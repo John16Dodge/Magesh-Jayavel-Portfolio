@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magesh Kumar Jayavel — Compliance, Training & Client Relations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a1a12;
+    --bg-panel: #102820;
+    --bg-panel-2: #0e2119;
+    --line: #24422f;
+    --gold: #c9a227;
+    --gold-soft: #e6cd7c;
+    --cream: #f1ecdd;
+    --muted: #93a794;
+    --muted-dim: #5f7362;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--cream);
+    font-family:'Work Sans', sans-serif;
+    font-weight:400;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--gold); color:#0a1a12;}
+  a{color:inherit;}
+  img{max-width:100%;}
+
+  .wrap{
+    max-width:1040px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    margin:0;
+    color:var(--cream);
+  }
+
+  /* subtle background texture: hairline vertical rule + faint gold glow */
+  .bg-fixed{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+    background:
+      radial-gradient(ellipse 900px 500px at 85% -10%, rgba(201,162,39,0.10), transparent 60%),
+      radial-gradient(ellipse 700px 500px at -10% 40%, rgba(201,162,39,0.06), transparent 60%);
+  }
+
+  header, main, footer{position:relative; z-index:1;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky;
+    top:0;
+    z-index:10;
+    background:rgba(10,26,18,0.86);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-top:18px;
+    padding-bottom:18px;
+  }
+  .brand{
+    font-family:'Fraunces', serif;
+    font-size:1.05rem;
+    letter-spacing:0.02em;
+    color:var(--gold-soft);
+  }
+  .navlinks{
+    display:flex;
+    gap:28px;
+    font-size:0.92rem;
+    color:var(--muted);
+  }
+  .navlinks a{ text-decoration:none; transition:color .2s ease; }
+  .navlinks a:hover{ color:var(--gold-soft); }
+  .nav-cta{
+    font-size:0.88rem;
+    padding:9px 18px;
+    border:1px solid var(--gold);
+    border-radius:2px;
+    color:var(--gold-soft);
+    text-decoration:none;
+    transition:background .2s ease, color .2s ease;
+    white-space:nowrap;
+  }
+  .nav-cta:hover{ background:var(--gold); color:#0a1a12; }
+
+  @media (max-width:720px){
+    .navlinks{display:none;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:96px 0 84px;
+    border-bottom:1px solid var(--line);
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:56px;
+    align-items:center;
+  }
+  .hero-portrait{
+    position:relative;
+    border:1px solid var(--line);
+    background:#04100a;
+  }
+  .hero-portrait img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .hero-portrait::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    box-shadow: inset 0 0 0 1px rgba(201,162,39,0.25);
+    pointer-events:none;
+  }
+  @media (max-width:840px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .hero-portrait{ order:-1; max-width:320px; margin:0 auto; }
+  }
+  .avatar{
+    width:96px;
+    height:96px;
+    border-radius:50%;
+    overflow:hidden;
+    border:1px solid var(--gold);
+    flex-shrink:0;
+  }
+  .avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .about-photo-row{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    margin-bottom:28px;
+  }
+  .about-photo-row .avatar-name{
+    font-family:'Fraunces', serif;
+    font-size:1.05rem;
+    color:var(--gold-soft);
+  }
+  .about-photo-row .avatar-role{
+    color:var(--muted);
+    font-size:0.88rem;
+    margin-top:2px;
+  }
+  .hero-eyebrow{
+    color:var(--muted);
+    font-size:0.95rem;
+    margin-bottom:22px;
+    max-width:480px;
+  }
+  .hero-eyebrow .loc{ color:var(--gold-soft); }
+  .hero h1{
+    font-size:clamp(2.6rem, 6vw, 4.6rem);
+    line-height:1.05;
+    max-width:11ch;
+  }
+  .hero .role{
+    margin-top:26px;
+    font-size:clamp(1.05rem, 2vw, 1.3rem);
+    color:var(--gold-soft);
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:400;
+  }
+  .hero p.summary{
+    margin-top:26px;
+    max-width:58ch;
+    color:var(--muted);
+    font-size:1.02rem;
+  }
+  .hero-actions{
+    margin-top:40px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:14px 24px;
+    text-decoration:none;
+    font-size:0.95rem;
+    border-radius:2px;
+    transition:transform .15s ease, background .2s ease, border-color .2s ease, color .2s ease;
+  }
+  .btn-primary{
+    background:var(--gold);
+    color:#10240b;
+    font-weight:500;
+    border:1px solid var(--gold);
+  }
+  .btn-primary:hover{ background:var(--gold-soft); transform:translateY(-1px); }
+  .btn-ghost{
+    border:1px solid var(--line);
+    color:var(--cream);
+  }
+  .btn-ghost:hover{ border-color:var(--gold); color:var(--gold-soft); }
+  .btn svg{ width:18px; height:18px; flex-shrink:0; }
+
+  /* ---------- SECTION SHELL ---------- */
+  section{
+    padding:76px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:24px;
+    margin-bottom:44px;
+  }
+  .section-head h2{
+    font-size:clamp(1.7rem, 3vw, 2.2rem);
+  }
+  .section-num{
+    color:var(--muted-dim);
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:1rem;
+  }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{
+    display:grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap:56px;
+  }
+  .about-grid p{ color:var(--muted); font-size:1.02rem; }
+  .about-grid p + p{ margin-top:16px; }
+  .facts{
+    border-left:1px solid var(--line);
+    padding-left:28px;
+  }
+  .fact{ margin-bottom:22px; }
+  .fact dt{
+    font-size:0.82rem;
+    color:var(--muted-dim);
+    margin-bottom:4px;
+  }
+  .fact dd{
+    margin:0;
+    color:var(--cream);
+    font-size:1rem;
+  }
+  @media (max-width:760px){
+    .about-grid{ grid-template-columns:1fr; }
+    .facts{ border-left:none; border-top:1px solid var(--line); padding-left:0; padding-top:28px; }
+  }
+
+  /* ---------- EXPERIENCE TIMELINE ---------- */
+  .timeline{
+    position:relative;
+    padding-left:32px;
+  }
+  .timeline::before{
+    content:"";
+    position:absolute;
+    left:5px;
+    top:6px;
+    bottom:6px;
+    width:1px;
+    background:var(--line);
+  }
+  .tl-item{
+    position:relative;
+    padding-bottom:44px;
+  }
+  .tl-item:last-child{ padding-bottom:0; }
+  .tl-item::before{
+    content:"";
+    position:absolute;
+    left:-32px;
+    top:6px;
+    width:11px;
+    height:11px;
+    border-radius:50%;
+    background:var(--bg);
+    border:2px solid var(--gold);
+  }
+  .tl-date{
+    color:var(--gold-soft);
+    font-size:0.86rem;
+    margin-bottom:6px;
+  }
+  .tl-role{
+    font-family:'Fraunces', serif;
+    font-size:1.2rem;
+    color:var(--cream);
+    margin-bottom:4px;
+  }
+  .tl-org{
+    color:var(--muted);
+    font-size:0.94rem;
+    margin-bottom:12px;
+  }
+  .tl-item ul{
+    margin:0;
+    padding-left:18px;
+    color:var(--muted);
+  }
+  .tl-item li{ margin-bottom:6px; font-size:0.96rem; }
+
+  /* ---------- SKILLS ---------- */
+  .skills-cols{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:48px;
+  }
+  .skill-group h3{
+    font-size:1rem;
+    color:var(--gold-soft);
+    font-family:'Work Sans', sans-serif;
+    font-weight:600;
+    margin-bottom:18px;
+  }
+  .chips{ display:flex; flex-wrap:wrap; gap:10px; }
+  .chip{
+    border:1px solid var(--line);
+    padding:8px 14px;
+    font-size:0.88rem;
+    color:var(--muted);
+    border-radius:2px;
+  }
+  @media (max-width:720px){
+    .skills-cols{ grid-template-columns:1fr; gap:36px; }
+  }
+
+  /* ---------- PROJECTS ---------- */
+  .projects{
+    display:grid;
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .project{
+    background:var(--bg);
+    padding:32px;
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:20px;
+    align-items:start;
+  }
+  .project h3{
+    font-size:1.15rem;
+    margin-bottom:8px;
+  }
+  .project p{
+    color:var(--muted);
+    font-size:0.95rem;
+    max-width:60ch;
+    margin:0;
+  }
+  .project .stack{
+    color:var(--gold-soft);
+    font-size:0.8rem;
+    margin-top:10px;
+    letter-spacing:0.02em;
+  }
+  .project .link{
+    white-space:nowrap;
+    font-size:0.86rem;
+    color:var(--gold-soft);
+    text-decoration:none;
+    border-bottom:1px solid var(--gold-soft);
+    padding-bottom:2px;
+    height:fit-content;
+  }
+  .project .link:hover{ color:var(--gold); border-color:var(--gold); }
+  @media (max-width:600px){
+    .project{ grid-template-columns:1fr; }
+  }
+
+  /* ---------- EDUCATION ---------- */
+  .edu-item{ margin-bottom:28px; }
+  .edu-item:last-child{ margin-bottom:0; }
+  .edu-item .tl-date{ color:var(--gold-soft); }
+  .edu-item h3{
+    font-size:1.1rem;
+    margin-bottom:4px;
+  }
+  .edu-item p{ color:var(--muted); font-size:0.94rem; margin:2px 0; }
+
+  /* ---------- ACHIEVEMENTS / CERTS ---------- */
+  .two-col{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:56px;
+  }
+  .list-marked{
+    list-style:none;
+    margin:0;
+    padding:0;
+  }
+  .list-marked li{
+    position:relative;
+    padding-left:22px;
+    margin-bottom:14px;
+    color:var(--muted);
+    font-size:0.96rem;
+  }
+  .list-marked li::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:9px;
+    width:6px;
+    height:1px;
+    background:var(--gold);
+  }
+  @media (max-width:720px){
+    .two-col{ grid-template-columns:1fr; gap:36px; }
+  }
+
+  /* ---------- CONTACT / FOOTER ---------- */
+  .contact{
+    padding:88px 0 64px;
+    border-bottom:none;
+    text-align:left;
+  }
+  .contact h2{
+    font-size:clamp(2rem, 4vw, 3rem);
+    max-width:14ch;
+  }
+  .contact p.lead{
+    color:var(--muted);
+    max-width:52ch;
+    margin-top:20px;
+    font-size:1.02rem;
+  }
+  .contact-actions{
+    margin-top:40px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+  }
+  .contact-details{
+    margin-top:56px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:40px;
+    border-top:1px solid var(--line);
+    padding-top:32px;
+  }
+  .contact-detail dt{
+    font-size:0.8rem;
+    color:var(--muted-dim);
+    margin-bottom:6px;
+  }
+  .contact-detail dd{
+    margin:0;
+    font-size:0.98rem;
+  }
+  .contact-detail a{ text-decoration:none; color:var(--cream); }
+  .contact-detail a:hover{ color:var(--gold-soft); }
+
+  footer.site-foot{
+    padding:28px 0 48px;
+    color:var(--muted-dim);
+    font-size:0.82rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-fixed"></div>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">Magesh Kumar J.</div>
+    <div class="navlinks">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a class="nav-cta" href="https://wa.me/918148916824?text=Hi%20Magesh%2C%20I%20found%20your%20portfolio%20and%20would%20like%20to%20connect." target="_blank" rel="noopener">Message on WhatsApp</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow">Based in <span class="loc">Villupuram, Tamil Nadu</span> · Open to opportunities</div>
+        <h1>Magesh Kumar Jayavel</h1>
+        <div class="role">Compliance &amp; Client Relations — Video Editor &amp; Public Speaker</div>
+        <p class="summary">Results-driven graduate with a foundation in AML/KYC compliance and a track record in training, sales, and public speaking. I move comfortably between regulatory detail and customer-facing conversation, and I care about delivering a genuinely good experience on both sides of the table.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="https://wa.me/918148916824?text=Hi%20Magesh%2C%20I%20found%20your%20portfolio%20and%20would%20like%20to%20connect." target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A8.86 8.86 0 0 0 11.94 4C7.15 4 3.26 7.9 3.26 12.68a8.6 8.6 0 0 0 1.15 4.32L3 21l4.12-1.37a8.7 8.7 0 0 0 4.8 1.41h.01c4.79 0 8.68-3.9 8.68-8.68a8.63 8.63 0 0 0-3.01-6.04Zm-5.65 13.35a7.2 7.2 0 0 1-3.68-1l-.26-.16-2.75.91.92-2.68-.17-.28a7.15 7.15 0 0 1-1.1-3.8c0-3.96 3.22-7.19 7.19-7.19a7.15 7.15 0 0 1 7.16 7.19c0 3.96-3.22 7.19-7.19 7.19Zm3.94-5.38c-.21-.11-1.27-.63-1.47-.7-.2-.07-.34-.11-.49.11-.14.21-.56.7-.69.84-.13.14-.25.16-.47.05-.21-.11-.9-.33-1.72-1.06-.63-.57-1.06-1.26-1.19-1.47-.12-.21-.01-.33.1-.43.1-.1.21-.25.32-.38.11-.13.14-.21.21-.36.07-.14.04-.27-.02-.38-.07-.11-.49-1.19-.68-1.63-.18-.42-.36-.37-.49-.37-.13 0-.27-.01-.42-.01-.14 0-.38.05-.58.27-.2.21-.76.75-.76 1.82 0 1.07.78 2.11.89 2.25.11.14 1.54 2.36 3.74 3.31.52.22.93.36 1.25.46.53.17 1 .14 1.38.09.42-.06 1.27-.52 1.45-1.02.18-.5.18-.93.12-1.02-.06-.09-.2-.14-.41-.25Z"/></svg>
+            Message on WhatsApp
+          </a>
+          <a class="btn btn-ghost" href="Magesh_Kumar_Jayavel_Resume.pdf" download>Download résumé</a>
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/mageshkumar-jayavel/" target="_blank" rel="noopener">View LinkedIn</a>
+          <a class="btn btn-ghost" href="https://www.youtube.com/@AtmanMageshJayavel" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.58 7.19a2.75 2.75 0 0 0-1.94-1.95C17.92 4.75 12 4.75 12 4.75s-5.92 0-7.64.49a2.75 2.75 0 0 0-1.94 1.95A28.6 28.6 0 0 0 2 12a28.6 28.6 0 0 0 .42 4.81 2.75 2.75 0 0 0 1.94 1.95c1.72.49 7.64.49 7.64.49s5.92 0 7.64-.49a2.75 2.75 0 0 0 1.94-1.95A28.6 28.6 0 0 0 22 12a28.6 28.6 0 0 0-.42-4.81ZM9.98 15.02V8.98L15.34 12l-5.36 3.02Z"/></svg>
+            YouTube
+          </a>
+        </div>
+      </div>
+      <div class="hero-portrait">
+        <img src="hero-portrait.png" alt="Magesh Kumar Jayavel">
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section id="about">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>About</h2>
+        <span class="section-num">01</span>
+      </div>
+      <div class="about-grid">
+        <div>
+          <div class="about-photo-row">
+            <div class="avatar"><img src="profile.jpg" alt="Magesh Kumar Jayavel headshot"></div>
+            <div>
+              <div class="avatar-name">Magesh Kumar Jayavel</div>
+              <div class="avatar-role">Villupuram, Tamil Nadu</div>
+            </div>
+          </div>
+          <p>I'm a final-year B.Tech Computer Science student currently interning in AML &amp; KYC compliance, where I work on customer risk assessment and UK regulatory frameworks. Before that, I spent time on the other side of the desk — as an academic counsellor, soft skills trainer, and business developer — enrolling clients, running workshops, and giving talks on communication and leadership.</p>
+          <p>That mix is deliberate. Compliance work needs precision and judgement; sales and training need empathy and clarity. I try to bring both to every role: a user-centric, problem-solving mindset backed by a genuine interest in doing right by the person in front of me.</p>
+        </div>
+        <dl class="facts">
+          <div class="fact">
+            <dt>Currently</dt>
+            <dd>AML &amp; KYC Compliance Intern, ReTRRAC Global</dd>
+          </div>
+          <div class="fact">
+            <dt>Studying</dt>
+            <dd>B.Tech CSE (ICB), Manakula Vinayagar Institute of Technology — CGPA 8.08</dd>
+          </div>
+          <div class="fact">
+            <dt>Location</dt>
+            <dd>Villupuram, Tamil Nadu – 605602</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Experience &amp; internships</h2>
+        <span class="section-num">02</span>
+      </div>
+      <div class="timeline">
+
+        <div class="tl-item">
+          <div class="tl-date">July 2026 — Present</div>
+          <div class="tl-role">AML &amp; KYC Compliance Intern</div>
+          <div class="tl-org">ReTRRAC Global</div>
+          <ul>
+            <li>Gained practical exposure to AML, KYC, and financial crime compliance.</li>
+            <li>Assisted with risk management and regulatory compliance projects.</li>
+            <li>Developed working knowledge of the UK compliance framework and its requirements.</li>
+          </ul>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">February 2026 — May 2026</div>
+          <div class="tl-role">Business Developer / Academic Counsellor (Sales Specialist)</div>
+          <div class="tl-org">Codeyoung</div>
+          <ul>
+            <li>Enrolled UK and native clients into learning programs by explaining courses to prospects and guiding their decision.</li>
+          </ul>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">July 2025 — May 2026</div>
+          <div class="tl-role">Clap Captain</div>
+          <div class="tl-org">LSE Training Academy</div>
+          <ul>
+            <li>Led students through speeches and motivational sessions on soft skills and why they matter.</li>
+          </ul>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">March 2025 — May 2026</div>
+          <div class="tl-role">Innovation Ambassador</div>
+          <div class="tl-org">Manakula Vinayagar Institute of Technology</div>
+          <ul>
+            <li>Acted as a resource person for other Innovation Cells, promoting an innovation and startup culture among students and faculty.</li>
+          </ul>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">August 2024 — Present</div>
+          <div class="tl-role">Business Developer (Sales Specialist)</div>
+          <div class="tl-org">Sri Nivas Enterprises (FMCG)</div>
+          <ul>
+            <li>Promoted and sold household cleaning products — dishwash liquids, toilet cleaners, and other daily-use items — to customers.</li>
+            <li>Built customer relationships by understanding their needs, explaining product benefits, and recommending suitable products.</li>
+            <li>Achieved sales through direct customer interaction, regular follow-ups, and effective communication while working toward targets.</li>
+          </ul>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">September 2024 — October 2024</div>
+          <div class="tl-role">Soft Skill Trainer</div>
+          <div class="tl-org">Datanerdz.AI</div>
+          <ul>
+            <li>Led intensive workshops and created training materials on communication, teamwork, leadership, and public speaking.</li>
+          </ul>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">April 2024</div>
+          <div class="tl-role">Content Writer &amp; Public Speaker</div>
+          <div class="tl-org">Ignite Skylabs</div>
+          <ul>
+            <li>Developed and delivered persuasive speeches and audience-driven presentations, sharpening verbal communication and presentation ability.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Skills</h2>
+        <span class="section-num">03</span>
+      </div>
+      <div class="skills-cols">
+        <div class="skill-group">
+          <h3>Technical &amp; domain</h3>
+          <div class="chips">
+            <span class="chip">AML &amp; KYC</span>
+            <span class="chip">Customer Due Diligence (CDD)</span>
+            <span class="chip">Enhanced Due Diligence (EDD)</span>
+            <span class="chip">Customer Risk Assessment</span>
+            <span class="chip">Transaction Monitoring</span>
+            <span class="chip">PEP &amp; Financial Crime Risk</span>
+            <span class="chip">UK AML Regulations</span>
+            <span class="chip">Compliance Documentation</span>
+            <span class="chip">Java Full Stack</span>
+            <span class="chip">MySQL</span>
+            <span class="chip">VS Code / Eclipse IDE</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>Soft skills</h3>
+          <div class="chips">
+            <span class="chip">Customer focus</span>
+            <span class="chip">Leadership &amp; mentoring</span>
+            <span class="chip">Teamwork</span>
+            <span class="chip">Problem-solving</span>
+            <span class="chip">Presentation &amp; pitching</span>
+            <span class="chip">Public speaking</span>
+            <span class="chip">Video editing</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Projects</h2>
+        <span class="section-num">04</span>
+      </div>
+      <div class="projects">
+
+        <div class="project">
+          <div>
+            <h3>Anti-Theft Mechanism</h3>
+            <p>A mini security vault prototype with automated locking, motion-triggered security, mobile-controlled access, and an intelligent alarm system.</p>
+            <div class="stack">Arduino · IoT</div>
+          </div>
+        </div>
+
+        <div class="project">
+          <div>
+            <h3>Personal Portfolio (v1)</h3>
+            <p>An earlier responsive portfolio showcasing skills and projects, with a clean UI and smooth navigation.</p>
+            <div class="stack">HTML · CSS · JavaScript</div>
+          </div>
+          <a class="link" href="https://john16dodge.github.io/MK-Portfolio/" target="_blank" rel="noopener">View site ↗</a>
+        </div>
+
+        <div class="project">
+          <div>
+            <h3>X-Recruit (v1.1)</h3>
+            <p>A smart job platform with dashboards for students and colleges, mock interviews, placement analytics, recruiter feedback, career roadmaps, and mentorship tools.</p>
+            <div class="stack">Python Full Stack · ML · AI</div>
+          </div>
+        </div>
+
+        <div class="project">
+          <div>
+            <h3>Sri Nivas Enterprises — Catalog Site</h3>
+            <p>A freelance home-care product catalog with structured listings, pricing breakdowns, and branded content for detergents, dishwash liquids, toilet cleaners, and fabric conditioners.</p>
+            <div class="stack">HTML · CSS · JavaScript</div>
+          </div>
+          <a class="link" href="https://john16dodge.github.io/Sri-NivasEnterprises/" target="_blank" rel="noopener">View site ↗</a>
+        </div>
+
+        <div class="project">
+          <div>
+            <h3>Sales Tool</h3>
+            <p>A mini sales tool built to cut down basic manual workload — automating repetitive steps like reaching out with messages and sharing pricing details.</p>
+            <div class="stack">HTML · CSS · JavaScript</div>
+          </div>
+          <a class="link" href="https://x-rec.github.io/Sales/" target="_blank" rel="noopener">View site ↗</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Education</h2>
+        <span class="section-num">05</span>
+      </div>
+
+      <div class="edu-item">
+        <div class="tl-date">May 2026</div>
+        <h3>B.Tech, Computer Science &amp; Engineering (ICB)</h3>
+        <p>Manakula Vinayagar Institute of Technology, Madagadipet, Puducherry</p>
+        <p>CGPA: 8.08 (including 8th semester) · Coursework: Blockchain Technologies, Internet of Things, Software Testing</p>
+      </div>
+
+      <div class="edu-item">
+        <div class="tl-date">Completed May 2022</div>
+        <h3>Higher Secondary Education (12th Grade)</h3>
+        <p>Achariya Siksha Mandir, Villianur, Puducherry — 72%</p>
+      </div>
+
+      <div class="edu-item">
+        <div class="tl-date">Completed March 2020</div>
+        <h3>Secondary Education (10th Grade)</h3>
+        <p>Achariya Siksha Mandir, Villianur, Puducherry — 76%</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="more">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Achievements &amp; certifications</h2>
+        <span class="section-num">06</span>
+      </div>
+      <div class="two-col">
+        <div>
+          <h3 style="font-size:1rem; color:var(--gold-soft); font-family:'Work Sans',sans-serif; font-weight:600; margin-bottom:18px;">Achievements &amp; recognition</h3>
+          <ul class="list-marked">
+            <li>ICT Youth Talk Pre-Finalist (2024), Puducherry — public speaking excellence.</li>
+            <li>Freelance UI/UX design for Sri Nivas Enterprises' product catalog.</li>
+            <li>ICSSCAN'2024 — presented a paper on cloud-based security for the medical industry (1st prize).</li>
+            <li>SCIMIT'25 — presented "Blockchain Based Police Complaint System."</li>
+            <li>ICACIKDDA'2025 — presented a paper on sentiment analysis of social media reviews (2nd prize).</li>
+            <li>Talent Spark — identified by Jai Kishore, Quantum Consulting Services.</li>
+            <li>Appointed Innovation Ambassador, promoting entrepreneurship and innovation on campus.</li>
+            <li>Maintained an 8.08 CGPA while balancing leadership and project roles.</li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="font-size:1rem; color:var(--gold-soft); font-family:'Work Sans',sans-serif; font-weight:600; margin-bottom:18px;">Certifications</h3>
+          <ul class="list-marked">
+            <li>CAFS AML Certification — ReTTRAC Global</li>
+            <li>Foundation IA Certificate — MoE Innovation Cell</li>
+            <li>Advanced IA Certificate — MoE Innovation Cell</li>
+            <li>Re-Skilling IA Certificate — MoE Innovation Cell</li>
+            <li>Soft Skills Training — Analytics</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="wrap">
+      <h2>Let's talk.</h2>
+      <p class="lead">Whether it's a compliance role, a training opportunity, or a project — the fastest way to reach me is WhatsApp. I read every message.</p>
+      <div class="contact-actions">
+        <a class="btn btn-primary" href="https://wa.me/918148916824?text=Hi%20Magesh%2C%20I%20found%20your%20portfolio%20and%20would%20like%20to%20connect." target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A8.86 8.86 0 0 0 11.94 4C7.15 4 3.26 7.9 3.26 12.68a8.6 8.6 0 0 0 1.15 4.32L3 21l4.12-1.37a8.7 8.7 0 0 0 4.8 1.41h.01c4.79 0 8.68-3.9 8.68-8.68a8.63 8.63 0 0 0-3.01-6.04Zm-5.65 13.35a7.2 7.2 0 0 1-3.68-1l-.26-.16-2.75.91.92-2.68-.17-.28a7.15 7.15 0 0 1-1.1-3.8c0-3.96 3.22-7.19 7.19-7.19a7.15 7.15 0 0 1 7.16 7.19c0 3.96-3.22 7.19-7.19 7.19Zm3.94-5.38c-.21-.11-1.27-.63-1.47-.7-.2-.07-.34-.11-.49.11-.14.21-.56.7-.69.84-.13.14-.25.16-.47.05-.21-.11-.9-.33-1.72-1.06-.63-.57-1.06-1.26-1.19-1.47-.12-.21-.01-.33.1-.43.1-.1.21-.25.32-.38.11-.13.14-.21.21-.36.07-.14.04-.27-.02-.38-.07-.11-.49-1.19-.68-1.63-.18-.42-.36-.37-.49-.37-.13 0-.27-.01-.42-.01-.14 0-.38.05-.58.27-.2.21-.76.75-.76 1.82 0 1.07.78 2.11.89 2.25.11.14 1.54 2.36 3.74 3.31.52.22.93.36 1.25.46.53.17 1 .14 1.38.09.42-.06 1.27-.52 1.45-1.02.18-.5.18-.93.12-1.02-.06-.09-.2-.14-.41-.25Z"/></svg>
+          Message on WhatsApp
+        </a>
+        <a class="btn btn-ghost" href="mailto:mageshkumarjayavel@gmail.com">Send an email</a>
+        <a class="btn btn-ghost" href="Magesh_Kumar_Jayavel_Resume.pdf" download>Download résumé</a>
+        <a class="btn btn-ghost" href="https://www.youtube.com/@AtmanMageshJayavel" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.58 7.19a2.75 2.75 0 0 0-1.94-1.95C17.92 4.75 12 4.75 12 4.75s-5.92 0-7.64.49a2.75 2.75 0 0 0-1.94 1.95A28.6 28.6 0 0 0 2 12a28.6 28.6 0 0 0 .42 4.81 2.75 2.75 0 0 0 1.94 1.95c1.72.49 7.64.49 7.64.49s5.92 0 7.64-.49a2.75 2.75 0 0 0 1.94-1.95A28.6 28.6 0 0 0 22 12a28.6 28.6 0 0 0-.42-4.81ZM9.98 15.02V8.98L15.34 12l-5.36 3.02Z"/></svg>
+          YouTube
+        </a>
+      </div>
+
+      <dl class="contact-details">
+        <div class="contact-detail">
+          <dt>Phone / WhatsApp</dt>
+          <dd><a href="https://wa.me/918148916824" target="_blank" rel="noopener">+91 81489 16824</a></dd>
+        </div>
+        <div class="contact-detail">
+          <dt>Email</dt>
+          <dd><a href="mailto:mageshkumarjayavel@gmail.com">mageshkumarjayavel@gmail.com</a></dd>
+        </div>
+        <div class="contact-detail">
+          <dt>LinkedIn</dt>
+          <dd><a href="https://www.linkedin.com/in/mageshkumar-jayavel/" target="_blank" rel="noopener">mageshkumar-jayavel</a></dd>
+        </div>
+        <div class="contact-detail">
+          <dt>YouTube</dt>
+          <dd><a href="https://www.youtube.com/@AtmanMageshJayavel" target="_blank" rel="noopener">@AtmanMageshJayavel</a></dd>
+        </div>
+        <div class="contact-detail">
+          <dt>Location</dt>
+          <dd>Villupuram, Tamil Nadu – 605602</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    © 2026 Magesh Kumar Jayavel.
+  </div>
+</footer>
+
+</body>
+</html>
