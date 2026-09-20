@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Magesh Kumar Jayavel — Compliance, Training & Client Relations</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2216%22%20fill%3D%22%230a1a12%22/%3E%3Ctext%20x%3D%2250%22%20y%3D%2268%22%20font-family%3D%22Georgia%2C%20serif%22%20font-size%3D%2246%22%20font-weight%3D%22600%22%20fill%3D%22%23c9a227%22%20text-anchor%3D%22middle%22%3EMJ%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -409,6 +408,91 @@
   }
   .edu-item p{ color:var(--muted); font-size:0.94rem; margin:2px 0; }
 
+  /* ---------- EDUCATION: point-to-point path ---------- */
+  .edu-path{
+    position:relative;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:8px;
+    padding-top:8px;
+  }
+  .edu-path::before{
+    content:"";
+    position:absolute;
+    top:15px;
+    left:calc(100%/6);
+    right:calc(100%/6);
+    height:1px;
+    background:var(--line);
+    z-index:0;
+  }
+  .edu-node{
+    position:relative;
+    text-align:center;
+    padding:0 6px;
+  }
+  .edu-dot{
+    position:relative;
+    z-index:1;
+    width:13px;
+    height:13px;
+    margin:2px auto 20px;
+    border-radius:50%;
+    background:var(--bg);
+    border:2px solid var(--gold);
+  }
+  .edu-node.is-current .edu-dot{
+    background:var(--gold);
+    box-shadow:0 0 0 4px rgba(201,162,39,0.18);
+  }
+  .edu-card{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    padding:20px 18px;
+    text-align:left;
+  }
+  .edu-card .edu-date{
+    color:var(--gold-soft);
+    font-size:0.8rem;
+    margin-bottom:8px;
+  }
+  .edu-card h3{
+    font-size:1rem;
+    line-height:1.35;
+    margin-bottom:8px;
+  }
+  .edu-card p{
+    color:var(--muted);
+    font-size:0.86rem;
+    margin:3px 0;
+  }
+  .edu-card .edu-score{
+    display:inline-block;
+    margin-top:10px;
+    padding:4px 10px;
+    font-size:0.78rem;
+    color:var(--gold-soft);
+    border:1px solid var(--line);
+  }
+  @media (max-width:780px){
+    .edu-path{ grid-template-columns:1fr; gap:0; padding-top:0; }
+    .edu-path::before{
+      top:0; bottom:0; left:19px; right:auto;
+      width:1px; height:auto;
+    }
+    .edu-node{
+      text-align:left;
+      padding:0 0 28px 44px;
+    }
+    .edu-node:last-child{ padding-bottom:0; }
+    .edu-dot{
+      position:absolute;
+      top:4px;
+      left:14px;
+      margin:0;
+    }
+  }
+
   /* ---------- ACHIEVEMENTS / CERTS ---------- */
   .two-col{
     display:grid;
@@ -462,6 +546,62 @@
     flex-wrap:wrap;
     gap:14px;
   }
+  /* ---------- WHATSAPP REASON FORM ---------- */
+  .wa-form{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    padding:32px;
+    max-width:520px;
+    margin-top:36px;
+  }
+  .wa-field{ margin-bottom:18px; }
+  .wa-field:last-of-type{ margin-bottom:24px; }
+  .wa-field label{
+    display:block;
+    font-size:0.82rem;
+    color:var(--muted);
+    margin-bottom:8px;
+  }
+  .wa-field input,
+  .wa-field select,
+  .wa-field textarea{
+    width:100%;
+    background:var(--bg);
+    border:1px solid var(--line);
+    color:var(--cream);
+    padding:11px 13px;
+    font-family:'Work Sans', sans-serif;
+    font-size:0.92rem;
+    border-radius:2px;
+    outline:none;
+    transition:border-color .2s ease;
+  }
+  .wa-field input:focus,
+  .wa-field select:focus,
+  .wa-field textarea:focus{ border-color:var(--gold); }
+  .wa-field textarea{ resize:vertical; min-height:64px; }
+  .wa-field select{
+    appearance:none;
+    -webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2393a794'%3E%3Cpath d='M5.5 7.5l4.5 4.5 4.5-4.5' stroke='%2393a794' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 12px center;
+    padding-right:34px;
+  }
+  .wa-field select option{ background:var(--bg); color:var(--cream); }
+  .wa-submit{
+    width:100%;
+    justify-content:center;
+    border:none;
+    cursor:pointer;
+    font-family:'Work Sans', sans-serif;
+  }
+  .wa-note{
+    font-size:0.78rem;
+    color:var(--muted-dim);
+    margin-top:14px;
+  }
+
   .contact-details{
     margin-top:56px;
     display:flex;
@@ -754,23 +894,39 @@
         <span class="section-num">05</span>
       </div>
 
-      <div class="edu-item">
-        <div class="tl-date">May 2026</div>
-        <h3>B.Tech, Computer Science &amp; Engineering (ICB)</h3>
-        <p>Manakula Vinayagar Institute of Technology, Madagadipet, Puducherry</p>
-        <p>CGPA: 8.08 (including 8th semester) · Coursework: Blockchain Technologies, Internet of Things, Software Testing</p>
-      </div>
+      <div class="edu-path">
 
-      <div class="edu-item">
-        <div class="tl-date">Completed May 2022</div>
-        <h3>Higher Secondary Education (12th Grade)</h3>
-        <p>Achariya Siksha Mandir, Villianur, Puducherry — 72%</p>
-      </div>
+        <div class="edu-node">
+          <div class="edu-dot"></div>
+          <div class="edu-card">
+            <div class="edu-date">Completed March 2020</div>
+            <h3>Secondary Education (10th Grade)</h3>
+            <p>Achariya Siksha Mandir, Villianur, Puducherry</p>
+            <span class="edu-score">76%</span>
+          </div>
+        </div>
 
-      <div class="edu-item">
-        <div class="tl-date">Completed March 2020</div>
-        <h3>Secondary Education (10th Grade)</h3>
-        <p>Achariya Siksha Mandir, Villianur, Puducherry — 76%</p>
+        <div class="edu-node">
+          <div class="edu-dot"></div>
+          <div class="edu-card">
+            <div class="edu-date">Completed May 2022</div>
+            <h3>Higher Secondary Education (12th Grade)</h3>
+            <p>Achariya Siksha Mandir, Villianur, Puducherry</p>
+            <span class="edu-score">72%</span>
+          </div>
+        </div>
+
+        <div class="edu-node is-current">
+          <div class="edu-dot"></div>
+          <div class="edu-card">
+            <div class="edu-date">May 2026</div>
+            <h3>B.Tech, Computer Science &amp; Engineering (ICB)</h3>
+            <p>Manakula Vinayagar Institute of Technology, Madagadipet, Puducherry</p>
+            <p>Coursework: Blockchain Technologies, IoT, Software Testing</p>
+            <span class="edu-score">CGPA 8.08</span>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -812,12 +968,37 @@
   <section id="contact" class="contact">
     <div class="wrap">
       <h2>Let's talk.</h2>
-      <p class="lead">Whether it's a compliance role, a training opportunity, or a project — the fastest way to reach me is WhatsApp. I read every message.</p>
-      <div class="contact-actions">
-        <a class="btn btn-primary" href="https://wa.me/918148916824?text=Hi%20Magesh%2C%20I%20found%20your%20portfolio%20and%20would%20like%20to%20connect." target="_blank" rel="noopener">
+      <p class="lead">Whether it's a compliance role, a training opportunity, or a project — the fastest way to reach me is WhatsApp. Tell me a bit about why you're reaching out and I'll open the chat pre-filled.</p>
+
+      <form class="wa-form" id="waForm">
+        <div class="wa-field">
+          <label for="waName">Your name</label>
+          <input type="text" id="waName" placeholder="e.g. Priya Sharma" required>
+        </div>
+        <div class="wa-field">
+          <label for="waReason">Reason for contacting</label>
+          <select id="waReason" required>
+            <option value="" disabled selected>Select a reason</option>
+            <option value="a job opportunity">Job opportunity</option>
+            <option value="a compliance / AML-KYC role">Compliance / AML-KYC role</option>
+            <option value="a training or speaking engagement">Training or speaking engagement</option>
+            <option value="a freelance or web project">Freelance project</option>
+            <option value="just connecting">Just connecting / networking</option>
+            <option value="something else">Something else</option>
+          </select>
+        </div>
+        <div class="wa-field">
+          <label for="waMessage">A few details (optional)</label>
+          <textarea id="waMessage" rows="3" placeholder="Add any context that would help..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary wa-submit">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A8.86 8.86 0 0 0 11.94 4C7.15 4 3.26 7.9 3.26 12.68a8.6 8.6 0 0 0 1.15 4.32L3 21l4.12-1.37a8.7 8.7 0 0 0 4.8 1.41h.01c4.79 0 8.68-3.9 8.68-8.68a8.63 8.63 0 0 0-3.01-6.04Zm-5.65 13.35a7.2 7.2 0 0 1-3.68-1l-.26-.16-2.75.91.92-2.68-.17-.28a7.15 7.15 0 0 1-1.1-3.8c0-3.96 3.22-7.19 7.19-7.19a7.15 7.15 0 0 1 7.16 7.19c0 3.96-3.22 7.19-7.19 7.19Zm3.94-5.38c-.21-.11-1.27-.63-1.47-.7-.2-.07-.34-.11-.49.11-.14.21-.56.7-.69.84-.13.14-.25.16-.47.05-.21-.11-.9-.33-1.72-1.06-.63-.57-1.06-1.26-1.19-1.47-.12-.21-.01-.33.1-.43.1-.1.21-.25.32-.38.11-.13.14-.21.21-.36.07-.14.04-.27-.02-.38-.07-.11-.49-1.19-.68-1.63-.18-.42-.36-.37-.49-.37-.13 0-.27-.01-.42-.01-.14 0-.38.05-.58.27-.2.21-.76.75-.76 1.82 0 1.07.78 2.11.89 2.25.11.14 1.54 2.36 3.74 3.31.52.22.93.36 1.25.46.53.17 1 .14 1.38.09.42-.06 1.27-.52 1.45-1.02.18-.5.18-.93.12-1.02-.06-.09-.2-.14-.41-.25Z"/></svg>
-          Message on WhatsApp
-        </a>
+          Continue to WhatsApp
+        </button>
+        <div class="wa-note">Opens WhatsApp with your details pre-filled — nothing is stored or sent anywhere else.</div>
+      </form>
+
+      <div class="contact-actions" style="margin-top:32px;">
         <a class="btn btn-ghost" href="mailto:mageshkumarjayavel@gmail.com">Send an email</a>
         <a class="btn btn-ghost" href="Magesh_Kumar_Jayavel_Resume.pdf" download>Download résumé</a>
         <a class="btn btn-ghost" href="https://www.youtube.com/@AtmanMageshJayavel" target="_blank" rel="noopener">
@@ -858,6 +1039,21 @@
     © 2026 Magesh Kumar Jayavel.
   </div>
 </footer>
+
+<script>
+  document.getElementById('waForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = document.getElementById('waName').value.trim();
+    var reason = document.getElementById('waReason').value;
+    var details = document.getElementById('waMessage').value.trim();
+
+    var text = "Hi Magesh, I'm " + name + ". I'm reaching out about " + reason + ".";
+    if (details) { text += " " + details; }
+
+    var url = "https://wa.me/918148916824?text=" + encodeURIComponent(text);
+    window.open(url, "_blank");
+  });
+</script>
 
 </body>
 </html>
