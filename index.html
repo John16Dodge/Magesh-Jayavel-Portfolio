@@ -690,6 +690,115 @@
     color:var(--muted-dim);
     font-size:0.82rem;
   }
+
+  /* =====================================================
+     ANIMATIONS + HOVER-TO-OPEN NAV (added)
+     ===================================================== */
+  @keyframes nudge { 0%,100%{transform:translateX(0)} 50%{transform:translateX(5px)} }
+  @keyframes wordUp { to { transform:translateY(0); } }
+  @keyframes ring { 0%{box-shadow:0 0 0 0 rgba(201,162,39,.55)} 100%{box-shadow:0 0 0 12px rgba(201,162,39,0)} }
+  @keyframes drift { 0%,100%{transform:translate3d(0,0,0)} 50%{transform:translate3d(-2%,3%,0) scale(1.04)} }
+  @keyframes zoom { from{transform:scale(1)} to{transform:scale(1.06)} }
+
+  /* scroll progress bar */
+  .scroll-bar{
+    position:fixed; top:0; left:0; right:0; height:2px; z-index:30;
+    background:var(--gold); transform:scaleX(0); transform-origin:left; pointer-events:none;
+  }
+
+  /* ambient motion */
+  .bg-fixed{ animation:drift 22s ease-in-out infinite; }
+  .hero-portrait{ overflow:hidden; }
+  .hero-portrait img{ animation:zoom 14s ease-in-out infinite alternate; }
+  .tl-item:first-child::before{ animation:ring 2s ease-out infinite; }
+
+  /* scroll reveal (classes added by the script below) */
+  .js .rv{
+    opacity:0; transform:translateY(26px);
+    transition:opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1);
+    transition-delay:var(--d,0ms);
+  }
+  .js .rv-left{ transform:translateX(-28px); }
+  .js .rv-scale{ transform:scale(.94); }
+  .js .rv.in{ opacity:1; transform:none; }
+
+  .js .timeline::before{ transform:scaleY(0); transform-origin:top; transition:transform 1.6s cubic-bezier(.2,.8,.2,1); }
+  .js .timeline.drawn::before{ transform:scaleY(1); }
+
+  /* headline: words slide up out of a mask */
+  .js .hero h1 .w{ display:inline-block; overflow:hidden; vertical-align:top; padding-bottom:.14em; margin-bottom:-.14em; }
+  .js .hero h1 .w > span{
+    display:inline-block; transform:translateY(110%);
+    animation:wordUp .9s cubic-bezier(.2,.8,.2,1) forwards; animation-delay:var(--d,0ms);
+  }
+
+  /* hover feedback */
+  .chip{ transition:transform .2s ease, border-color .2s ease, color .2s ease; }
+  .chip:hover{ transform:translateY(-3px); border-color:var(--gold); color:var(--gold-soft); }
+  .project{ transition:background .25s ease, transform .25s ease; }
+  .project:hover{ transform:translateX(6px); background:var(--bg-panel); }
+  .edu-card{ transition:transform .25s ease, border-color .25s ease; }
+  .edu-card:hover{ transform:translateY(-4px); border-color:var(--gold); }
+  .navlinks a.active{ color:var(--gold-soft); }
+
+  /* hover-to-open navigation (desktop with a mouse only) */
+  .nav-zone{ display:none; }
+
+  @media (min-width:901px) and (hover:hover){
+    .page-content{ margin-left:0; }
+
+    .nav-zone{
+      display:flex; align-items:center; justify-content:center;
+      position:fixed; left:0; top:0; bottom:0; width:38px; z-index:9;
+    }
+    .nav-zone-tab{
+      display:flex; flex-direction:column; align-items:center; gap:10px;
+      padding:16px 8px; background:var(--bg-panel); color:var(--gold-soft);
+      border:1px solid var(--gold); border-left:none; border-radius:0 4px 4px 0;
+      font-size:.78rem; animation:nudge 2.2s ease-in-out infinite;
+      transition:opacity .2s ease;
+    }
+    .nav-zone-text{ writing-mode:vertical-rl; transform:rotate(180deg); white-space:nowrap; letter-spacing:.03em; }
+    .nav-zone:hover .nav-zone-tab{ opacity:0; }
+
+    .side-nav{
+      transform:translateX(-100%);
+      transition:transform .55s cubic-bezier(.2,.9,.25,1.08) .25s, box-shadow .3s ease .25s,
+                 background .25s ease, color .25s ease, border-color .25s ease;
+    }
+    .nav-zone:hover + .side-nav,
+    .side-nav:hover,
+    .side-nav:focus-within{
+      transform:translateX(0);
+      box-shadow:12px 0 40px rgba(0,0,0,.35);
+      transition-delay:0s;
+    }
+
+    .side-nav .brand,
+    .navlinks a{
+      opacity:0; transform:translateX(-14px);
+      transition:opacity .4s ease, transform .4s ease, color .2s ease, padding-left .2s ease;
+    }
+    .nav-zone:hover + .side-nav .brand,
+    .side-nav:hover .brand, .side-nav:focus-within .brand,
+    .nav-zone:hover + .side-nav .navlinks a,
+    .side-nav:hover .navlinks a, .side-nav:focus-within .navlinks a{
+      opacity:1; transform:none;
+    }
+    .navlinks a:nth-child(1){ transition-delay:.10s; }
+    .navlinks a:nth-child(2){ transition-delay:.16s; }
+    .navlinks a:nth-child(3){ transition-delay:.22s; }
+    .navlinks a:nth-child(4){ transition-delay:.28s; }
+    .navlinks a:nth-child(5){ transition-delay:.34s; }
+    .navlinks a:nth-child(6){ transition-delay:.40s; }
+  }
+
+  /* respect reduced-motion settings */
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{ animation:none !important; transition-duration:.01ms !important; transition-delay:0s !important; }
+    .js .rv{ opacity:1; transform:none; }
+    .js .hero h1 .w > span{ transform:none; }
+  }
 </style>
 </head>
 <body>
@@ -728,7 +837,7 @@
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A8.86 8.86 0 0 0 11.94 4C7.15 4 3.26 7.9 3.26 12.68a8.6 8.6 0 0 0 1.15 4.32L3 21l4.12-1.37a8.7 8.7 0 0 0 4.8 1.41h.01c4.79 0 8.68-3.9 8.68-8.68a8.63 8.63 0 0 0-3.01-6.04Zm-5.65 13.35a7.2 7.2 0 0 1-3.68-1l-.26-.16-2.75.91.92-2.68-.17-.28a7.15 7.15 0 0 1-1.1-3.8c0-3.96 3.22-7.19 7.19-7.19a7.15 7.15 0 0 1 7.16 7.19c0 3.96-3.22 7.19-7.19 7.19Zm3.94-5.38c-.21-.11-1.27-.63-1.47-.7-.2-.07-.34-.11-.49.11-.14.21-.56.7-.69.84-.13.14-.25.16-.47.05-.21-.11-.9-.33-1.72-1.06-.63-.57-1.06-1.26-1.19-1.47-.12-.21-.01-.33.1-.43.1-.1.21-.25.32-.38.11-.13.14-.21.21-.36.07-.14.04-.27-.02-.38-.07-.11-.49-1.19-.68-1.63-.18-.42-.36-.37-.49-.37-.13 0-.27-.01-.42-.01-.14 0-.38.05-.58.27-.2.21-.76.75-.76 1.82 0 1.07.78 2.11.89 2.25.11.14 1.54 2.36 3.74 3.31.52.22.93.36 1.25.46.53.17 1 .14 1.38.09.42-.06 1.27-.52 1.45-1.02.18-.5.18-.93.12-1.02-.06-.09-.2-.14-.41-.25Z"/></svg>
             Message on WhatsApp
           </a>
-          <a class="btn btn-ghost" href="Magesh_Kumar_Jayavel_Resumé.pdf" download>Download résumé</a>
+          <a class="btn btn-ghost" href="Magesh_Kumar_Jayavel_Resume.pdf" download>Download résumé</a>
           <a class="btn btn-ghost" href="https://www.linkedin.com/in/mageshkumar-jayavel/" target="_blank" rel="noopener">View LinkedIn</a>
           <a class="btn btn-ghost" href="https://www.youtube.com/@AtmanMageshJayavel" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.58 7.19a2.75 2.75 0 0 0-1.94-1.95C17.92 4.75 12 4.75 12 4.75s-5.92 0-7.64.49a2.75 2.75 0 0 0-1.94 1.95A28.6 28.6 0 0 0 2 12a28.6 28.6 0 0 0 .42 4.81 2.75 2.75 0 0 0 1.94 1.95c1.72.49 7.64.49 7.64.49s5.92 0 7.64-.49a2.75 2.75 0 0 0 1.94-1.95A28.6 28.6 0 0 0 22 12a28.6 28.6 0 0 0-.42-4.81ZM9.98 15.02V8.98L15.34 12l-5.36 3.02Z"/></svg>
@@ -879,9 +988,9 @@
             <span class="chip">UK AML Regulations</span>
             <span class="chip">Compliance Documentation</span>
             <span class="chip">Java Full Stack</span>
+            <span class="chip">Blockchain</span>
             <span class="chip">MySQL</span>
             <span class="chip">VS Code / Eclipse IDE</span>
-            <span class="chip">Blockchain</span>
           </div>
         </div>
         <div class="skill-group">
@@ -1150,6 +1259,120 @@
     var url = "https://wa.me/918148916824?text=" + encodeURIComponent(text);
     window.open(url, "_blank");
   });
+</script>
+
+<script>
+/* ===== Animations + hover-to-open nav (plain JavaScript, no framework) ===== */
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var root = document.documentElement;
+  root.classList.add('js');
+
+  /* "Place your mouse here" hint beside the hidden nav */
+  var nav = document.querySelector('.side-nav');
+  if (nav) {
+    var zone = document.createElement('div');
+    zone.className = 'nav-zone';
+    zone.setAttribute('aria-hidden', 'true');
+    zone.innerHTML =
+      '<div class="nav-zone-tab"><span>›</span><span class="nav-zone-text">Place your mouse here</span></div>';
+    nav.parentNode.insertBefore(zone, nav); // must sit right before the nav (CSS uses "+")
+  }
+
+  /* Scroll progress bar */
+  var bar = document.createElement('div');
+  bar.className = 'scroll-bar';
+  document.body.appendChild(bar);
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      var max = root.scrollHeight - window.innerHeight;
+      bar.style.transform = 'scaleX(' + (max > 0 ? window.scrollY / max : 0) + ')';
+      ticking = false;
+    });
+  }, { passive: true });
+
+  /* Active section highlight in the nav */
+  var links = {};
+  document.querySelectorAll('.navlinks a').forEach(function (a) {
+    links[a.getAttribute('href').slice(1)] = a;
+  });
+  if ('IntersectionObserver' in window) {
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        Object.keys(links).forEach(function (k) { links[k].classList.remove('active'); });
+        if (links[e.target.id]) links[e.target.id].classList.add('active');
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    Object.keys(links).forEach(function (id) {
+      var s = document.getElementById(id);
+      if (s) spy.observe(s);
+    });
+  }
+
+  if (reduce || !('IntersectionObserver' in window)) return;
+
+  /* Headline: words rise into place */
+  var h1 = document.querySelector('.hero h1');
+  if (h1) {
+    var words = h1.textContent.trim().split(/\s+/);
+    h1.setAttribute('aria-label', words.join(' '));
+    h1.innerHTML = words.map(function (w, i) {
+      return '<span class="w" aria-hidden="true"><span style="--d:' + (100 + i * 130) + 'ms">' + w + '</span></span>';
+    }).join(' ');
+  }
+
+  /* Scroll reveal with staggered delays: [selector, extra class, stagger ms, base delay ms] */
+  var groups = [
+    ['.hero-grid > div:first-child > *:not(h1)', '', 120, 350],
+    ['.hero-portrait', 'rv-scale', 0, 200],
+    ['.section-head', '', 0, 0],
+    ['.about-grid > div:first-child > *', '', 110, 0],
+    ['.fact', '', 110, 0],
+    ['.tl-item', 'rv-left', 0, 0],
+    ['.chip', '', 45, 0],
+    ['.project', '', 60, 0],
+    ['.edu-node', '', 140, 0],
+    ['.list-marked li', '', 70, 0],
+    ['.contact .wrap > *', '', 90, 0],
+    ['.contact-detail', '', 80, 0]
+  ];
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var el = e.target;
+      io.unobserve(el);
+      el.classList.add('in');
+      var wait = 900 + (parseInt(el.style.getPropertyValue('--d'), 10) || 0);
+      setTimeout(function () { // hand control back to normal CSS (hover effects etc.)
+        el.classList.remove('rv', 'rv-left', 'rv-scale', 'in');
+        el.style.removeProperty('--d');
+      }, wait);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+
+  groups.forEach(function (g) {
+    document.querySelectorAll(g[0]).forEach(function (el, i) {
+      el.classList.add('rv');
+      if (g[1]) el.classList.add(g[1]);
+      el.style.setProperty('--d', (g[3] + (i % 6) * g[2]) + 'ms');
+      io.observe(el);
+    });
+  });
+
+  /* Timeline line draws itself */
+  var tl = document.querySelector('.timeline');
+  if (tl) {
+    var lineIO = new IntersectionObserver(function (es) {
+      if (es[0].isIntersecting) { tl.classList.add('drawn'); lineIO.disconnect(); }
+    }, { threshold: 0.05 });
+    lineIO.observe(tl);
+  }
+})();
 </script>
 
 </body>
