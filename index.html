@@ -16,6 +16,7 @@
     --line: #24422f;
     --gold: #c9a227;
     --gold-soft: #e6cd7c;
+    --gold-rgb: 201,162,39;
     --cream: #f1ecdd;
     --muted: #93a794;
     --muted-dim: #5f7362;
@@ -23,15 +24,16 @@
     --btn-primary-text: #10240b;
   }
   html[data-theme="light"]{
-    --bg: #ffffff;
-    --bg-panel: #f7f5ea;
-    --bg-panel-2: #f1eedd;
-    --line: #ddd8c2;
-    --gold: #b08a1c;
-    --gold-soft: #8a6c15;
-    --cream: #132015;
-    --muted: #5b6a5d;
-    --muted-dim: #838f83;
+    --bg: #f6faf4;
+    --bg-panel: #e9f2e4;
+    --bg-panel-2: #dcebd6;
+    --line: #a9c6a0;
+    --gold: #96700a;
+    --gold-soft: #765808;
+    --gold-rgb: 150,112,10;
+    --cream: #0f2410;
+    --muted: #4a6047;
+    --muted-dim: #728a6d;
     --btn-primary-bg: #1f4d34;
     --btn-primary-text: #ffffff;
   }
@@ -73,8 +75,8 @@
     pointer-events:none;
     z-index:0;
     background:
-      radial-gradient(ellipse 900px 500px at 85% -10%, rgba(201,162,39,0.10), transparent 60%),
-      radial-gradient(ellipse 700px 500px at -10% 40%, rgba(201,162,39,0.06), transparent 60%);
+      radial-gradient(ellipse 900px 500px at 85% -10%, rgba(var(--gold-rgb),0.10), transparent 60%),
+      radial-gradient(ellipse 700px 500px at -10% 40%, rgba(var(--gold-rgb),0.06), transparent 60%);
   }
 
   header, main, footer{position:relative; z-index:1;}
@@ -151,6 +153,29 @@
   .theme-toggle .icon-moon{ display:none; }
   html[data-theme="light"] .theme-toggle .icon-sun{ display:none; }
   html[data-theme="light"] .theme-toggle .icon-moon{ display:block; }
+
+  /* ---------- LIGHT MODE: heavier gold borders + greener surfaces ---------- */
+  html[data-theme="light"] .nav-cta,
+  html[data-theme="light"] .avatar,
+  html[data-theme="light"] .btn-primary,
+  html[data-theme="light"] .ms-tag.is-cert,
+  html[data-theme="light"] .nav-zone-tab,
+  html[data-theme="light"] .wa-pill.active{
+    border-width:2px;
+  }
+  html[data-theme="light"] .tl-item::before,
+  html[data-theme="light"] .ms-item::before,
+  html[data-theme="light"] .edu-dot{
+    border-width:3px;
+  }
+  html[data-theme="light"] .wa-form:hover{
+    border-width:2px;
+  }
+  html[data-theme="light"] .bg-fixed{
+    background:
+      radial-gradient(ellipse 900px 500px at 85% -10%, rgba(31,77,52,0.07), transparent 60%),
+      radial-gradient(ellipse 700px 500px at -10% 40%, rgba(150,112,10,0.09), transparent 60%);
+  }
 
   /* Hamburger toggle for the mobile nav dropdown — hidden on desktop */
   .nav-toggle{
@@ -233,7 +258,7 @@
     content:"";
     position:absolute;
     inset:0;
-    box-shadow: inset 0 0 0 1px rgba(201,162,39,0.25);
+    box-shadow: inset 0 0 0 1px rgba(var(--gold-rgb),0.25);
     pointer-events:none;
   }
   @media (max-width:840px){
@@ -430,62 +455,141 @@
   .tl-item li{ margin-bottom:6px; font-size:0.96rem; }
 
   /* ---------- SKILLS ---------- */
-  .skills-cols{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:48px;
+  .filter-tabs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:40px;
   }
-  .skill-group h3{
+  .filter-tabs button{
+    font-family:'Work Sans', sans-serif;
+    font-size:0.82rem;
+    color:var(--muted);
+    background:transparent;
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:8px 16px;
+    cursor:pointer;
+    transition:background .2s ease, border-color .2s ease, color .2s ease;
+  }
+  .filter-tabs button:hover{ border-color:var(--gold); color:var(--gold-soft); }
+  .filter-tabs button.active{
+    background:var(--gold);
+    border-color:var(--gold);
+    color:#10240b;
+  }
+  .skill-cat{ margin-bottom:40px; transition:opacity .2s ease; }
+  .skill-cat:last-child{ margin-bottom:0; }
+  .skill-cat.hide{ display:none; }
+  .skill-cat h3{
     font-size:1rem;
     color:var(--gold-soft);
     font-family:'Work Sans', sans-serif;
     font-weight:600;
-    margin-bottom:18px;
+    margin-bottom:20px;
   }
-  .chips{ display:flex; flex-wrap:wrap; gap:10px; }
-  .chip{
+  .skill-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(190px, 1fr));
+    gap:14px;
+  }
+  .skill-card{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    background:var(--bg-panel);
     border:1px solid var(--line);
-    padding:8px 14px;
-    font-size:0.88rem;
-    color:var(--muted);
-    border-radius:2px;
+    border-radius:6px;
+    padding:16px 18px;
+    transition:transform .22s ease, border-color .22s ease, box-shadow .22s ease;
   }
-  @media (max-width:720px){
-    .skills-cols{ grid-template-columns:1fr; gap:36px; }
+  .skill-card:hover{
+    transform:translateY(-4px);
+    border-color:var(--gold);
+    box-shadow:0 12px 28px rgba(0,0,0,0.22);
   }
+  .skill-icon{
+    width:34px;
+    height:34px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:var(--bg-panel-2);
+    border:1px solid var(--line);
+    color:var(--gold-soft);
+    transition:background .22s ease, border-color .22s ease, color .22s ease;
+  }
+  .skill-card:hover .skill-icon{
+    background:var(--gold);
+    border-color:var(--gold);
+    color:#10240b;
+  }
+  .skill-icon svg{ width:17px; height:17px; }
+  .skill-card span{ font-size:0.92rem; color:var(--cream); line-height:1.3; }
 
   /* ---------- PROJECTS ---------- */
   .projects{
     display:grid;
-    gap:1px;
-    background:var(--line);
-    border:1px solid var(--line);
+    grid-template-columns:1fr 1fr;
+    gap:20px;
   }
   .project{
-    background:var(--bg);
-    padding:32px;
-    display:grid;
-    grid-template-columns:1fr auto;
-    gap:20px;
-    align-items:start;
+    position:relative;
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:30px 28px 26px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    overflow:hidden;
+    transition:transform .28s ease, border-color .28s ease, box-shadow .28s ease;
   }
-  .project h3{
-    font-size:1.15rem;
-    margin-bottom:8px;
+  .project::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:radial-gradient(420px 200px at 100% 0%, rgba(var(--gold-rgb),0.10), transparent 65%);
+    opacity:0;
+    transition:opacity .28s ease;
+    pointer-events:none;
   }
-  .project p{
+  .project:hover{
+    transform:translateY(-5px);
+    border-color:var(--gold);
+    box-shadow:0 16px 36px rgba(0,0,0,0.25);
+  }
+  .project:hover::before{ opacity:1; }
+  .project.hide{ display:none; }
+  .project-index{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    color:var(--gold-soft);
+    font-size:0.85rem;
+    opacity:.75;
+  }
+  .project-body h3{ font-size:1.14rem; margin-bottom:8px; }
+  .project-body p{
     color:var(--muted);
-    font-size:0.95rem;
-    max-width:60ch;
+    font-size:0.94rem;
     margin:0;
   }
-  .project .stack{
+  .stack-pills{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+  .pill{
+    font-size:0.74rem;
     color:var(--gold-soft);
-    font-size:0.8rem;
-    margin-top:10px;
+    border:1px solid var(--line);
+    padding:4px 11px;
+    border-radius:20px;
     letter-spacing:0.02em;
+    transition:border-color .2s ease, color .2s ease;
   }
+  .project:hover .pill{ border-color:rgba(var(--gold-rgb),0.5); }
   .project .link{
+    align-self:flex-start;
+    margin-top:auto;
     white-space:nowrap;
     font-size:0.86rem;
     color:var(--gold-soft);
@@ -495,8 +599,15 @@
     height:fit-content;
   }
   .project .link:hover{ color:var(--gold); border-color:var(--gold); }
-  @media (max-width:600px){
-    .project{ grid-template-columns:1fr; }
+  .project-status{
+    align-self:flex-start;
+    margin-top:auto;
+    font-size:0.8rem;
+    color:var(--muted-dim);
+    font-style:italic;
+  }
+  @media (max-width:720px){
+    .projects{ grid-template-columns:1fr; }
   }
 
   /* ---------- SOLUTIONS / SERVICES ---------- */
@@ -573,7 +684,7 @@
   }
   .net-node:hover .node-bg, .net-node:focus .node-bg{
     stroke:var(--gold);
-    filter:drop-shadow(0 0 7px rgba(201,162,39,.55));
+    filter:drop-shadow(0 0 7px rgba(var(--gold-rgb),.55));
   }
   .net-node:hover .node-icon, .net-node:focus .node-icon{ stroke:var(--gold); }
   .net-node:hover text, .net-node:focus text{ fill:var(--gold-soft); }
@@ -632,7 +743,7 @@
   }
   .service:hover .service-icon{
     border-color:var(--gold);
-    background:rgba(201,162,39,0.08);
+    background:rgba(var(--gold-rgb),0.08);
     transform:scale(1.08) rotate(-4deg);
   }
   .service h3{
@@ -705,7 +816,7 @@
   }
   .edu-node.is-current .edu-dot{
     background:var(--gold);
-    box-shadow:0 0 0 4px rgba(201,162,39,0.18);
+    box-shadow:0 0 0 4px rgba(var(--gold-rgb),0.18);
   }
   .edu-card{
     background:var(--bg-panel);
@@ -786,6 +897,178 @@
     .two-col{ grid-template-columns:1fr; gap:36px; }
   }
 
+  /* ---------- ACHIEVEMENTS: growth graph + chronological milestones ---------- */
+  .achieve-graph{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    padding:32px 32px 20px;
+    margin-bottom:48px;
+  }
+  .achieve-graph-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    flex-wrap:wrap;
+    gap:8px 20px;
+    margin-bottom:8px;
+  }
+  .achieve-graph-head h3{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:1.05rem;
+    color:var(--cream);
+    margin:0;
+  }
+  .achieve-graph-head span{
+    font-size:0.78rem;
+    color:var(--muted-dim);
+  }
+  .ag-svg{ width:100%; height:auto; display:block; overflow:visible; margin-top:14px; }
+  .ag-grid{ stroke:var(--line); stroke-width:1; stroke-dasharray:3 5; }
+  .ag-line{
+    stroke:var(--gold);
+    stroke-width:2;
+    fill:none;
+    stroke-dasharray:6 6;
+    animation:agFlow 2.4s linear infinite;
+  }
+  @keyframes agFlow{ to{ stroke-dashoffset:-48; } }
+  .ag-node{ fill:var(--bg-panel); stroke:var(--gold); stroke-width:2; }
+  .ag-node-ring{
+    fill:none;
+    stroke:var(--gold);
+    stroke-width:1;
+    opacity:.55;
+    transform-box:fill-box;
+    transform-origin:center;
+    animation:agPulse 2.6s ease-out infinite;
+  }
+  @keyframes agPulse{ 0%{ r:6; opacity:.55; } 100%{ r:18; opacity:0; } }
+  .ag-value{
+    fill:var(--gold-soft);
+    font-family:'Work Sans', sans-serif;
+    font-size:13px;
+    font-weight:600;
+    text-anchor:middle;
+  }
+  .ag-year{
+    fill:var(--muted);
+    font-family:'Work Sans', sans-serif;
+    font-size:11px;
+    text-anchor:middle;
+  }
+  .achieve-graph-caption{
+    color:var(--muted);
+    font-size:0.82rem;
+    margin:16px 0 4px;
+  }
+
+  .milestones{
+    position:relative;
+    padding-left:32px;
+  }
+  .milestones::before{
+    content:"";
+    position:absolute;
+    left:5px;
+    top:6px;
+    bottom:6px;
+    width:1px;
+    background:var(--line);
+  }
+  .ms-item{
+    position:relative;
+    padding-bottom:30px;
+  }
+  .ms-item:last-child{ padding-bottom:0; }
+  .ms-item::before{
+    content:"";
+    position:absolute;
+    left:-32px;
+    top:5px;
+    width:11px;
+    height:11px;
+    border-radius:50%;
+    background:var(--bg);
+    border:2px solid var(--gold);
+  }
+  .ms-top{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:4px;
+  }
+  .ms-year{
+    color:var(--gold-soft);
+    font-size:0.86rem;
+    font-family:'Fraunces', serif;
+    font-style:italic;
+  }
+  .ms-tag{
+    font-size:0.72rem;
+    color:var(--muted);
+    border:1px solid var(--line);
+    padding:2px 9px;
+    border-radius:2px;
+  }
+  .ms-tag.is-cert{ color:var(--gold-soft); border-color:var(--gold); }
+  .ms-text{
+    color:var(--muted);
+    font-size:0.94rem;
+    margin:0;
+  }
+
+  /* ---------- CERTIFICATIONS (standalone section) ---------- */
+  .certs{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .cert-card{
+    background:var(--bg);
+    padding:26px 28px;
+    display:flex;
+    gap:16px;
+    align-items:flex-start;
+  }
+  .cert-icon{
+    width:40px; height:40px;
+    border:1px solid var(--line);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--gold-soft);
+    flex-shrink:0;
+  }
+  .cert-icon svg{
+    width:18px; height:18px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.5;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+  .cert-card h3{
+    font-size:1rem;
+    line-height:1.35;
+    margin-bottom:6px;
+  }
+  .cert-card .cert-issuer{
+    color:var(--muted);
+    font-size:0.86rem;
+    margin-bottom:6px;
+  }
+  .cert-card .cert-year{
+    color:var(--gold-soft);
+    font-size:0.78rem;
+  }
+  @media (max-width:700px){
+    .certs{ grid-template-columns:1fr; }
+  }
   /* ---------- CONTACT / FOOTER ---------- */
   .contact{
     padding:88px 0 64px;
@@ -815,6 +1098,25 @@
     padding:32px;
     max-width:520px;
     margin-top:36px;
+    transition:border-color .25s ease, box-shadow .25s ease;
+  }
+  .wa-form:hover{
+    border-color:rgba(var(--gold-rgb),0.4);
+    box-shadow:0 12px 32px rgba(0,0,0,0.2);
+  }
+  .wa-progress{
+    height:4px;
+    background:var(--bg-panel-2);
+    border:1px solid var(--line);
+    border-radius:4px;
+    overflow:hidden;
+    margin-bottom:28px;
+  }
+  .wa-progress-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, var(--gold-soft), var(--gold));
+    transition:width .45s cubic-bezier(.2,.8,.2,1);
   }
   .wa-field{ margin-bottom:18px; }
   .wa-field:last-of-type{ margin-bottom:24px; }
@@ -836,11 +1138,14 @@
     font-size:0.92rem;
     border-radius:2px;
     outline:none;
-    transition:border-color .2s ease;
+    transition:border-color .2s ease, box-shadow .2s ease;
   }
   .wa-field input:focus,
   .wa-field select:focus,
-  .wa-field textarea:focus{ border-color:var(--gold); }
+  .wa-field textarea:focus{
+    border-color:var(--gold);
+    box-shadow:0 0 0 3px rgba(var(--gold-rgb),0.14);
+  }
   .wa-field textarea{ resize:vertical; min-height:64px; }
   .wa-field select{
     appearance:none;
@@ -851,13 +1156,123 @@
     padding-right:34px;
   }
   .wa-field select option{ background:var(--bg); color:var(--cream); }
+
+  /* floating labels */
+  .wa-float{ position:relative; }
+  .wa-float input,
+  .wa-float textarea{ padding-top:19px; padding-bottom:9px; }
+  .wa-float label{
+    position:absolute;
+    left:14px;
+    top:14px;
+    margin:0;
+    font-size:0.92rem;
+    color:var(--muted);
+    pointer-events:none;
+    transition:top .18s ease, font-size .18s ease, color .18s ease;
+  }
+  .wa-float input:focus + label,
+  .wa-float input:not(:placeholder-shown) + label,
+  .wa-float textarea:focus + label,
+  .wa-float textarea:not(:placeholder-shown) + label{
+    top:6px;
+    font-size:0.7rem;
+    color:var(--gold-soft);
+  }
+  .wa-check{
+    position:absolute;
+    right:13px;
+    top:15px;
+    color:var(--gold-soft);
+    opacity:0;
+    transform:scale(0.5);
+    transition:opacity .2s ease, transform .2s ease;
+    pointer-events:none;
+  }
+  .wa-check svg{ width:16px; height:16px; display:block; }
+  .wa-float input:valid:not(:placeholder-shown) ~ .wa-check{
+    opacity:1;
+    transform:scale(1);
+  }
+  .wa-count{
+    display:block;
+    text-align:right;
+    font-size:0.74rem;
+    color:var(--muted-dim);
+    margin-top:6px;
+  }
+
+  /* pill-style reason selector */
+  .wa-pills{ display:flex; flex-wrap:wrap; gap:9px; margin-top:2px; }
+  .wa-pill{
+    font-family:'Work Sans', sans-serif;
+    font-size:0.82rem;
+    color:var(--muted);
+    background:transparent;
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:8px 15px;
+    cursor:pointer;
+    transition:transform .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
+  }
+  .wa-pill:hover{ border-color:var(--gold); color:var(--gold-soft); }
+  .wa-pill.active{
+    background:var(--gold);
+    border-color:var(--gold);
+    color:#10240b;
+    transform:scale(1.05);
+  }
+  .wa-pills.invalid{
+    outline:1px solid #c0645a;
+    outline-offset:8px;
+    border-radius:20px;
+    animation:wa-shake .4s ease;
+  }
+  @keyframes wa-shake{
+    10%,90%{ transform:translateX(-1px); }
+    20%,80%{ transform:translateX(2px); }
+    30%,50%,70%{ transform:translateX(-4px); }
+    40%,60%{ transform:translateX(4px); }
+  }
+  .wa-field.invalid input{
+    border-color:#c0645a !important;
+    animation:wa-shake .4s ease;
+  }
+
+  /* submit button states + ripple */
   .wa-submit{
+    position:relative;
     width:100%;
     justify-content:center;
     border:none;
     cursor:pointer;
     font-family:'Work Sans', sans-serif;
+    overflow:hidden;
   }
+  .wa-submit-spinner{
+    display:none;
+    width:16px;
+    height:16px;
+    border:2px solid rgba(16,36,11,0.3);
+    border-top-color:#10240b;
+    border-radius:50%;
+    animation:wa-spin .6s linear infinite;
+  }
+  @keyframes wa-spin{ to{ transform:rotate(360deg); } }
+  .wa-submit.loading .wa-submit-icon{ display:none; }
+  .wa-submit.loading .wa-submit-spinner{ display:inline-block; }
+  .wa-submit.success{ background:#2e7d4f; border-color:#2e7d4f; }
+  .wa-submit.success .wa-submit-icon{ display:none; }
+  .wa-submit:disabled{ cursor:default; }
+  .wa-submit .ripple{
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,255,255,0.35);
+    transform:scale(0);
+    animation:wa-ripple .6s ease-out;
+    pointer-events:none;
+  }
+  @keyframes wa-ripple{ to{ transform:scale(2.6); opacity:0; } }
   .wa-note{
     font-size:0.78rem;
     color:var(--muted-dim);
@@ -895,7 +1310,7 @@
      ===================================================== */
   @keyframes nudge { 0%,100%{transform:translateX(0)} 50%{transform:translateX(5px)} }
   @keyframes wordUp { to { transform:translateY(0); } }
-  @keyframes ring { 0%{box-shadow:0 0 0 0 rgba(201,162,39,.55)} 100%{box-shadow:0 0 0 12px rgba(201,162,39,0)} }
+  @keyframes ring { 0%{box-shadow:0 0 0 0 rgba(var(--gold-rgb),.55)} 100%{box-shadow:0 0 0 12px rgba(var(--gold-rgb),0)} }
   @keyframes drift { 0%,100%{transform:translate3d(0,0,0)} 50%{transform:translate3d(-2%,3%,0) scale(1.04)} }
   @keyframes zoom { from{transform:scale(1)} to{transform:scale(1.06)} }
 
@@ -932,8 +1347,6 @@
   }
 
   /* hover feedback */
-  .chip{ transition:transform .2s ease, border-color .2s ease, color .2s ease; }
-  .chip:hover{ transform:translateY(-3px); border-color:var(--gold); color:var(--gold-soft); }
   .project{ transition:background .25s ease, transform .25s ease; }
   .project:hover{ transform:translateX(6px); background:var(--bg-panel); }
   .service{ transition:background .25s ease, transform .25s ease, box-shadow .25s ease; }
@@ -1020,6 +1433,8 @@
     <a href="#projects">Projects</a>
     <a href="#solutions">Solutions</a>
     <a href="#education">Education</a>
+    <a href="#more">Achievements</a>
+    <a href="#certifications">Certifications</a>
     <a href="#contact">Contact</a>
   </div>
   <a class="nav-cta" href="https://wa.me/918148916824?text=Hi%20Magesh%2C%20I%20found%20your%20portfolio%20and%20would%20like%20to%20connect." target="_blank" rel="noopener">Message on WhatsApp</a>
@@ -1182,34 +1597,104 @@
         <h2>Skills</h2>
         <span class="section-num">03</span>
       </div>
-      <div class="skills-cols">
-        <div class="skill-group">
-          <h3>Technical &amp; domain</h3>
-          <div class="chips">
-            <span class="chip">AML &amp; KYC</span>
-            <span class="chip">Customer Due Diligence (CDD)</span>
-            <span class="chip">Enhanced Due Diligence (EDD)</span>
-            <span class="chip">Customer Risk Assessment</span>
-            <span class="chip">Transaction Monitoring</span>
-            <span class="chip">PEP &amp; Financial Crime Risk</span>
-            <span class="chip">UK AML Regulations</span>
-            <span class="chip">Compliance Documentation</span>
-            <span class="chip">Java Full Stack</span>
-            <span class="chip">Blockchain</span>
-            <span class="chip">MySQL</span>
-            <span class="chip">VS Code / Eclipse IDE</span>
+
+      <div class="filter-tabs" id="skillsFilter" aria-label="Filter skills by category">
+        <button type="button" class="active" data-filter="all">All</button>
+        <button type="button" data-filter="compliance">Compliance &amp; AML</button>
+        <button type="button" data-filter="dev">Development</button>
+        <button type="button" data-filter="soft">Soft skills</button>
+      </div>
+
+      <div class="skill-cat" data-cat="compliance">
+        <h3>Compliance &amp; domain</h3>
+        <div class="skill-grid">
+          <div class="skill-card">
+            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3Z"/><path d="m9.5 12 2 2 3.5-3.5"/></svg></span>
+            <span>AML &amp; KYC</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3Z"/><path d="m9.5 12 2 2 3.5-3.5"/></svg></span>
+            <span>Customer Due Diligence (CDD)</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3Z"/><path d="m9.5 12 2 2 3.5-3.5"/></svg></span>
+            <span>Enhanced Due Diligence (EDD)</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l4 2"/></svg></span>
+            <span>Customer Risk Assessment</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-8 4 16 2-8h6"/></svg></span>
+            <span>Transaction Monitoring</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/><path d="M9 3.5 12 2l3 1.5"/></svg></span>
+            <span>PEP &amp; Financial Crime Risk</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>
+            <span>UK AML Regulations</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg></span>
+            <span>Compliance Documentation</span>
           </div>
         </div>
-        <div class="skill-group">
-          <h3>Soft skills</h3>
-          <div class="chips">
-            <span class="chip">Customer focus</span>
-            <span class="chip">Leadership &amp; mentoring</span>
-            <span class="chip">Teamwork</span>
-            <span class="chip">Problem-solving</span>
-            <span class="chip">Presentation &amp; pitching</span>
-            <span class="chip">Public speaking</span>
-            <span class="chip">Video editing</span>
+      </div>
+
+      <div class="skill-cat" data-cat="dev">
+        <h3>Development &amp; tools</h3>
+        <div class="skill-grid">
+          <div class="skill-card">
+            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
+            <span>Java Full Stack</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="8" height="8" rx="2"/><rect x="14" y="7" width="8" height="8" rx="2"/><path d="M10 11h4"/></svg></span>
+            <span>Blockchain</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span>
+            <span>MySQL</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3"/><path d="M13 15h4"/></svg></span>
+            <span>VS Code / Eclipse IDE</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="skill-cat" data-cat="soft">
+        <h3>Soft skills</h3>
+        <div class="skill-grid">
+          <div class="skill-card">
+            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>
+            <span>Customer focus</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+            <span>Leadership &amp; mentoring</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg></span>
+            <span>Teamwork</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2.05V17h6v-.25c0-.85.4-1.55 1-2.05A7 7 0 0 0 12 2Z"/></svg></span>
+            <span>Problem-solving</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="14" rx="2"/><path d="M7 21h10"/><path d="M9 13v-3M12 13V7M15 13v-5"/></svg></span>
+            <span>Presentation &amp; pitching</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 17v5"/><path d="M8 22h8"/></svg></span>
+            <span>Public speaking</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 3-4h4l-3 4Z"/><path d="m9 7 3-4h4l-3 4Z"/><path d="M15 7 18 3h1a2 2 0 0 1 2 2v2Z"/><rect x="2" y="7" width="20" height="13" rx="2"/></svg></span>
+            <span>Video editing</span>
           </div>
         </div>
       </div>
@@ -1222,47 +1707,62 @@
         <h2>Projects</h2>
         <span class="section-num">04</span>
       </div>
+
+      <div class="filter-tabs" id="projectsFilter" aria-label="Filter projects by type">
+        <button type="button" class="active" data-pfilter="all">All</button>
+        <button type="button" data-pfilter="web">Web</button>
+        <button type="button" data-pfilter="ai">AI &amp; ML</button>
+        <button type="button" data-pfilter="iot">IoT</button>
+      </div>
+
       <div class="projects">
 
-        <div class="project">
-          <div>
+        <div class="project" data-pcat="iot">
+          <span class="project-index">01</span>
+          <div class="project-body">
             <h3>Anti-Theft Mechanism</h3>
             <p>A mini security vault prototype with automated locking, motion-triggered security, mobile-controlled access, and an intelligent alarm system.</p>
-            <div class="stack">Arduino · IoT</div>
+            <div class="stack-pills"><span class="pill">Arduino</span><span class="pill">IoT</span></div>
           </div>
+          <span class="project-status">No live demo</span>
         </div>
 
-        <div class="project">
-          <div>
+        <div class="project" data-pcat="web">
+          <span class="project-index">02</span>
+          <div class="project-body">
             <h3>Personal Portfolio (v1)</h3>
             <p>An earlier responsive portfolio showcasing skills and projects, with a clean UI and smooth navigation.</p>
-            <div class="stack">HTML · CSS · JavaScript</div>
+            <div class="stack-pills"><span class="pill">HTML</span><span class="pill">CSS</span><span class="pill">JavaScript</span></div>
           </div>
           <a class="link" href="https://john16dodge.github.io/MK-Portfolio/" target="_blank" rel="noopener">View site ↗</a>
         </div>
 
-        <div class="project">
-          <div>
+        <div class="project" data-pcat="ai">
+          <span class="project-index">03</span>
+          <div class="project-body">
             <h3>X-Recruit (v1.1)</h3>
             <p>A smart job platform with dashboards for students and colleges, mock interviews, placement analytics, recruiter feedback, career roadmaps, and mentorship tools.</p>
-            <div class="stack">Python Full Stack · ML · AI</div>
+            <div class="stack-pills"><span class="pill">Python Full Stack</span><span class="pill">ML</span><span class="pill">AI</span></div>
           </div>
+          <span class="project-status">No live demo</span>
         </div>
 
-        <div class="project">
-          <div>
+        <div class="project" data-pcat="web">
+          <span class="project-index">04</span>
+          <div class="project-body">
             <h3>Sri Nivas Enterprises — Catalog Site</h3>
             <p>A freelance home-care product catalog with structured listings, pricing breakdowns, and branded content for detergents, dishwash liquids, toilet cleaners, and fabric conditioners.</p>
-            <div class="stack">HTML · CSS · JavaScript</div>
+            <div class="stack-pills"><span class="pill">HTML</span><span class="pill">CSS</span><span class="pill">JavaScript</span></div>
           </div>
           <a class="link" href="https://john16dodge.github.io/Sri-NivasEnterprises/" target="_blank" rel="noopener">View site ↗</a>
         </div>
 
-        <div class="project">
-          <div>
+        <div class="project" data-pcat="web">
+          <span class="project-index">05</span>
+          <div class="project-body">
             <h3>Sales Tool</h3>
             <p>A mini sales tool built to cut down basic manual workload — automating repetitive steps like reaching out with messages and sharing pricing details.</p>
-            <div class="stack">HTML · CSS · JavaScript</div>
+            <div class="stack-pills"><span class="pill">HTML</span><span class="pill">CSS</span><span class="pill">JavaScript</span></div>
           </div>
           <a class="link" href="https://x-rec.github.io/Sales/" target="_blank" rel="noopener">View site ↗</a>
         </div>
@@ -1441,30 +1941,158 @@
         <h2>Achievements &amp; certifications</h2>
         <span class="section-num">07</span>
       </div>
-      <div class="two-col">
-        <div>
-          <h3 style="font-size:1rem; color:var(--gold-soft); font-family:'Work Sans',sans-serif; font-weight:600; margin-bottom:18px;">Achievements &amp; recognition</h3>
-          <ul class="list-marked">
-            <li>ICT Youth Talk Pre-Finalist (2024), Puducherry — public speaking excellence.</li>
-            <li>Freelance UI/UX design for Sri Nivas Enterprises' product catalog.</li>
-            <li>ICSSCAN'2024 — presented a paper on cloud-based security for the medical industry (1st prize).</li>
-            <li>SCIMIT'25 — presented "Blockchain Based Police Complaint System."</li>
-            <li>ICACIKDDA'2025 — presented a paper on sentiment analysis of social media reviews (2nd prize).</li>
-            <li>Talent Spark — identified by Jai Kishore, Quantum Consulting Services.</li>
-            <li>Appointed Innovation Ambassador, promoting entrepreneurship and innovation on campus.</li>
-            <li>Maintained an 8.08 CGPA while balancing leadership and project roles.</li>
-          </ul>
+
+      <div class="achieve-graph">
+        <div class="achieve-graph-head">
+          <h3>Milestone growth</h3>
+          <span>Cumulative achievements, 2024–2026</span>
         </div>
-        <div>
-          <h3 style="font-size:1rem; color:var(--gold-soft); font-family:'Work Sans',sans-serif; font-weight:600; margin-bottom:18px;">Certifications</h3>
-          <ul class="list-marked">
-            <li>CAFS AML Certification — ReTTRAC Global</li>
-            <li>Foundation IA Certificate — MoE Innovation Cell</li>
-            <li>Advanced IA Certificate — MoE Innovation Cell</li>
-            <li>Re-Skilling IA Certificate — MoE Innovation Cell</li>
-            <li>Soft Skills Training — Analytics</li>
-          </ul>
+        <svg class="ag-svg" viewBox="0 0 640 210" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Line chart showing cumulative achievements rising from 3 in 2024 to 7 in 2025 to 8 in 2026">
+          <defs>
+            <linearGradient id="agGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" style="stop-color:var(--gold);stop-opacity:0.35"/>
+              <stop offset="100%" style="stop-color:var(--gold);stop-opacity:0"/>
+            </linearGradient>
+          </defs>
+
+          <line class="ag-grid" x1="60" y1="175" x2="590" y2="175"/>
+          <line class="ag-grid" x1="60" y1="105" x2="590" y2="105"/>
+          <line class="ag-grid" x1="60" y1="35"  x2="590" y2="35"/>
+
+          <path fill="url(#agGradient)" d="M90,175 L90,123 L320,53 L550,35 L550,175 Z"/>
+          <path class="ag-line" d="M90,123 L320,53 L550,35"/>
+
+          <circle class="ag-node-ring" cx="90" cy="123"/>
+          <circle class="ag-node" cx="90" cy="123" r="6"/>
+          <text class="ag-value" x="90" y="106">3</text>
+          <text class="ag-year" x="90" y="196">2024</text>
+
+          <circle class="ag-node-ring" cx="320" cy="53"/>
+          <circle class="ag-node" cx="320" cy="53" r="6"/>
+          <text class="ag-value" x="320" y="36">7</text>
+          <text class="ag-year" x="320" y="196">2025</text>
+
+          <circle class="ag-node-ring" cx="550" cy="35"/>
+          <circle class="ag-node" cx="550" cy="35" r="6"/>
+          <text class="ag-value" x="550" y="20">8</text>
+          <text class="ag-year" x="550" y="196">2026</text>
+        </svg>
+        <p class="achieve-graph-caption">8 recognitions earned across three years — momentum that's tracked to speed up alongside the compliance internship and public-speaking work below.</p>
+      </div>
+
+      <div class="milestones">
+
+        <div class="ms-item">
+          <div class="ms-top"><span class="ms-year">2024</span><span class="ms-tag">Achievement</span></div>
+          <p class="ms-text">ICT Youth Talk Pre-Finalist, Puducherry — recognized for public speaking excellence.</p>
         </div>
+
+        <div class="ms-item">
+          <div class="ms-top"><span class="ms-year">2024</span><span class="ms-tag">Achievement</span></div>
+          <p class="ms-text">Executed freelance UI/UX design for Sri Nivas Enterprises' product catalog.</p>
+        </div>
+
+        <div class="ms-item">
+          <div class="ms-top"><span class="ms-year">2024</span><span class="ms-tag">Achievement</span></div>
+          <p class="ms-text">ICSSCAN'2024 — 1st prize for a paper on cloud-based security in the medical industry.</p>
+        </div>
+
+        <div class="ms-item">
+          <div class="ms-top"><span class="ms-year">2024</span><span class="ms-tag">Achievement</span></div>
+          <p class="ms-text">Training &amp; Mentorship — successfully led workshops as a Soft Skill Trainer, guiding communication, teamwork, and leadership.</p>
+        </div>
+
+        <div class="ms-item">
+          <div class="ms-top"><span class="ms-year">2025</span><span class="ms-tag">Achievement</span></div>
+          <p class="ms-text">SCIMIT'25 — presented "Blockchain Based Police Complaint System."</p>
+        </div>
+
+        <div class="ms-item">
+          <div class="ms-top"><span class="ms-year">2025</span><span class="ms-tag">Achievement</span></div>
+          <p class="ms-text">ICACIKDDA'2025 — 2nd prize for a paper on sentiment analysis of social media reviews.</p>
+        </div>
+
+        <div class="ms-item">
+          <div class="ms-top"><span class="ms-year">2025</span><span class="ms-tag">Achievement</span></div>
+          <p class="ms-text">Appointed Innovation Ambassador, promoting entrepreneurship and innovation on campus.</p>
+        </div>
+
+        <div class="ms-item">
+          <div class="ms-top"><span class="ms-year">2025</span><span class="ms-tag">Achievement</span></div>
+          <p class="ms-text">Talent Spark — identified by Jai Kishore, Quantum Consulting Services.</p>
+        </div>
+
+        <div class="ms-item">
+          <div class="ms-top"><span class="ms-year">2026</span><span class="ms-tag">Achievement</span></div>
+          <p class="ms-text">Maintained an 8.08 CGPA through B.Tech while balancing leadership and project roles.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="certifications">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Certifications</h2>
+        <span class="section-num">08</span>
+      </div>
+      <div class="certs">
+
+        <div class="cert-card">
+          <div class="cert-icon"><svg viewBox="0 0 24 24"><path d="M12 2 9 8l-6 .9 4.4 4.2L6.3 19 12 15.9 17.7 19l-1.1-5.9L21 8.9 15 8Z"/></svg></div>
+          <div>
+            <h3>KYC Lookup: Foundation in AML and KYC</h3>
+            <div class="cert-issuer">Foundation-level certification in Anti-Money Laundering and Know Your Customer processes</div>
+            <div class="cert-year">2026</div>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-icon"><svg viewBox="0 0 24 24"><path d="M12 2 9 8l-6 .9 4.4 4.2L6.3 19 12 15.9 17.7 19l-1.1-5.9L21 8.9 15 8Z"/></svg></div>
+          <div>
+            <h3>CAFS AML Certification</h3>
+            <div class="cert-issuer">ReTTRAC Global</div>
+            <div class="cert-year">2026</div>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-icon"><svg viewBox="0 0 24 24"><path d="M12 2 9 8l-6 .9 4.4 4.2L6.3 19 12 15.9 17.7 19l-1.1-5.9L21 8.9 15 8Z"/></svg></div>
+          <div>
+            <h3>Soft Skills Training</h3>
+            <div class="cert-issuer">Analytics</div>
+            <div class="cert-year">2026</div>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-icon"><svg viewBox="0 0 24 24"><path d="M12 2 9 8l-6 .9 4.4 4.2L6.3 19 12 15.9 17.7 19l-1.1-5.9L21 8.9 15 8Z"/></svg></div>
+          <div>
+            <h3>Foundation IA Certificate</h3>
+            <div class="cert-issuer">MoE Innovation Cell</div>
+            <div class="cert-year">2025</div>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-icon"><svg viewBox="0 0 24 24"><path d="M12 2 9 8l-6 .9 4.4 4.2L6.3 19 12 15.9 17.7 19l-1.1-5.9L21 8.9 15 8Z"/></svg></div>
+          <div>
+            <h3>Advanced IA Certificate</h3>
+            <div class="cert-issuer">MoE Innovation Cell</div>
+            <div class="cert-year">2025</div>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-icon"><svg viewBox="0 0 24 24"><path d="M12 2 9 8l-6 .9 4.4 4.2L6.3 19 12 15.9 17.7 19l-1.1-5.9L21 8.9 15 8Z"/></svg></div>
+          <div>
+            <h3>Re-Skilling IA Certificate</h3>
+            <div class="cert-issuer">MoE Innovation Cell</div>
+            <div class="cert-year">2025</div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -1474,30 +2102,38 @@
       <h2>Let's talk.</h2>
       <p class="lead">Whether it's a compliance role, a training opportunity, or a project — the fastest way to reach me is WhatsApp. Tell me a bit about why you're reaching out and I'll open the chat pre-filled.</p>
 
-      <form class="wa-form" id="waForm">
-        <div class="wa-field">
+      <form class="wa-form" id="waForm" novalidate>
+        <div class="wa-progress"><div class="wa-progress-fill" id="waProgress"></div></div>
+
+        <div class="wa-field wa-float">
+          <input type="text" id="waName" placeholder=" " required>
           <label for="waName">Your name</label>
-          <input type="text" id="waName" placeholder="e.g. Priya Sharma" required>
+          <span class="wa-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
         </div>
+
         <div class="wa-field">
-          <label for="waReason">Reason for contacting</label>
-          <select id="waReason" required>
-            <option value="" disabled selected>Select a reason</option>
-            <option value="a job opportunity">Job opportunity</option>
-            <option value="a compliance / AML-KYC role">Compliance / AML-KYC role</option>
-            <option value="a training or speaking engagement">Training or speaking engagement</option>
-            <option value="a freelance or web project">Freelance project</option>
-            <option value="just connecting">Just connecting / networking</option>
-            <option value="something else">Something else</option>
-          </select>
+          <label id="waReasonLabel">Reason for contacting</label>
+          <div class="wa-pills" id="waReasonPills" role="radiogroup" aria-labelledby="waReasonLabel">
+            <button type="button" class="wa-pill" role="radio" aria-checked="false" data-value="a job opportunity">Job opportunity</button>
+            <button type="button" class="wa-pill" role="radio" aria-checked="false" data-value="a compliance / AML-KYC role">Compliance / AML-KYC</button>
+            <button type="button" class="wa-pill" role="radio" aria-checked="false" data-value="a training or speaking engagement">Training / speaking</button>
+            <button type="button" class="wa-pill" role="radio" aria-checked="false" data-value="a freelance or web project">Freelance project</button>
+            <button type="button" class="wa-pill" role="radio" aria-checked="false" data-value="just connecting">Just connecting</button>
+            <button type="button" class="wa-pill" role="radio" aria-checked="false" data-value="something else">Something else</button>
+          </div>
+          <input type="hidden" id="waReason">
         </div>
-        <div class="wa-field">
+
+        <div class="wa-field wa-float">
+          <textarea id="waMessage" rows="3" placeholder=" " maxlength="240"></textarea>
           <label for="waMessage">A few details (optional)</label>
-          <textarea id="waMessage" rows="3" placeholder="Add any context that would help..."></textarea>
+          <span class="wa-count" id="waCount">0 / 240</span>
         </div>
-        <button type="submit" class="btn btn-primary wa-submit">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A8.86 8.86 0 0 0 11.94 4C7.15 4 3.26 7.9 3.26 12.68a8.6 8.6 0 0 0 1.15 4.32L3 21l4.12-1.37a8.7 8.7 0 0 0 4.8 1.41h.01c4.79 0 8.68-3.9 8.68-8.68a8.63 8.63 0 0 0-3.01-6.04Zm-5.65 13.35a7.2 7.2 0 0 1-3.68-1l-.26-.16-2.75.91.92-2.68-.17-.28a7.15 7.15 0 0 1-1.1-3.8c0-3.96 3.22-7.19 7.19-7.19a7.15 7.15 0 0 1 7.16 7.19c0 3.96-3.22 7.19-7.19 7.19Zm3.94-5.38c-.21-.11-1.27-.63-1.47-.7-.2-.07-.34-.11-.49.11-.14.21-.56.7-.69.84-.13.14-.25.16-.47.05-.21-.11-.9-.33-1.72-1.06-.63-.57-1.06-1.26-1.19-1.47-.12-.21-.01-.33.1-.43.1-.1.21-.25.32-.38.11-.13.14-.21.21-.36.07-.14.04-.27-.02-.38-.07-.11-.49-1.19-.68-1.63-.18-.42-.36-.37-.49-.37-.13 0-.27-.01-.42-.01-.14 0-.38.05-.58.27-.2.21-.76.75-.76 1.82 0 1.07.78 2.11.89 2.25.11.14 1.54 2.36 3.74 3.31.52.22.93.36 1.25.46.53.17 1 .14 1.38.09.42-.06 1.27-.52 1.45-1.02.18-.5.18-.93.12-1.02-.06-.09-.2-.14-.41-.25Z"/></svg>
-          Continue to WhatsApp
+
+        <button type="submit" class="btn btn-primary wa-submit" id="waSubmit">
+          <svg class="wa-submit-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A8.86 8.86 0 0 0 11.94 4C7.15 4 3.26 7.9 3.26 12.68a8.6 8.6 0 0 0 1.15 4.32L3 21l4.12-1.37a8.7 8.7 0 0 0 4.8 1.41h.01c4.79 0 8.68-3.9 8.68-8.68a8.63 8.63 0 0 0-3.01-6.04Zm-5.65 13.35a7.2 7.2 0 0 1-3.68-1l-.26-.16-2.75.91.92-2.68-.17-.28a7.15 7.15 0 0 1-1.1-3.8c0-3.96 3.22-7.19 7.19-7.19a7.15 7.15 0 0 1 7.16 7.19c0 3.96-3.22 7.19-7.19 7.19Zm3.94-5.38c-.21-.11-1.27-.63-1.47-.7-.2-.07-.34-.11-.49.11-.14.21-.56.7-.69.84-.13.14-.25.16-.47.05-.21-.11-.9-.33-1.72-1.06-.63-.57-1.06-1.26-1.19-1.47-.12-.21-.01-.33.1-.43.1-.1.21-.25.32-.38.11-.13.14-.21.21-.36.07-.14.04-.27-.02-.38-.07-.11-.49-1.19-.68-1.63-.18-.42-.36-.37-.49-.37-.13 0-.27-.01-.42-.01-.14 0-.38.05-.58.27-.2.21-.76.75-.76 1.82 0 1.07.78 2.11.89 2.25.11.14 1.54 2.36 3.74 3.31.52.22.93.36 1.25.46.53.17 1 .14 1.38.09.42-.06 1.27-.52 1.45-1.02.18-.5.18-.93.12-1.02-.06-.09-.2-.14-.41-.25Z"/></svg>
+          <span class="wa-submit-spinner" aria-hidden="true"></span>
+          <span class="wa-submit-text">Continue to WhatsApp</span>
         </button>
         <div class="wa-note">Opens WhatsApp with your details pre-filled — nothing is stored or sent anywhere else.</div>
       </form>
@@ -1574,18 +2210,106 @@
 </script>
 
 <script>
-  document.getElementById('waForm').addEventListener('submit', function (e) {
+/* ===== Interactive WhatsApp contact form ===== */
+(function () {
+  var form = document.getElementById('waForm');
+  if (!form) return;
+
+  var nameInput = document.getElementById('waName');
+  var nameField = nameInput.closest('.wa-field');
+  var reasonHidden = document.getElementById('waReason');
+  var reasonPills = document.getElementById('waReasonPills');
+  var messageInput = document.getElementById('waMessage');
+  var countEl = document.getElementById('waCount');
+  var progressFill = document.getElementById('waProgress');
+  var submitBtn = document.getElementById('waSubmit');
+  var submitText = submitBtn.querySelector('.wa-submit-text');
+
+  function updateProgress() {
+    var filled = 0;
+    if (nameInput.value.trim()) filled++;
+    if (reasonHidden.value) filled++;
+    progressFill.style.width = (filled / 2) * 100 + '%';
+  }
+
+  reasonPills.querySelectorAll('.wa-pill').forEach(function (pill) {
+    pill.addEventListener('click', function () {
+      reasonPills.querySelectorAll('.wa-pill').forEach(function (p) {
+        p.classList.remove('active');
+        p.setAttribute('aria-checked', 'false');
+      });
+      pill.classList.add('active');
+      pill.setAttribute('aria-checked', 'true');
+      reasonHidden.value = pill.getAttribute('data-value');
+      reasonPills.classList.remove('invalid');
+      updateProgress();
+    });
+  });
+
+  nameInput.addEventListener('input', function () {
+    nameField.classList.remove('invalid');
+    updateProgress();
+  });
+
+  if (countEl && messageInput) {
+    messageInput.addEventListener('input', function () {
+      countEl.textContent = messageInput.value.length + ' / ' + messageInput.getAttribute('maxlength');
+    });
+  }
+
+  submitBtn.addEventListener('click', function (e) {
+    var rect = submitBtn.getBoundingClientRect();
+    var size = Math.max(rect.width, rect.height);
+    var ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+    ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+    submitBtn.appendChild(ripple);
+    setTimeout(function () { ripple.remove(); }, 650);
+  });
+
+  form.addEventListener('submit', function (e) {
     e.preventDefault();
-    var name = document.getElementById('waName').value.trim();
-    var reason = document.getElementById('waReason').value;
-    var details = document.getElementById('waMessage').value.trim();
+
+    var valid = true;
+    if (!nameInput.value.trim()) {
+      nameField.classList.add('invalid');
+      valid = false;
+      setTimeout(function () { nameField.classList.remove('invalid'); }, 450);
+    }
+    if (!reasonHidden.value) {
+      reasonPills.classList.add('invalid');
+      valid = false;
+      setTimeout(function () { reasonPills.classList.remove('invalid'); }, 450);
+    }
+    if (!valid) return;
+
+    var name = nameInput.value.trim();
+    var reason = reasonHidden.value;
+    var details = messageInput.value.trim();
 
     var text = "Hi Magesh, I'm " + name + ". I'm reaching out about " + reason + ".";
     if (details) { text += " " + details; }
-
     var url = "https://wa.me/918148916824?text=" + encodeURIComponent(text);
-    window.open(url, "_blank");
+
+    submitBtn.classList.add('loading');
+    submitBtn.disabled = true;
+    submitText.textContent = 'Opening WhatsApp…';
+
+    setTimeout(function () {
+      submitBtn.classList.remove('loading');
+      submitBtn.classList.add('success');
+      submitText.textContent = 'Opened ✓';
+      window.open(url, '_blank');
+      setTimeout(function () {
+        submitBtn.classList.remove('success');
+        submitBtn.disabled = false;
+        submitText.textContent = 'Continue to WhatsApp';
+      }, 1500);
+    }, 550);
   });
+})();
 </script>
 
 <script>
@@ -1618,6 +2342,29 @@
       if (window.innerWidth > 900) closeMenu();
     });
   })();
+</script>
+
+<script>
+/* ===== Skills & projects filter tabs ===== */
+(function () {
+  function wireFilter(container, attr, items, itemAttr) {
+    if (!container) return;
+    var buttons = container.querySelectorAll('button');
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        buttons.forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var val = btn.getAttribute(attr);
+        items.forEach(function (it) {
+          var cat = it.getAttribute(itemAttr);
+          it.classList.toggle('hide', val !== 'all' && cat !== val);
+        });
+      });
+    });
+  }
+  wireFilter(document.getElementById('skillsFilter'), 'data-filter', document.querySelectorAll('.skill-cat'), 'data-cat');
+  wireFilter(document.getElementById('projectsFilter'), 'data-pfilter', document.querySelectorAll('.project'), 'data-pcat');
+})();
 </script>
 
 <script>
@@ -1693,12 +2440,18 @@
     ['.about-grid > div:first-child > *', '', 110, 0],
     ['.fact', '', 110, 0],
     ['.tl-item', 'rv-left', 0, 0],
-    ['.chip', '', 45, 0],
+    ['.filter-tabs', '', 0, 0],
+    ['.skill-card', 'rv-left', 60, 0],
     ['.project', '', 60, 0],
     ['.service', '', 60, 0],
     ['.edu-node', '', 140, 0],
+    ['.achieve-graph', 'rv-scale', 0, 0],
+    ['.ms-item', 'rv-left', 60, 0],
+    ['.cert-card', '', 70, 0],
     ['.list-marked li', '', 70, 0],
     ['.contact .wrap > *', '', 90, 0],
+    ['.wa-field', '', 90, 150],
+    ['.wa-pill', '', 40, 0],
     ['.contact-detail', '', 80, 0]
   ];
 
