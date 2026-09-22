@@ -152,6 +152,27 @@
   html[data-theme="light"] .theme-toggle .icon-sun{ display:none; }
   html[data-theme="light"] .theme-toggle .icon-moon{ display:block; }
 
+  /* Hamburger toggle for the mobile nav dropdown — hidden on desktop */
+  .nav-toggle{
+    display:none;
+    align-items:center;
+    justify-content:center;
+    width:38px;
+    height:38px;
+    flex-shrink:0;
+    background:transparent;
+    border:1px solid var(--line);
+    border-radius:2px;
+    color:var(--cream);
+    cursor:pointer;
+    padding:0;
+  }
+  .nav-toggle:hover{ border-color:var(--gold); color:var(--gold-soft); }
+  .nav-toggle svg{ width:19px; height:19px; }
+  .nav-toggle .icon-close{ display:none; }
+  .nav-toggle[aria-expanded="true"] .icon-open{ display:none; }
+  .nav-toggle[aria-expanded="true"] .icon-close{ display:block; }
+
   .page-content{ margin-left:220px; }
 
   @media (max-width:900px){
@@ -160,13 +181,29 @@
       top:0; bottom:auto;
       width:auto;
       flex-direction:row;
+      flex-wrap:wrap;
       align-items:center;
+      gap:10px 12px;
       padding:14px 20px;
       overflow-y:visible;
     }
     .side-nav .brand{ margin-bottom:0; margin-right:auto; }
-    .navlinks{ display:none; }
-    .nav-cta{ margin-top:0; width:auto; }
+    .nav-toggle{ display:inline-flex; order:1; }
+    .navlinks{
+      display:none;
+      order:5;
+      width:100%;
+      flex-basis:100%;
+      margin-bottom:0;
+      margin-top:4px;
+      padding-top:10px;
+      border-top:1px solid var(--line);
+      gap:0;
+    }
+    .navlinks.mobile-open{ display:flex; }
+    .nav-cta{ margin-top:0; width:auto; order:2; }
+    .theme-toggle{ width:auto; margin-top:0; padding:10px; order:3; }
+    .theme-toggle .toggle-label{ display:none; }
     .page-content{ margin-left:0; }
   }
 
@@ -808,7 +845,11 @@
 
 <nav class="side-nav">
   <div class="brand">Magesh Kumar J.</div>
-  <div class="navlinks">
+  <button id="navToggle" class="nav-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navlinks">
+    <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <div class="navlinks" id="navlinks">
     <a href="#about">About</a>
     <a href="#experience">Experience</a>
     <a href="#skills">Skills</a>
@@ -1260,6 +1301,38 @@
     var url = "https://wa.me/918148916824?text=" + encodeURIComponent(text);
     window.open(url, "_blank");
   });
+</script>
+
+<script>
+  /* Mobile hamburger: open/close the section-link dropdown below the top bar */
+  (function () {
+    var toggleBtn = document.getElementById('navToggle');
+    var navlinks = document.getElementById('navlinks');
+    if (!toggleBtn || !navlinks) return;
+
+    function closeMenu() {
+      navlinks.classList.remove('mobile-open');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+    }
+    function openMenu() {
+      navlinks.classList.add('mobile-open');
+      toggleBtn.setAttribute('aria-expanded', 'true');
+    }
+
+    toggleBtn.addEventListener('click', function () {
+      var isOpen = navlinks.classList.contains('mobile-open');
+      if (isOpen) { closeMenu(); } else { openMenu(); }
+    });
+
+    navlinks.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', closeMenu);
+    });
+
+    /* Close the mobile menu if the viewport is resized back to desktop width */
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 900) closeMenu();
+    });
+  })();
 </script>
 
 <script>
