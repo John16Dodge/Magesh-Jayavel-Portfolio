@@ -163,7 +163,7 @@
   html[data-theme="light"] .wa-pill.active{
     border-width:2px;
   }
-  html[data-theme="light"] .tl-item::before,
+  html[data-theme="light"] .tl-node,
   html[data-theme="light"] .ms-item::before,
   html[data-theme="light"] .edu-dot{
     border-width:3px;
@@ -402,39 +402,129 @@
   }
 
   /* ---------- EXPERIENCE TIMELINE ---------- */
+  .tl-subhead{
+    margin:-6px 0 28px;
+    color:var(--muted-dim);
+    font-size:0.84rem;
+    letter-spacing:.02em;
+  }
   .timeline{
     position:relative;
-    padding-left:32px;
+    padding-left:46px;
   }
+  /* base rail */
   .timeline::before{
     content:"";
     position:absolute;
-    left:5px;
-    top:6px;
-    bottom:6px;
-    width:1px;
+    left:11px;
+    top:8px;
+    bottom:8px;
+    width:2px;
     background:var(--line);
+    border-radius:2px;
+  }
+  /* gold fill that grows with scroll progress through the section */
+  .timeline::after{
+    content:"";
+    position:absolute;
+    left:11px;
+    top:8px;
+    width:2px;
+    height:calc(var(--tl-fill, 0) * 100%);
+    background:linear-gradient(180deg, var(--gold), var(--gold-soft));
+    border-radius:2px;
+    box-shadow:0 0 10px rgba(var(--gold-rgb),.55);
+    transition:height .12s linear;
   }
   .tl-item{
     position:relative;
-    padding-bottom:44px;
+    padding-bottom:40px;
   }
   .tl-item:last-child{ padding-bottom:0; }
-  .tl-item::before{
-    content:"";
+
+  /* node / badge on the rail */
+  .tl-node{
     position:absolute;
-    left:-32px;
-    top:6px;
-    width:11px;
-    height:11px;
+    left:-46px;
+    top:2px;
+    width:24px;
+    height:24px;
     border-radius:50%;
-    background:var(--bg);
+    background:var(--bg-panel);
     border:2px solid var(--gold);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Fraunces', serif;
+    font-size:0.7rem;
+    color:var(--gold-soft);
+    z-index:2;
+    transition:background .35s ease, border-color .35s ease, transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
+  }
+  .tl-item.is-current .tl-node{ animation:ring 2s ease-out infinite; }
+  .tl-item.tl-active .tl-node{
+    background:var(--gold);
+    color:#10240b;
+    transform:scale(1.15);
+    box-shadow:0 0 0 4px rgba(var(--gold-rgb),.18);
+  }
+
+  /* card */
+  .tl-card{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:20px 22px;
+    transform-style:preserve-3d;
+    will-change:transform;
+    transition:border-color .3s ease, box-shadow .35s ease, transform .12s ease;
+  }
+  .tl-item.tl-active .tl-card{
+    border-color:rgba(var(--gold-rgb),.55);
+    box-shadow:0 14px 34px -18px rgba(0,0,0,.5), 0 0 0 1px rgba(var(--gold-rgb),.12) inset;
+  }
+  @media (hover:hover){
+    .tl-card:hover{ border-color:rgba(var(--gold-rgb),.5); }
+  }
+
+  .tl-date-row{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:8px;
   }
   .tl-date{
     color:var(--gold-soft);
     font-size:0.86rem;
-    margin-bottom:6px;
+    letter-spacing:.01em;
+  }
+  .tl-duration{
+    font-size:0.72rem;
+    color:var(--muted);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:2px 10px;
+    letter-spacing:.02em;
+  }
+  .tl-present{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    font-size:0.7rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:#10240b;
+    background:var(--gold);
+    border-radius:20px;
+    padding:2px 10px 2px 8px;
+  }
+  .tl-present::before{
+    content:"";
+    width:6px; height:6px;
+    border-radius:50%;
+    background:#10240b;
+    animation:blink 1.6s ease-in-out infinite;
   }
   .tl-role{
     font-family:'Fraunces', serif;
@@ -453,6 +543,16 @@
     color:var(--muted);
   }
   .tl-item li{ margin-bottom:6px; font-size:0.96rem; }
+  @keyframes blink{ 0%,100%{opacity:1} 50%{opacity:.35} }
+
+  @media (max-width:560px){
+    .timeline{ padding-left:34px; }
+    .timeline::before,
+    .timeline::after{ left:9px; }
+    .tl-node{ left:-34px; width:20px; height:20px; font-size:0.62rem; }
+    .tl-card{ padding:16px; }
+    .tl-role{ font-size:1.08rem; }
+  }
 
   /* ---------- SKILLS ---------- */
   .filter-tabs{
@@ -1324,7 +1424,6 @@
   .bg-fixed{ animation:drift 22s ease-in-out infinite; }
   .hero-portrait{ overflow:hidden; }
   .hero-portrait img{ animation:zoom 14s ease-in-out infinite alternate; }
-  .tl-item:first-child::before{ animation:ring 2s ease-out infinite; }
 
   /* scroll reveal (classes added by the script below) */
   .js .rv{
@@ -1334,10 +1433,8 @@
   }
   .js .rv-left{ transform:translateX(-28px); }
   .js .rv-scale{ transform:scale(.94); }
+  .js .rv-card{ transform:translateY(30px) scale(.97); }
   .js .rv.in{ opacity:1; transform:none; }
-
-  .js .timeline::before{ transform:scaleY(0); transform-origin:top; transition:transform 1.6s cubic-bezier(.2,.8,.2,1); }
-  .js .timeline.drawn::before{ transform:scaleY(1); }
 
   /* headline: words slide up out of a mask */
   .js .hero h1 .w{ display:inline-block; overflow:hidden; vertical-align:top; padding-bottom:.14em; margin-bottom:-.14em; }
@@ -1518,73 +1615,116 @@
         <h2>Experience &amp; internships</h2>
         <span class="section-num">02</span>
       </div>
+      <p class="tl-subhead">Reverse chronological — most recent first.</p>
       <div class="timeline">
 
-        <div class="tl-item">
-          <div class="tl-date">July 2026 — Present</div>
-          <div class="tl-role">AML &amp; KYC Compliance Intern</div>
-          <div class="tl-org">ReTRRAC Global</div>
-          <ul>
-            <li>Gained practical exposure to AML, KYC, and financial crime compliance.</li>
-            <li>Assisted with risk management and regulatory compliance projects.</li>
-            <li>Developed working knowledge of the UK compliance framework and its requirements.</li>
-          </ul>
+        <div class="tl-item" data-start="July 2026" data-end="Present">
+          <div class="tl-node"><span class="tl-node-num"></span></div>
+          <div class="tl-card">
+            <div class="tl-date-row">
+              <span class="tl-date">July 2026 — Present</span>
+              <span class="tl-duration"></span>
+            </div>
+            <div class="tl-role">AML &amp; KYC Compliance Intern</div>
+            <div class="tl-org">ReTRRAC Global</div>
+            <ul>
+              <li>Gained practical exposure to AML, KYC, and financial crime compliance.</li>
+              <li>Assisted with risk management and regulatory compliance projects.</li>
+              <li>Developed working knowledge of the UK compliance framework and its requirements.</li>
+            </ul>
+          </div>
         </div>
 
-        <div class="tl-item">
-          <div class="tl-date">February 2026 — May 2026</div>
-          <div class="tl-role">Business Developer / Academic Counsellor (Sales Specialist)</div>
-          <div class="tl-org">Codeyoung</div>
-          <ul>
-            <li>Enrolled UK and native clients into learning programs by explaining courses to prospects and guiding their decision.</li>
-          </ul>
+        <div class="tl-item" data-start="February 2026" data-end="May 2026">
+          <div class="tl-node"><span class="tl-node-num"></span></div>
+          <div class="tl-card">
+            <div class="tl-date-row">
+              <span class="tl-date">February 2026 — May 2026</span>
+              <span class="tl-duration"></span>
+            </div>
+            <div class="tl-role">Business Developer / Academic Counsellor (Sales Specialist)</div>
+            <div class="tl-org">Codeyoung</div>
+            <ul>
+              <li>Enrolled UK and native clients into learning programs by explaining courses to prospects and guiding their decision.</li>
+            </ul>
+          </div>
         </div>
 
-        <div class="tl-item">
-          <div class="tl-date">July 2025 — May 2026</div>
-          <div class="tl-role">Clap Captain</div>
-          <div class="tl-org">LSE Training Academy</div>
-          <ul>
-            <li>Led students through speeches and motivational sessions on soft skills and why they matter.</li>
-          </ul>
+        <div class="tl-item" data-start="July 2025" data-end="May 2026">
+          <div class="tl-node"><span class="tl-node-num"></span></div>
+          <div class="tl-card">
+            <div class="tl-date-row">
+              <span class="tl-date">July 2025 — May 2026</span>
+              <span class="tl-duration"></span>
+            </div>
+            <div class="tl-role">Clap Captain</div>
+            <div class="tl-org">LSE Training Academy</div>
+            <ul>
+              <li>Led students through speeches and motivational sessions on soft skills and why they matter.</li>
+            </ul>
+          </div>
         </div>
 
-        <div class="tl-item">
-          <div class="tl-date">March 2025 — May 2026</div>
-          <div class="tl-role">Innovation Ambassador</div>
-          <div class="tl-org">Manakula Vinayagar Institute of Technology</div>
-          <ul>
-            <li>Acted as a resource person for other Innovation Cells, promoting an innovation and startup culture among students and faculty.</li>
-          </ul>
+        <div class="tl-item" data-start="March 2025" data-end="May 2026">
+          <div class="tl-node"><span class="tl-node-num"></span></div>
+          <div class="tl-card">
+            <div class="tl-date-row">
+              <span class="tl-date">March 2025 — May 2026</span>
+              <span class="tl-duration"></span>
+            </div>
+            <div class="tl-role">Innovation Ambassador</div>
+            <div class="tl-org">Manakula Vinayagar Institute of Technology</div>
+            <ul>
+              <li>Acted as a resource person for other Innovation Cells, promoting an innovation and startup culture among students and faculty.</li>
+            </ul>
+          </div>
         </div>
 
-        <div class="tl-item">
-          <div class="tl-date">August 2024 — Present</div>
-          <div class="tl-role">Business Developer (Sales Specialist)</div>
-          <div class="tl-org">Sri Nivas Enterprises (FMCG)</div>
-          <ul>
-            <li>Promoted and sold household cleaning products — dishwash liquids, toilet cleaners, and other daily-use items — to customers.</li>
-            <li>Built customer relationships by understanding their needs, explaining product benefits, and recommending suitable products.</li>
-            <li>Achieved sales through direct customer interaction, regular follow-ups, and effective communication while working toward targets.</li>
-          </ul>
+        <div class="tl-item" data-start="September 2024" data-end="October 2024">
+          <div class="tl-node"><span class="tl-node-num"></span></div>
+          <div class="tl-card">
+            <div class="tl-date-row">
+              <span class="tl-date">September 2024 — October 2024</span>
+              <span class="tl-duration"></span>
+            </div>
+            <div class="tl-role">Soft Skill Trainer</div>
+            <div class="tl-org">Datanerdz.AI</div>
+            <ul>
+              <li>Led intensive workshops and created training materials on communication, teamwork, leadership, and public speaking.</li>
+            </ul>
+          </div>
         </div>
 
-        <div class="tl-item">
-          <div class="tl-date">September 2024 — October 2024</div>
-          <div class="tl-role">Soft Skill Trainer</div>
-          <div class="tl-org">Datanerdz.AI</div>
-          <ul>
-            <li>Led intensive workshops and created training materials on communication, teamwork, leadership, and public speaking.</li>
-          </ul>
+        <div class="tl-item" data-start="August 2024" data-end="Present">
+          <div class="tl-node"><span class="tl-node-num"></span></div>
+          <div class="tl-card">
+            <div class="tl-date-row">
+              <span class="tl-date">August 2024 — Present</span>
+              <span class="tl-duration"></span>
+            </div>
+            <div class="tl-role">Business Developer (Sales Specialist)</div>
+            <div class="tl-org">Sri Nivas Enterprises (FMCG)</div>
+            <ul>
+              <li>Promoted and sold household cleaning products — dishwash liquids, toilet cleaners, and other daily-use items — to customers.</li>
+              <li>Built customer relationships by understanding their needs, explaining product benefits, and recommending suitable products.</li>
+              <li>Achieved sales through direct customer interaction, regular follow-ups, and effective communication while working toward targets.</li>
+            </ul>
+          </div>
         </div>
 
-        <div class="tl-item">
-          <div class="tl-date">April 2024</div>
-          <div class="tl-role">Content Writer &amp; Public Speaker</div>
-          <div class="tl-org">Ignite Skylabs</div>
-          <ul>
-            <li>Developed and delivered persuasive speeches and audience-driven presentations, sharpening verbal communication and presentation ability.</li>
-          </ul>
+        <div class="tl-item" data-start="April 2024" data-end="April 2024">
+          <div class="tl-node"><span class="tl-node-num"></span></div>
+          <div class="tl-card">
+            <div class="tl-date-row">
+              <span class="tl-date">April 2024</span>
+              <span class="tl-duration"></span>
+            </div>
+            <div class="tl-role">Content Writer &amp; Public Speaker</div>
+            <div class="tl-org">Ignite Skylabs</div>
+            <ul>
+              <li>Developed and delivered persuasive speeches and audience-driven presentations, sharpening verbal communication and presentation ability.</li>
+            </ul>
+          </div>
         </div>
 
       </div>
@@ -1717,8 +1857,18 @@
 
       <div class="projects">
 
-        <div class="project" data-pcat="iot">
+        <div class="project" data-pcat="web">
           <span class="project-index">01</span>
+          <div class="project-body">
+            <h3>Blockchain-Based Police Complaint Management System</h3>
+            <p>Developed a blockchain-based police complaint management system using Blockchain and MERN to securely record, manage, and track police complaints with improved transparency and data integrity.</p>
+            <div class="stack-pills"><span class="pill">Blockchain</span><span class="pill">MERN</span></div>
+          </div>
+          <span class="project-status">No live demo</span>
+        </div>
+
+        <div class="project" data-pcat="iot">
+          <span class="project-index">02</span>
           <div class="project-body">
             <h3>Anti-Theft Mechanism</h3>
             <p>A mini security vault prototype with automated locking, motion-triggered security, mobile-controlled access, and an intelligent alarm system.</p>
@@ -1728,7 +1878,7 @@
         </div>
 
         <div class="project" data-pcat="web">
-          <span class="project-index">02</span>
+          <span class="project-index">03</span>
           <div class="project-body">
             <h3>Personal Portfolio (v1)</h3>
             <p>An earlier responsive portfolio showcasing skills and projects, with a clean UI and smooth navigation.</p>
@@ -1738,7 +1888,7 @@
         </div>
 
         <div class="project" data-pcat="ai">
-          <span class="project-index">03</span>
+          <span class="project-index">04</span>
           <div class="project-body">
             <h3>X-Recruit (v1.1)</h3>
             <p>A smart job platform with dashboards for students and colleges, mock interviews, placement analytics, recruiter feedback, career roadmaps, and mentorship tools.</p>
@@ -1748,7 +1898,7 @@
         </div>
 
         <div class="project" data-pcat="web">
-          <span class="project-index">04</span>
+          <span class="project-index">05</span>
           <div class="project-body">
             <h3>Sri Nivas Enterprises — Catalog Site</h3>
             <p>A freelance home-care product catalog with structured listings, pricing breakdowns, and branded content for detergents, dishwash liquids, toilet cleaners, and fabric conditioners.</p>
@@ -1758,7 +1908,7 @@
         </div>
 
         <div class="project" data-pcat="web">
-          <span class="project-index">05</span>
+          <span class="project-index">06</span>
           <div class="project-body">
             <h3>Sales Tool</h3>
             <p>A mini sales tool built to cut down basic manual workload — automating repetitive steps like reaching out with messages and sharing pricing details.</p>
@@ -2439,7 +2589,7 @@
     ['.services-network', 'rv-scale', 0, 0],
     ['.about-grid > div:first-child > *', '', 110, 0],
     ['.fact', '', 110, 0],
-    ['.tl-item', 'rv-left', 0, 0],
+    ['.tl-item', 'rv-card', 100, 0],
     ['.filter-tabs', '', 0, 0],
     ['.skill-card', 'rv-left', 60, 0],
     ['.project', '', 60, 0],
@@ -2463,7 +2613,7 @@
       el.classList.add('in');
       var wait = 900 + (parseInt(el.style.getPropertyValue('--d'), 10) || 0);
       setTimeout(function () { // hand control back to normal CSS (hover effects etc.)
-        el.classList.remove('rv', 'rv-left', 'rv-scale', 'in');
+        el.classList.remove('rv', 'rv-left', 'rv-scale', 'rv-card', 'in');
         el.style.removeProperty('--d');
       }, wait);
     });
@@ -2478,13 +2628,121 @@
     });
   });
 
-  /* Timeline line draws itself */
-  var tl = document.querySelector('.timeline');
-  if (tl) {
-    var lineIO = new IntersectionObserver(function (es) {
-      if (es[0].isIntersecting) { tl.classList.add('drawn'); lineIO.disconnect(); }
-    }, { threshold: 0.05 });
-    lineIO.observe(tl);
+})();
+</script>
+
+<script>
+/* ===== Experience timeline: numbering, live durations, scroll-linked fill,
+   active-card highlight, and a subtle hover tilt ===== */
+(function () {
+  var timeline = document.querySelector('#experience .timeline');
+  if (!timeline) return;
+
+  var items = Array.prototype.slice.call(timeline.querySelectorAll('.tl-item'));
+  var MONTHS = { january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
+    july: 6, august: 7, september: 8, october: 9, november: 10, december: 11 };
+
+  function parseMonthYear(str) {
+    var parts = String(str).trim().split(/\s+/);
+    var m = MONTHS[(parts[0] || '').toLowerCase()];
+    var y = parseInt(parts[1], 10);
+    if (m === undefined || isNaN(y)) return null;
+    return new Date(y, m, 1);
+  }
+
+  function formatDuration(start, end) {
+    var months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth()) + 1;
+    months = Math.max(1, months);
+    var yrs = Math.floor(months / 12);
+    var mos = months % 12;
+    var out = [];
+    if (yrs) out.push(yrs + (yrs === 1 ? ' yr' : ' yrs'));
+    if (mos || !yrs) out.push(mos + (mos === 1 ? ' mo' : ' mos'));
+    return out.join(' ');
+  }
+
+  var now = new Date();
+
+  items.forEach(function (item, i) {
+    var numEl = item.querySelector('.tl-node-num');
+    if (numEl) numEl.textContent = String(i + 1).padStart(2, '0');
+
+    var startRaw = item.getAttribute('data-start');
+    var endRaw = item.getAttribute('data-end');
+    var isPresent = (endRaw || '').toLowerCase() === 'present';
+    var isSingleDate = startRaw === endRaw;
+
+    if (isPresent) {
+      item.classList.add('is-current');
+      var row = item.querySelector('.tl-date-row');
+      if (row) {
+        var pill = document.createElement('span');
+        pill.className = 'tl-present';
+        pill.textContent = 'Present';
+        row.appendChild(pill);
+      }
+    }
+
+    var durEl = item.querySelector('.tl-duration');
+    if (durEl && !isSingleDate) {
+      var start = parseMonthYear(startRaw);
+      var end = isPresent ? now : parseMonthYear(endRaw);
+      if (start && end) {
+        durEl.textContent = formatDuration(start, end);
+      } else {
+        durEl.remove();
+      }
+    } else if (durEl) {
+      durEl.remove();
+    }
+  });
+
+  /* scroll-linked gold fill on the rail, tracked to how far the timeline has been scrolled through */
+  var ticking = false;
+  function updateFill() {
+    ticking = false;
+    var rect = timeline.getBoundingClientRect();
+    var viewportAnchor = window.innerHeight * 0.55;
+    var progress = (viewportAnchor - rect.top) / rect.height;
+    progress = Math.max(0, Math.min(1, progress));
+    timeline.style.setProperty('--tl-fill', progress.toFixed(4));
+  }
+  function requestFillUpdate() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(updateFill);
+  }
+  window.addEventListener('scroll', requestFillUpdate, { passive: true });
+  window.addEventListener('resize', requestFillUpdate);
+  requestFillUpdate();
+
+  /* highlight whichever card sits nearest the vertical center of the viewport */
+  if ('IntersectionObserver' in window) {
+    var activeIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        entry.target.classList.toggle('tl-active', entry.isIntersecting);
+      });
+    }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+    items.forEach(function (item) { activeIO.observe(item); });
+  }
+
+  /* gentle 3D tilt on hover for pointer devices, skipped for touch & reduced-motion */
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canHover = window.matchMedia('(hover: hover)').matches;
+  if (!reduce && canHover) {
+    items.forEach(function (item) {
+      var card = item.querySelector('.tl-card');
+      if (!card) return;
+      card.addEventListener('mousemove', function (e) {
+        var rect = card.getBoundingClientRect();
+        var px = (e.clientX - rect.left) / rect.width - 0.5;
+        var py = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.transform = 'perspective(700px) rotateX(' + (py * -3.5) + 'deg) rotateY(' + (px * 4) + 'deg) translateY(-2px)';
+      });
+      card.addEventListener('mouseleave', function () {
+        card.style.transform = '';
+      });
+    });
   }
 })();
 </script>
