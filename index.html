@@ -499,6 +499,167 @@
     .project{ grid-template-columns:1fr; }
   }
 
+  /* ---------- SOLUTIONS / SERVICES ---------- */
+
+  /* -- network / "web structure" diagram -- */
+  .services-network{
+    margin:0 0 40px;
+  }
+  .network-svg{
+    width:100%;
+    height:auto;
+    display:block;
+    overflow:visible;
+  }
+  .net-line{
+    stroke:var(--line);
+    stroke-width:1.2;
+    fill:none;
+  }
+  .net-line.flow{
+    stroke:var(--gold);
+    stroke-dasharray:4 7;
+    opacity:.5;
+    animation:netFlow 2.6s linear infinite;
+  }
+  @keyframes netFlow{ to{ stroke-dashoffset:-44; } }
+  .net-hub{
+    fill:var(--bg-panel);
+    stroke:var(--gold);
+    stroke-width:2;
+  }
+  .net-hub-ring{
+    fill:none;
+    stroke:var(--gold);
+    stroke-width:1;
+    opacity:.5;
+    transform-box:fill-box;
+    transform-origin:center;
+    animation:netPulseRing 2.6s ease-out infinite;
+  }
+  @keyframes netPulseRing{
+    0%{ r:13; opacity:.5; }
+    100%{ r:30; opacity:0; }
+  }
+  .net-hub-label{
+    fill:var(--gold-soft);
+    font-family:'Work Sans', sans-serif;
+    font-size:9px;
+    font-weight:600;
+    text-anchor:middle;
+    letter-spacing:.02em;
+  }
+  .net-node{ cursor:pointer; }
+  .net-node .node-bg{
+    fill:var(--bg-panel);
+    stroke:var(--line);
+    stroke-width:1.4;
+    transition:stroke .25s ease, filter .25s ease;
+  }
+  .net-node .node-icon{
+    stroke:var(--gold-soft);
+    fill:none;
+    stroke-width:1.6;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    transition:stroke .25s ease;
+  }
+  .net-node text{
+    fill:var(--muted);
+    font-family:'Work Sans', sans-serif;
+    font-size:11px;
+    text-anchor:middle;
+    transition:fill .25s ease;
+  }
+  .net-node:hover .node-bg, .net-node:focus .node-bg{
+    stroke:var(--gold);
+    filter:drop-shadow(0 0 7px rgba(201,162,39,.55));
+  }
+  .net-node:hover .node-icon, .net-node:focus .node-icon{ stroke:var(--gold); }
+  .net-node:hover text, .net-node:focus text{ fill:var(--gold-soft); }
+
+  /* -- service cards -- */
+  .services{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .service{
+    position:relative;
+    background:var(--bg);
+    padding:32px 32px 28px;
+    overflow:hidden;
+  }
+  .service::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height:2px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    background-size:200% 100%;
+    background-position:200% 0;
+    transition:background-position .5s ease;
+  }
+  .service:hover::before{ background-position:0 0; }
+  .service-index{
+    position:absolute;
+    top:24px; right:26px;
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    color:var(--muted-dim);
+    font-size:0.85rem;
+  }
+  .service-icon{
+    width:40px; height:40px;
+    border:1px solid var(--line);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--gold-soft);
+    margin-bottom:18px;
+    transition:border-color .25s ease, background .25s ease, transform .25s ease;
+  }
+  .service-icon svg{
+    width:18px; height:18px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.6;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+  .service:hover .service-icon{
+    border-color:var(--gold);
+    background:rgba(201,162,39,0.08);
+    transform:scale(1.08) rotate(-4deg);
+  }
+  .service h3{
+    font-size:1.05rem;
+    margin-bottom:8px;
+    padding-right:26px;
+  }
+  .service p{
+    color:var(--muted);
+    font-size:0.92rem;
+    margin:0;
+    max-width:44ch;
+  }
+  .service.full{ grid-column:1 / -1; }
+  @media (max-width:700px){
+    .services{ grid-template-columns:1fr; }
+  }
+  .services-cta{
+    margin-top:36px;
+    text-align:center;
+  }
+  .services-cta p{
+    color:var(--muted);
+    font-size:0.92rem;
+    margin:0 0 18px;
+  }
+
   /* ---------- EDUCATION ---------- */
   .edu-item{ margin-bottom:28px; }
   .edu-item:last-child{ margin-bottom:0; }
@@ -775,6 +936,8 @@
   .chip:hover{ transform:translateY(-3px); border-color:var(--gold); color:var(--gold-soft); }
   .project{ transition:background .25s ease, transform .25s ease; }
   .project:hover{ transform:translateX(6px); background:var(--bg-panel); }
+  .service{ transition:background .25s ease, transform .25s ease, box-shadow .25s ease; }
+  .service:hover{ transform:translateY(-6px); background:var(--bg-panel); box-shadow:0 18px 30px -18px rgba(0,0,0,0.5); }
   .edu-card{ transition:transform .25s ease, border-color .25s ease; }
   .edu-card:hover{ transform:translateY(-4px); border-color:var(--gold); }
   .navlinks a.active{ color:var(--gold-soft); }
@@ -829,6 +992,7 @@
     .navlinks a:nth-child(4){ transition-delay:.28s; }
     .navlinks a:nth-child(5){ transition-delay:.34s; }
     .navlinks a:nth-child(6){ transition-delay:.40s; }
+    .navlinks a:nth-child(7){ transition-delay:.46s; }
   }
 
   /* respect reduced-motion settings */
@@ -854,6 +1018,7 @@
     <a href="#experience">Experience</a>
     <a href="#skills">Skills</a>
     <a href="#projects">Projects</a>
+    <a href="#solutions">Solutions</a>
     <a href="#education">Education</a>
     <a href="#contact">Contact</a>
   </div>
@@ -1106,11 +1271,131 @@
     </div>
   </section>
 
+  <section id="solutions">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Solutions &amp; services</h2>
+        <span class="section-num">05</span>
+      </div>
+
+      <div class="services-network" aria-hidden="true">
+        <svg class="network-svg" viewBox="0 0 640 220" preserveAspectRatio="xMidYMid meet">
+          <line class="net-line flow" x1="320" y1="196" x2="70"  y2="40"/>
+          <line class="net-line flow" x1="320" y1="196" x2="195" y2="26"/>
+          <line class="net-line flow" x1="320" y1="196" x2="320" y2="20"/>
+          <line class="net-line flow" x1="320" y1="196" x2="445" y2="26"/>
+          <line class="net-line flow" x1="320" y1="196" x2="570" y2="40"/>
+
+          <circle class="net-hub-ring" cx="320" cy="196" r="14"/>
+          <circle class="net-hub" cx="320" cy="196" r="13"/>
+          <text class="net-hub-label" x="320" y="200">Solutions</text>
+
+          <a class="net-node" href="#svc-logo" aria-label="Logo Design">
+            <circle class="node-bg" cx="70" cy="40" r="21"/>
+            <g class="node-icon" transform="translate(61,31)">
+              <path d="M9 1 L17 9 L9 17 L1 9 Z"/>
+            </g>
+            <text x="70" y="76">Logo Design</text>
+          </a>
+
+          <a class="net-node" href="#svc-training" aria-label="Soft Skill Training">
+            <circle class="node-bg" cx="195" cy="26" r="21"/>
+            <g class="node-icon" transform="translate(186,18)">
+              <path d="M2 3h14v9H6l-3 3V3Z"/>
+            </g>
+            <text x="195" y="62">Soft Skill Training</text>
+          </a>
+
+          <a class="net-node" href="#svc-interview" aria-label="Interview Preparation and Resume Building">
+            <circle class="node-bg" cx="320" cy="20" r="21"/>
+            <g class="node-icon" transform="translate(311,11)">
+              <rect x="4" y="1" width="10" height="16" rx="1"/>
+              <path d="M6 7h6M6 11h6"/>
+            </g>
+            <text x="320" y="56">Interview / Resume</text>
+          </a>
+
+          <a class="net-node" href="#svc-portfolio" aria-label="Portfolio Website Building">
+            <circle class="node-bg" cx="445" cy="26" r="21"/>
+            <g class="node-icon" transform="translate(436,18)">
+              <rect x="1" y="2" width="16" height="13" rx="1"/>
+              <path d="M1 6h16"/>
+            </g>
+            <text x="445" y="62">Portfolio Websites</text>
+          </a>
+
+          <a class="net-node" href="#svc-sales" aria-label="Sales and Strategy for Business">
+            <circle class="node-bg" cx="570" cy="40" r="21"/>
+            <g class="node-icon" transform="translate(561,31)">
+              <path d="M2 16V10M6 16V4M10 16V12M14 16V7"/>
+            </g>
+            <text x="570" y="76">Sales &amp; Strategy</text>
+          </a>
+        </svg>
+      </div>
+
+      <div class="services">
+
+        <div class="service" id="svc-logo">
+          <span class="service-index">01</span>
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2 L22 12 L12 22 L2 12 Z"/></svg>
+          </div>
+          <h3>Logo Design</h3>
+          <p>Clean, distinctive marks for founders and small businesses that need a professional identity to launch with.</p>
+        </div>
+
+        <div class="service" id="svc-training">
+          <span class="service-index">02</span>
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M3 4h18v11H8l-5 5V4Z"/></svg>
+          </div>
+          <h3>Soft Skill Training</h3>
+          <p>Workshops and sessions on communication, teamwork, leadership, and public speaking for students and teams.</p>
+        </div>
+
+        <div class="service" id="svc-interview">
+          <span class="service-index">03</span>
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><rect x="5" y="3" width="13" height="18" rx="1"/><path d="M8 10h7M8 14h7M8 18h4"/></svg>
+          </div>
+          <h3>Interview Preparation / Resume Building</h3>
+          <p>One-on-one prep for interviews plus resumes that are structured, honest, and built to get shortlisted.</p>
+        </div>
+
+        <div class="service" id="svc-portfolio">
+          <span class="service-index">04</span>
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="15" rx="1"/><path d="M2 9h20"/></svg>
+          </div>
+          <h3>Portfolio Website Building</h3>
+          <p>Custom-built personal and business portfolio sites — like this one — designed, built, and deployed end to end.</p>
+        </div>
+
+        <div class="service full" id="svc-sales">
+          <span class="service-index">05</span>
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M4 20V13M9 20V5M14 20V16M19 20V9"/></svg>
+          </div>
+          <h3>Sales &amp; Strategy for Business</h3>
+          <p>Go-to-market thinking, pitch structuring, and direct sales support — available for company contract-based engagements.</p>
+        </div>
+
+      </div>
+
+      <div class="services-cta">
+        <p>Want to see more of this work in one place?</p>
+        <!-- TODO: add the destination link for the services/solutions website -->
+        <a class="btn btn-primary" href="" target="_blank" rel="noopener">Visit the solutions website</a>
+      </div>
+    </div>
+  </section>
+
   <section id="education">
     <div class="wrap">
       <div class="section-head">
         <h2>Education</h2>
-        <span class="section-num">05</span>
+        <span class="section-num">06</span>
       </div>
 
       <div class="edu-path">
@@ -1154,7 +1439,7 @@
     <div class="wrap">
       <div class="section-head">
         <h2>Achievements &amp; certifications</h2>
-        <span class="section-num">06</span>
+        <span class="section-num">07</span>
       </div>
       <div class="two-col">
         <div>
@@ -1404,11 +1689,13 @@
     ['.hero-grid > div:first-child > *:not(h1)', '', 120, 350],
     ['.hero-portrait', 'rv-scale', 0, 200],
     ['.section-head', '', 0, 0],
+    ['.services-network', 'rv-scale', 0, 0],
     ['.about-grid > div:first-child > *', '', 110, 0],
     ['.fact', '', 110, 0],
     ['.tl-item', 'rv-left', 0, 0],
     ['.chip', '', 45, 0],
     ['.project', '', 60, 0],
+    ['.service', '', 60, 0],
     ['.edu-node', '', 140, 0],
     ['.list-marked li', '', 70, 0],
     ['.contact .wrap > *', '', 90, 0],
