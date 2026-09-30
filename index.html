@@ -497,7 +497,6 @@
     position:relative;
     padding-left:46px;
   }
-  /* base rail */
   .timeline::before{
     content:"";
     position:absolute;
@@ -508,7 +507,6 @@
     background:var(--line);
     border-radius:2px;
   }
-  /* gold fill that grows with scroll progress through the section */
   .timeline::after{
     content:"";
     position:absolute;
@@ -527,7 +525,6 @@
   }
   .tl-item:last-child{ padding-bottom:0; }
 
-  /* node / badge on the rail */
   .tl-node{
     position:absolute;
     left:-46px;
@@ -554,7 +551,6 @@
     box-shadow:0 0 0 4px rgba(var(--gold-rgb),.18);
   }
 
-  /* card */
   .tl-card{
     background:var(--bg-panel);
     border:1px solid var(--line);
@@ -796,8 +792,6 @@
   }
 
   /* ---------- SOLUTIONS / SERVICES ---------- */
-
-  /* -- network / "web structure" diagram -- */
   .services-network{
     margin:0 0 40px;
   }
@@ -874,7 +868,6 @@
   .net-node:hover .node-icon, .net-node:focus .node-icon{ stroke:var(--gold); }
   .net-node:hover text, .net-node:focus text{ fill:var(--gold-soft); }
 
-  /* -- service cards -- */
   .services{
     display:grid;
     grid-template-columns:repeat(2, 1fr);
@@ -966,7 +959,6 @@
   }
   .edu-item p{ color:var(--muted); font-size:0.94rem; margin:2px 0; }
 
-  /* ---------- EDUCATION: point-to-point path ---------- */
   .edu-path{
     position:relative;
     display:grid;
@@ -1082,7 +1074,6 @@
     .two-col{ grid-template-columns:1fr; gap:36px; }
   }
 
-  /* ---------- ACHIEVEMENTS: growth graph + chronological milestones ---------- */
   .achieve-graph{
     background:var(--bg-panel);
     border:1px solid var(--line);
@@ -1204,7 +1195,7 @@
     margin:0;
   }
 
-  /* ---------- CERTIFICATIONS (standalone section) ---------- */
+  /* ---------- CERTIFICATIONS ---------- */
   .certs{
     display:grid;
     grid-template-columns:repeat(2, 1fr);
@@ -1342,7 +1333,6 @@
   }
   .wa-field select option{ background:var(--bg); color:var(--cream); }
 
-  /* floating labels */
   .wa-float{ position:relative; }
   .wa-float input,
   .wa-float textarea{ padding-top:19px; padding-bottom:9px; }
@@ -1387,7 +1377,6 @@
     margin-top:6px;
   }
 
-  /* pill-style reason selector */
   .wa-pills{ display:flex; flex-wrap:wrap; gap:9px; margin-top:2px; }
   .wa-pill{
     font-family:'Work Sans', sans-serif;
@@ -1424,7 +1413,6 @@
     animation:wa-shake .4s ease;
   }
 
-  /* submit button states + ripple */
   .wa-submit{
     position:relative;
     width:100%;
@@ -1491,24 +1479,21 @@
   }
 
   /* =====================================================
-     ANIMATIONS + HOVER-TO-OPEN NAV (added)
+     ANIMATIONS + HOVER-TO-OPEN NAV
      ===================================================== */
   @keyframes nudge { 0%,100%{transform:translateX(0)} 50%{transform:translateX(5px)} }
   @keyframes wordUp { to { transform:translateY(0); } }
   @keyframes ring { 0%{box-shadow:0 0 0 0 rgba(var(--gold-rgb),.55)} 100%{box-shadow:0 0 0 12px rgba(var(--gold-rgb),0)} }
   @keyframes zoom { from{transform:scale(1)} to{transform:scale(1.06)} }
 
-  /* scroll progress bar */
   .scroll-bar{
     position:fixed; top:0; left:0; right:0; height:2px; z-index:30;
     background:var(--gold); transform:scaleX(0); transform-origin:left; pointer-events:none;
   }
 
-  /* ambient motion */
   .hero-portrait{ overflow:hidden; }
   .hero-portrait img{ animation:zoom 14s ease-in-out infinite alternate; }
 
-  /* scroll reveal (classes added by the script below) */
   .js .rv{
     opacity:0; transform:translateY(26px);
     transition:opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1);
@@ -1519,14 +1504,12 @@
   .js .rv-card{ transform:translateY(30px) scale(.97); }
   .js .rv.in{ opacity:1; transform:none; }
 
-  /* headline: words slide up out of a mask */
   .js .hero h1 .w{ display:inline-block; overflow:hidden; vertical-align:top; padding-bottom:.14em; margin-bottom:-.14em; }
   .js .hero h1 .w > span{
     display:inline-block; transform:translateY(110%);
     animation:wordUp .9s cubic-bezier(.2,.8,.2,1) forwards; animation-delay:var(--d,0ms);
   }
 
-  /* hover feedback */
   .project{ transition:background .25s ease, transform .25s ease; }
   .project:hover{ transform:translateX(6px); background:var(--bg-panel); }
   .service{ transition:background .25s ease, transform .25s ease, box-shadow .25s ease; }
@@ -1535,7 +1518,6 @@
   .edu-card:hover{ transform:translateY(-4px); border-color:var(--gold); }
   .navlinks a.active{ color:var(--gold-soft); }
 
-  /* hover-to-open navigation (desktop with a mouse only) */
   .nav-zone{ display:none; }
 
   @media (min-width:901px) and (hover:hover){
@@ -1591,13 +1573,108 @@
     .navlinks a:nth-child(10){ transition-delay:.64s; }
   }
 
-  /* respect reduced-motion settings */
   @media (prefers-reduced-motion: reduce){
     *, *::before, *::after{ animation:none !important; transition-duration:.01ms !important; transition-delay:0s !important; }
     .scene-scan{ display:none; }
     .js .rv{ opacity:1; transform:none; }
     .js .hero h1 .w > span{ transform:none; }
   }
+
+  /* =====================================================
+     FUTURISTIC LAYER (money · tech · cybersecurity · startup)
+     ===================================================== */
+  .tl-card,.skill-card,.project,.edu-card,.achieve-graph,.wa-form{
+    background:color-mix(in srgb,var(--bg-panel) 76%,transparent);
+    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  }
+  .services,.certs{ background:transparent; gap:12px; border:none; }
+  .service,.cert-card{
+    background:color-mix(in srgb,var(--bg) 68%,transparent);
+    border:1px solid var(--line);
+    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  }
+  .skill-card:hover,.project:hover,.service:hover,.cert-card:hover,.edu-card:hover{
+    box-shadow:0 0 0 1px rgba(var(--gold-rgb),.5),0 0 30px -6px rgba(var(--gold-rgb),.6);
+  }
+  .hero h1{ text-shadow:0 0 34px rgba(var(--gold-rgb),.28); }
+  .section-head h2{ position:relative; }
+  .section-head h2::after{
+    content:""; position:absolute; left:0; bottom:-10px; width:54px; height:2px;
+    background:var(--gold); box-shadow:0 0 12px rgba(var(--gold-rgb),.9);
+  }
+
+  #fx{ position:fixed; inset:0; z-index:0; pointer-events:none; }
+  .fx-spot{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:radial-gradient(420px circle at var(--mx,70%) var(--my,30%),rgba(var(--gold-rgb),.10),transparent 65%);
+  }
+
+  .radar{
+    position:fixed; right:28px; bottom:54px; width:130px; height:130px; z-index:0;
+    border-radius:50%; pointer-events:none; opacity:.7;
+    border:1px solid rgba(var(--gold-rgb),.35);
+    background:radial-gradient(circle,transparent 0 28%,rgba(var(--gold-rgb),.2) 29% 30%,transparent 31% 58%,rgba(var(--gold-rgb),.2) 59% 60%,transparent 61%);
+  }
+  .radar::before{
+    content:""; position:absolute; inset:0; border-radius:50%;
+    background:conic-gradient(from 0deg,rgba(var(--gold-rgb),.5),transparent 28%);
+    animation:fxspin 4s linear infinite;
+  }
+  .radar::after{
+    content:""; position:absolute; inset:0; border-radius:50%;
+    background:
+      linear-gradient(rgba(var(--gold-rgb),.22),rgba(var(--gold-rgb),.22)) center/1px 100% no-repeat,
+      linear-gradient(rgba(var(--gold-rgb),.22),rgba(var(--gold-rgb),.22)) center/100% 1px no-repeat;
+  }
+  @keyframes fxspin{ to{ transform:rotate(360deg); } }
+
+  .hud{
+    position:fixed; inset:10px; z-index:24; pointer-events:none;
+    --c:rgba(var(--gold-rgb),.7);
+    background:
+      linear-gradient(var(--c),var(--c)) top left/24px 1.5px no-repeat,
+      linear-gradient(var(--c),var(--c)) top left/1.5px 24px no-repeat,
+      linear-gradient(var(--c),var(--c)) top right/24px 1.5px no-repeat,
+      linear-gradient(var(--c),var(--c)) top right/1.5px 24px no-repeat,
+      linear-gradient(var(--c),var(--c)) bottom left/24px 1.5px no-repeat,
+      linear-gradient(var(--c),var(--c)) bottom left/1.5px 24px no-repeat,
+      linear-gradient(var(--c),var(--c)) bottom right/24px 1.5px no-repeat,
+      linear-gradient(var(--c),var(--c)) bottom right/1.5px 24px no-repeat;
+  }
+  .fx-lines{
+    position:fixed; inset:0; z-index:23; pointer-events:none;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,.05) 0 1px,transparent 1px 3px),
+               radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.28) 100%);
+  }
+  html[data-theme="light"] .fx-lines{
+    background:radial-gradient(ellipse at center,transparent 70%,rgba(31,77,52,.10) 100%);
+  }
+
+  .fx-chip{
+    position:fixed; top:14px; right:22px; z-index:8; pointer-events:none;
+    font:500 11px 'Work Sans',monospace; letter-spacing:.1em; color:var(--gold-soft);
+    border:1px solid var(--line); background:color-mix(in srgb,var(--bg-panel) 85%,transparent);
+    padding:6px 12px; border-radius:20px;
+  }
+  .fx-chip i{
+    display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:8px;
+    background:#3aa07a; box-shadow:0 0 8px #3aa07a; animation:blink 1.6s ease-in-out infinite;
+  }
+
+  body{ padding-bottom:26px; }
+  .ticker{
+    position:fixed; left:0; right:0; bottom:0; height:26px; z-index:8; overflow:hidden;
+    background:color-mix(in srgb,var(--bg-panel) 92%,transparent);
+    border-top:1px solid var(--line);
+    font:500 11px/26px 'Work Sans',monospace; letter-spacing:.08em; color:var(--muted); white-space:nowrap;
+  }
+  .ticker-track{ display:inline-block; animation:fxtick 45s linear infinite; }
+  .ticker span{ margin:0 22px; }
+  .ticker b{ color:var(--gold-soft); font-weight:600; }
+  @keyframes fxtick{ to{ transform:translateX(-50%); } }
+
+  @media (max-width:900px){ .radar,.fx-chip{ display:none; } }
+  @media (max-width:560px){ .hud{ inset:6px; } }
 </style>
 </head>
 <body>
@@ -1606,7 +1683,6 @@
 <div class="scene" aria-hidden="true">
   <div class="scene-grid"></div>
 
-  <!-- Cybersecurity: hex lattice -->
   <svg class="scene-hex" viewBox="0 0 620 460" preserveAspectRatio="xMinYMin slice">
     <defs>
       <pattern id="hexp" width="56" height="97" patternUnits="userSpaceOnUse">
@@ -1617,7 +1693,6 @@
     <rect width="620" height="460" fill="url(#hexp)"/>
   </svg>
 
-  <!-- Tech (circuit traces) + Money/Startup (candles and rising trend); built by script for desktop or mobile -->
   <svg class="scene-svg" id="sceneSvg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice">
     <g id="sceneCircuit"></g>
     <g id="sceneCandles"></g>
@@ -2473,6 +2548,14 @@
 </footer>
 </div>
 
+<!-- ===== Futuristic layer elements ===== -->
+<div class="fx-spot" id="fxSpot" aria-hidden="true"></div>
+<div class="radar" aria-hidden="true"></div>
+<div class="fx-lines" aria-hidden="true"></div>
+<div class="hud" aria-hidden="true"></div>
+<div class="fx-chip" aria-hidden="true"><i></i>SECURE · TLS 1.3 · ENCRYPTED</div>
+<div class="ticker" aria-hidden="true"><div class="ticker-track" id="fxTrack"></div></div>
+
 <script>
   (function () {
     var root = document.documentElement;
@@ -2720,7 +2803,6 @@
       a.addEventListener('click', closeMenu);
     });
 
-    /* Close the mobile menu if the viewport is resized back to desktop width */
     window.addEventListener('resize', function () {
       if (window.innerWidth > 900) closeMenu();
     });
@@ -2934,7 +3016,6 @@
       }
     });
 
-    /* scroll-linked gold fill on the rail, tracked to how far the timeline has been scrolled through */
     var ticking = false;
     function updateFill() {
       ticking = false;
@@ -2953,7 +3034,6 @@
     window.addEventListener('resize', requestFillUpdate);
     requestFillUpdate();
 
-    /* highlight whichever card sits nearest the vertical center of the viewport */
     if ('IntersectionObserver' in window) {
       var activeIO = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
@@ -2963,7 +3043,6 @@
       items.forEach(function (item) { activeIO.observe(item); });
     }
 
-    /* gentle 3D tilt on hover for pointer devices, skipped for touch & reduced-motion */
     if (!reduce && canHover) {
       items.forEach(function (item) {
         var card = item.querySelector('.tl-card');
@@ -2980,6 +3059,145 @@
       });
     }
   });
+})();
+</script>
+
+<script>
+/* ===== Futuristic canvas: currency/code rain + startup network + floating finance glyphs ===== */
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var mobile = window.innerWidth < 720;
+
+  var items = ['KYC VERIFIED <b>✓</b>','SANCTIONS SCREEN: <b>CLEAR</b>','PEP CHECK: <b>NEGATIVE</b>','ENCRYPTION: <b>AES-256</b>',
+    'THREATS: <b>0</b>','RISK RATING: <b>LOW</b>','UK AML: <b>ALIGNED</b>','LEDGER: <b>IMMUTABLE</b>','ZERO TRUST: <b>ON</b>',
+    'STARTUP MODE: <b>ON ▲</b>','SEED → SERIES A <b>↗</b>','FATF: <b>COMPLIANT</b>'];
+  var html = items.map(function (t) { return '<span>' + t + '</span>'; }).join('');
+  document.getElementById('fxTrack').innerHTML = html + html;
+
+  var spot = document.getElementById('fxSpot');
+  var mouse = { x: -999, y: -999 };
+  window.addEventListener('mousemove', function (e) {
+    mouse.x = e.clientX; mouse.y = e.clientY;
+    spot.style.setProperty('--mx', e.clientX + 'px');
+    spot.style.setProperty('--my', e.clientY + 'px');
+  }, { passive: true });
+  window.addEventListener('mouseleave', function () { mouse.x = mouse.y = -999; });
+
+  var c = document.createElement('canvas');
+  c.id = 'fx';
+  document.body.appendChild(c);
+  var x = c.getContext('2d');
+  var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+  var W, H;
+
+  var col = { g: '201,162,39', e: '58,160,122', a: 1 };
+  function readTheme() {
+    var light = document.documentElement.getAttribute('data-theme') === 'light';
+    col.g = light ? '150,112,10' : '201,162,39';
+    col.e = light ? '31,122,82' : '58,160,122';
+    col.a = light ? 0.6 : 1;
+  }
+  new MutationObserver(readTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  readTheme();
+
+  var FS = 16;
+  var G = '01₹$€£₿¥%#<>{}/;=+'.split('');
+  var rain = [], nodes = [], floats = [];
+  var tags = ['AML','KYC','CDD','EDD','PEP','FATF','SHA256','0xFF','API','SEED','ROI','IPO'];
+  var syms = ['₹','$','₿','€','↗','£'];
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  function setup() {
+    W = window.innerWidth; H = window.innerHeight;
+    c.width = W * dpr; c.height = H * dpr;
+    c.style.width = W + 'px'; c.style.height = H + 'px';
+    x.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    rain = [];
+    var gap = FS * (mobile ? 2.6 : 1.7);
+    for (var px = gap / 2; px < W; px += gap) {
+      rain.push({ x: px, y: rand(-40, H / FS), s: rand(0.08, 0.26), len: Math.floor(rand(8, 18)),
+        seed: Math.floor(rand(0, 99)), gold: Math.random() < 0.3 });
+    }
+
+    nodes = [];
+    var n = mobile ? 26 : 62;
+    for (var i = 0; i < n; i++) {
+      nodes.push({ x: rand(0, W), y: rand(0, H), vx: rand(-0.25, 0.25), vy: rand(-0.25, 0.25), coin: i % 7 === 0 });
+    }
+
+    floats = [];
+    var f = mobile ? 6 : 12;
+    for (var j = 0; j < f; j++) {
+      var big = j % 2 === 0;
+      floats.push({ t: big ? syms[j % syms.length] : tags[j % tags.length], big: big,
+        x: rand(0, W), y: rand(0, H), vy: rand(0.12, 0.4), size: big ? rand(46, 96) : rand(12, 16), a: big ? 0.07 : 0.2 });
+    }
+  }
+  setup();
+  window.addEventListener('resize', function () { mobile = window.innerWidth < 720; setup(); });
+
+  function frame(t) {
+    x.clearRect(0, 0, W, H);
+
+    floats.forEach(function (f) {
+      f.y -= f.vy;
+      if (f.y < -120) { f.y = H + 60; f.x = rand(0, W); }
+      x.font = '500 ' + f.size + 'px ' + (f.big ? "'Fraunces',serif" : "'Work Sans',monospace");
+      x.fillStyle = 'rgba(' + (f.big ? col.g : col.e) + ',' + (f.a * col.a) + ')';
+      x.fillText(f.t, f.x, f.y);
+    });
+
+    x.font = '13px "Work Sans",monospace';
+    x.textAlign = 'center';
+    var tick = Math.floor(t / 380);
+    rain.forEach(function (r) {
+      r.y += r.s;
+      var row = Math.floor(r.y);
+      for (var k = 0; k < r.len; k++) {
+        var rr = row - k, py = rr * FS;
+        if (py < -FS || py > H + FS) continue;
+        var ch = G[(r.seed + rr * 7 + tick * (k === 0 ? 3 : 1)) % G.length];
+        var head = k === 0;
+        var alpha = head ? 0.75 : (1 - k / r.len) * 0.24;
+        x.fillStyle = 'rgba(' + (head || r.gold ? col.g : col.e) + ',' + (alpha * col.a) + ')';
+        x.fillText(ch, r.x, py);
+      }
+      if ((row - r.len) * FS > H) { r.y = rand(-30, -4); r.s = rand(0.08, 0.26); }
+    });
+    x.textAlign = 'left';
+
+    for (var i = 0; i < nodes.length; i++) {
+      var a = nodes[i];
+      a.x += a.vx; a.y += a.vy;
+      if (a.x < 0 || a.x > W) a.vx *= -1;
+      if (a.y < 0 || a.y > H) a.vy *= -1;
+
+      for (var j = i + 1; j < nodes.length; j++) {
+        var b = nodes[j], dx = a.x - b.x, dy = a.y - b.y, d = dx * dx + dy * dy;
+        if (d < 19600) {
+          x.strokeStyle = 'rgba(' + col.e + ',' + ((1 - d / 19600) * 0.28 * col.a) + ')';
+          x.lineWidth = 1;
+          x.beginPath(); x.moveTo(a.x, a.y); x.lineTo(b.x, b.y); x.stroke();
+        }
+      }
+      var mx = a.x - mouse.x, my = a.y - mouse.y, md = mx * mx + my * my;
+      if (md < 32400) {
+        x.strokeStyle = 'rgba(' + col.g + ',' + ((1 - md / 32400) * 0.55 * col.a) + ')';
+        x.beginPath(); x.moveTo(a.x, a.y); x.lineTo(mouse.x, mouse.y); x.stroke();
+      }
+      x.fillStyle = 'rgba(' + (a.coin ? col.g : col.e) + ',' + ((a.coin ? 0.9 : 0.6) * col.a) + ')';
+      x.beginPath(); x.arc(a.x, a.y, a.coin ? 3.4 : 1.8, 0, 6.283); x.fill();
+      if (a.coin) {
+        x.strokeStyle = 'rgba(' + col.g + ',' + ((0.25 + 0.2 * Math.sin(t / 500 + i)) * col.a) + ')';
+        x.beginPath(); x.arc(a.x, a.y, 8 + 3 * Math.sin(t / 500 + i), 0, 6.283); x.stroke();
+      }
+    }
+
+    if (!reduce) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
 })();
 </script>
 
