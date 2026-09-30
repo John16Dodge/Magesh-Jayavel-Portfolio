@@ -22,6 +22,19 @@
     --muted-dim: #5f7362;
     --btn-primary-bg: var(--gold);
     --btn-primary-text: #10240b;
+
+    /* background scene tokens (dark) */
+    --scene-grid:rgba(201,162,39,.07);
+    --scene-grid-major:rgba(201,162,39,.13);
+    --scene-candle-up:#c9a227;
+    --scene-candle-down:#3f7a58;
+    --scene-trend:#e6cd7c;
+    --scene-circuit:#3aa07a;
+    --scene-hex:rgba(58,160,122,.16);
+    --scene-scan:rgba(230,205,124,.10);
+    --scene-glow-a:rgba(201,162,39,.11);
+    --scene-glow-b:rgba(58,160,122,.10);
+    --scene-opacity:.85;
   }
   html[data-theme="light"]{
     --bg: #f6faf4;
@@ -36,6 +49,19 @@
     --muted-dim: #728a6d;
     --btn-primary-bg: #1f4d34;
     --btn-primary-text: #ffffff;
+
+    /* background scene tokens (light) */
+    --scene-grid:rgba(31,77,52,.08);
+    --scene-grid-major:rgba(31,77,52,.15);
+    --scene-candle-up:#96700a;
+    --scene-candle-down:#6f9c82;
+    --scene-trend:#1f4d34;
+    --scene-circuit:#2f7a5a;
+    --scene-hex:rgba(31,77,52,.13);
+    --scene-scan:rgba(150,112,10,.10);
+    --scene-glow-a:rgba(150,112,10,.10);
+    --scene-glow-b:rgba(31,77,52,.08);
+    --scene-opacity:.8;
   }
   body, .btn, .side-nav, .theme-toggle{
     transition:background .25s ease, color .25s ease, border-color .25s ease;
@@ -68,15 +94,79 @@
     color:var(--cream);
   }
 
-  /* subtle background texture: hairline vertical rule + faint gold glow */
-  .bg-fixed{
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    z-index:0;
+  /* =====================================================
+     BACKGROUND SCENE: money, cybersecurity, tech, startup
+     ===================================================== */
+  .scene{
+    position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
     background:
-      radial-gradient(ellipse 900px 500px at 85% -10%, rgba(var(--gold-rgb),0.10), transparent 60%),
-      radial-gradient(ellipse 700px 500px at -10% 40%, rgba(var(--gold-rgb),0.06), transparent 60%);
+      radial-gradient(ellipse 900px 520px at 88% -8%, var(--scene-glow-a), transparent 62%),
+      radial-gradient(ellipse 760px 560px at -8% 42%, var(--scene-glow-b), transparent 62%),
+      var(--bg);
+  }
+
+  /* Money: ledger grid, minor lines every 32px, major every 160px */
+  .scene-grid{
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(var(--scene-grid-major) 1px, transparent 1px),
+      linear-gradient(90deg, var(--scene-grid-major) 1px, transparent 1px),
+      linear-gradient(var(--scene-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--scene-grid) 1px, transparent 1px);
+    background-size:160px 160px,160px 160px,32px 32px,32px 32px;
+    -webkit-mask-image:radial-gradient(ellipse 85% 75% at 60% 55%, #000 30%, transparent 100%);
+            mask-image:radial-gradient(ellipse 85% 75% at 60% 55%, #000 30%, transparent 100%);
+  }
+
+  /* Cybersecurity: hex lattice, top-left corner only */
+  .scene-hex{
+    position:absolute; top:0; left:0; width:min(620px,70vw); height:min(460px,55vh);
+    opacity:var(--scene-opacity);
+    -webkit-mask-image:radial-gradient(ellipse at 0% 0%, #000 20%, transparent 72%);
+            mask-image:radial-gradient(ellipse at 0% 0%, #000 20%, transparent 72%);
+  }
+
+  /* Tech (circuit traces) + Money/Startup (candles and rising trend) */
+  .scene-svg{
+    position:absolute; inset:0; width:100%; height:100%;
+    opacity:var(--scene-opacity);
+  }
+  .circuit{ fill:none; stroke:var(--scene-circuit); stroke-width:1.4; stroke-linecap:round; stroke-linejoin:round; opacity:.55; }
+  .circuit-node{ fill:var(--bg); stroke:var(--scene-circuit); stroke-width:1.6; }
+  .candle-up{ fill:var(--scene-candle-up); stroke:var(--scene-candle-up); }
+  .candle-down{ fill:var(--scene-candle-down); stroke:var(--scene-candle-down); }
+  .candle-wick{ stroke-width:1.4; }
+  .trend{ fill:none; stroke:var(--scene-trend); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+  .trend-dot{ fill:var(--scene-trend); }
+  .trend-ring{ fill:none; stroke:var(--scene-trend); stroke-width:1.2; transform-box:fill-box; transform-origin:center; animation:sceneRing 3s ease-out infinite; }
+  @keyframes sceneRing{ 0%{ transform:scale(1); opacity:.7 } 100%{ transform:scale(3.2); opacity:0 } }
+
+  /* The one moving element: a slow security scan sweeping down the page */
+  .scene-scan{
+    position:absolute; left:0; right:0; top:-160px; height:160px;
+    background:linear-gradient(180deg, transparent, var(--scene-scan) 55%, transparent);
+    animation:sceneScan 16s linear infinite;
+  }
+  @keyframes sceneScan{ to{ transform:translateY(calc(100vh + 320px)); } }
+
+  /* Soft veil so body copy stays readable over the scene */
+  .scene-veil{
+    position:absolute; inset:0;
+    background:radial-gradient(ellipse 60% 55% at 30% 45%, var(--bg) 0%, transparent 75%);
+    opacity:.55;
+  }
+
+  /* Mobile: quieter scene, bigger veil, portrait layout is built by the script */
+  @media (max-width:720px){
+    .scene-grid{
+      background-size:120px 120px,120px 120px,24px 24px,24px 24px;
+      -webkit-mask-image:radial-gradient(ellipse 100% 80% at 50% 60%, #000 25%, transparent 100%);
+              mask-image:radial-gradient(ellipse 100% 80% at 50% 60%, #000 25%, transparent 100%);
+    }
+    .scene-hex{ opacity:.55; width:80vw; height:38vh; }
+    .scene-svg{ opacity:.6; }
+    .scene-veil{ background:radial-gradient(ellipse 90% 70% at 50% 45%, var(--bg) 0%, transparent 80%); opacity:.6; }
+    .scene-scan{ animation-duration:20s; }
   }
 
   header, main, footer{position:relative; z-index:1;}
@@ -170,11 +260,6 @@
   }
   html[data-theme="light"] .wa-form:hover{
     border-width:2px;
-  }
-  html[data-theme="light"] .bg-fixed{
-    background:
-      radial-gradient(ellipse 900px 500px at 85% -10%, rgba(31,77,52,0.07), transparent 60%),
-      radial-gradient(ellipse 700px 500px at -10% 40%, rgba(150,112,10,0.09), transparent 60%);
   }
 
   /* Hamburger toggle for the mobile nav dropdown — hidden on desktop */
@@ -1411,7 +1496,6 @@
   @keyframes nudge { 0%,100%{transform:translateX(0)} 50%{transform:translateX(5px)} }
   @keyframes wordUp { to { transform:translateY(0); } }
   @keyframes ring { 0%{box-shadow:0 0 0 0 rgba(var(--gold-rgb),.55)} 100%{box-shadow:0 0 0 12px rgba(var(--gold-rgb),0)} }
-  @keyframes drift { 0%,100%{transform:translate3d(0,0,0)} 50%{transform:translate3d(-2%,3%,0) scale(1.04)} }
   @keyframes zoom { from{transform:scale(1)} to{transform:scale(1.06)} }
 
   /* scroll progress bar */
@@ -1421,7 +1505,6 @@
   }
 
   /* ambient motion */
-  .bg-fixed{ animation:drift 22s ease-in-out infinite; }
   .hero-portrait{ overflow:hidden; }
   .hero-portrait img{ animation:zoom 14s ease-in-out infinite alternate; }
 
@@ -1511,6 +1594,7 @@
   /* respect reduced-motion settings */
   @media (prefers-reduced-motion: reduce){
     *, *::before, *::after{ animation:none !important; transition-duration:.01ms !important; transition-delay:0s !important; }
+    .scene-scan{ display:none; }
     .js .rv{ opacity:1; transform:none; }
     .js .hero h1 .w > span{ transform:none; }
   }
@@ -1518,7 +1602,33 @@
 </head>
 <body>
 
-<div class="bg-fixed"></div>
+<!-- ===== Background scene: money, cybersecurity, tech, startup ===== -->
+<div class="scene" aria-hidden="true">
+  <div class="scene-grid"></div>
+
+  <!-- Cybersecurity: hex lattice -->
+  <svg class="scene-hex" viewBox="0 0 620 460" preserveAspectRatio="xMinYMin slice">
+    <defs>
+      <pattern id="hexp" width="56" height="97" patternUnits="userSpaceOnUse">
+        <path d="M28 2 L54 17 L54 47 L28 62 L2 47 L2 17 Z" fill="none" stroke="var(--scene-hex)" stroke-width="1.3"/>
+        <path d="M28 62 L28 92 M2 47 L-24 62 M54 47 L80 62" fill="none" stroke="var(--scene-hex)" stroke-width="1.3"/>
+      </pattern>
+    </defs>
+    <rect width="620" height="460" fill="url(#hexp)"/>
+  </svg>
+
+  <!-- Tech (circuit traces) + Money/Startup (candles and rising trend); built by script for desktop or mobile -->
+  <svg class="scene-svg" id="sceneSvg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice">
+    <g id="sceneCircuit"></g>
+    <g id="sceneCandles"></g>
+    <polyline class="trend" id="sceneTrend" points=""/>
+    <circle class="trend-ring" id="sceneTrendRing" r="6"/>
+    <circle class="trend-dot" id="sceneTrendDot" r="6"/>
+  </svg>
+
+  <div class="scene-veil"></div>
+  <div class="scene-scan"></div>
+</div>
 
 <nav class="side-nav">
   <div class="brand">Magesh Kumar J.</div>
@@ -2389,6 +2499,97 @@
       localStorage.setItem('mkj-theme', next);
     });
   })();
+</script>
+
+<script>
+/* ===== Background scene builder: desktop (wide) and mobile (tall) layouts ===== */
+(function () {
+  var NS = 'http://www.w3.org/2000/svg';
+  var svg = document.getElementById('sceneSvg');
+  var gCircuit = document.getElementById('sceneCircuit');
+  var gCandles = document.getElementById('sceneCandles');
+  var trend = document.getElementById('sceneTrend');
+  var dot = document.getElementById('sceneTrendDot');
+  var ring = document.getElementById('sceneTrendRing');
+  if (!svg) return;
+
+  function el(name, attrs, parent) {
+    var e = document.createElementNS(NS, name);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+
+  var layouts = {
+    wide: {
+      viewBox: '0 0 1600 900',
+      candles: 38, step: 40, x0: 40, baseY: 820, rise: 230, wave: 22,
+      traces: [
+        'M1600 90 H1440 L1400 130 H1250 L1220 100 H1110',
+        'M1600 170 H1500 L1460 210 H1330 V260 H1190',
+        'M1600 250 H1560 L1530 280 H1420 V340 L1380 380 H1290',
+        'M1600 40 H1520 L1490 70 H1380 V30 H1300'
+      ],
+      nodes: [[1110,100],[1190,260],[1290,380],[1300,30],[1250,130],[1420,280]]
+    },
+    tall: {
+      viewBox: '0 0 640 1000',
+      candles: 15, step: 40, x0: 32, baseY: 930, rise: 240, wave: 16,
+      traces: [
+        'M640 60 H548 L520 88 H430 L410 68 H350',
+        'M640 130 H590 L562 158 H490 V205 H420',
+        'M640 20 H600 L580 40 H520'
+      ],
+      nodes: [[350,68],[420,205],[520,40],[430,88]]
+    }
+  };
+
+  var current = null;
+
+  function build(mode) {
+    if (mode === current) return;
+    current = mode;
+    var L = layouts[mode];
+    svg.setAttribute('viewBox', L.viewBox);
+    gCircuit.innerHTML = '';
+    gCandles.innerHTML = '';
+
+    /* seeded random so the chart looks the same on every load */
+    var s = 7;
+    function rnd() { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }
+
+    /* Money + Startup: candles trending up, with a trend line through them */
+    var pts = [], N = L.candles;
+    for (var i = 0; i < N; i++) {
+      var x = L.x0 + i * L.step;
+      var base = L.baseY - i * (L.rise / N) - Math.sin(i / 3.2) * L.wave;
+      var open = base + (rnd() - .5) * 34, close = base + (rnd() - .5) * 34;
+      if (i > N - 6) close -= 10;
+      var hi = Math.min(open, close) - 8 - rnd() * 22;
+      var lo = Math.max(open, close) + 8 + rnd() * 22;
+      var up = close < open;
+      var cls = up ? 'candle-up' : 'candle-down';
+      el('line', { x1: x, y1: hi, x2: x, y2: lo, 'class': cls + ' candle-wick' }, gCandles);
+      el('rect', { x: x - 8, y: Math.min(open, close), width: 16, height: Math.max(4, Math.abs(open - close)), rx: 1.5, 'class': cls, 'fill-opacity': up ? .85 : .35 }, gCandles);
+      pts.push([x, base]);
+    }
+    trend.setAttribute('points', pts.map(function (p) { return p[0].toFixed(0) + ',' + (p[1] - 6).toFixed(0); }).join(' '));
+    var last = pts[pts.length - 1];
+    [dot, ring].forEach(function (c) { c.setAttribute('cx', last[0]); c.setAttribute('cy', last[1] - 6); });
+
+    /* Tech: circuit traces ending in nodes */
+    L.traces.forEach(function (d) { el('path', { d: d, 'class': 'circuit' }, gCircuit); });
+    L.nodes.forEach(function (n) { el('circle', { cx: n[0], cy: n[1], r: 5, 'class': 'circuit-node' }, gCircuit); });
+  }
+
+  function pick() {
+    var portrait = window.innerWidth <= 720 || window.innerHeight > window.innerWidth * 1.15;
+    build(portrait ? 'tall' : 'wide');
+  }
+  pick();
+  window.addEventListener('resize', pick);
+  window.addEventListener('orientationchange', pick);
+})();
 </script>
 
 <script>
