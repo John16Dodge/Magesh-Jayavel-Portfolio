@@ -23,7 +23,6 @@
     --btn-primary-bg: var(--gold);
     --btn-primary-text: #10240b;
 
-    /* background scene tokens (dark) */
     --scene-grid:rgba(201,162,39,.07);
     --scene-grid-major:rgba(201,162,39,.13);
     --scene-candle-up:#c9a227;
@@ -50,7 +49,6 @@
     --btn-primary-bg: #1f4d34;
     --btn-primary-text: #ffffff;
 
-    /* background scene tokens (light) */
     --scene-grid:rgba(31,77,52,.08);
     --scene-grid-major:rgba(31,77,52,.15);
     --scene-candle-up:#96700a;
@@ -94,9 +92,7 @@
     color:var(--cream);
   }
 
-  /* =====================================================
-     BACKGROUND SCENE: money, cybersecurity, tech, startup
-     ===================================================== */
+  /* BACKGROUND SCENE */
   .scene{
     position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
     background:
@@ -104,8 +100,6 @@
       radial-gradient(ellipse 760px 560px at -8% 42%, var(--scene-glow-b), transparent 62%),
       var(--bg);
   }
-
-  /* Money: ledger grid, minor lines every 32px, major every 160px */
   .scene-grid{
     position:absolute; inset:0;
     background-image:
@@ -117,16 +111,12 @@
     -webkit-mask-image:radial-gradient(ellipse 85% 75% at 60% 55%, #000 30%, transparent 100%);
             mask-image:radial-gradient(ellipse 85% 75% at 60% 55%, #000 30%, transparent 100%);
   }
-
-  /* Cybersecurity: hex lattice, top-left corner only */
   .scene-hex{
     position:absolute; top:0; left:0; width:min(620px,70vw); height:min(460px,55vh);
     opacity:var(--scene-opacity);
     -webkit-mask-image:radial-gradient(ellipse at 0% 0%, #000 20%, transparent 72%);
             mask-image:radial-gradient(ellipse at 0% 0%, #000 20%, transparent 72%);
   }
-
-  /* Tech (circuit traces) + Money/Startup (candles and rising trend) */
   .scene-svg{
     position:absolute; inset:0; width:100%; height:100%;
     opacity:var(--scene-opacity);
@@ -141,7 +131,6 @@
   .trend-ring{ fill:none; stroke:var(--scene-trend); stroke-width:1.2; transform-box:fill-box; transform-origin:center; animation:sceneRing 3s ease-out infinite; }
   @keyframes sceneRing{ 0%{ transform:scale(1); opacity:.7 } 100%{ transform:scale(3.2); opacity:0 } }
 
-  /* The one moving element: a slow security scan sweeping down the page */
   .scene-scan{
     position:absolute; left:0; right:0; top:-160px; height:160px;
     background:linear-gradient(180deg, transparent, var(--scene-scan) 55%, transparent);
@@ -149,14 +138,12 @@
   }
   @keyframes sceneScan{ to{ transform:translateY(calc(100vh + 320px)); } }
 
-  /* Soft veil so body copy stays readable over the scene */
   .scene-veil{
     position:absolute; inset:0;
     background:radial-gradient(ellipse 60% 55% at 30% 45%, var(--bg) 0%, transparent 75%);
     opacity:.55;
   }
 
-  /* Mobile: quieter scene, bigger veil, portrait layout is built by the script */
   @media (max-width:720px){
     .scene-grid{
       background-size:120px 120px,120px 120px,24px 24px,24px 24px;
@@ -171,7 +158,7 @@
 
   header, main, footer{position:relative; z-index:1;}
 
-  /* ---------- NAV ---------- */
+  /* NAV */
   .side-nav{
     position:fixed;
     top:0; left:0; bottom:0;
@@ -244,7 +231,6 @@
   html[data-theme="light"] .theme-toggle .icon-sun{ display:none; }
   html[data-theme="light"] .theme-toggle .icon-moon{ display:block; }
 
-  /* ---------- LIGHT MODE: heavier gold borders + greener surfaces ---------- */
   html[data-theme="light"] .nav-cta,
   html[data-theme="light"] .avatar,
   html[data-theme="light"] .btn-primary,
@@ -262,7 +248,6 @@
     border-width:2px;
   }
 
-  /* Hamburger toggle for the mobile nav dropdown — hidden on desktop */
   .nav-toggle{
     display:none;
     align-items:center;
@@ -317,7 +302,7 @@
     .page-content{ margin-left:0; }
   }
 
-  /* ---------- HERO ---------- */
+  /* HERO */
   .hero{
     padding:96px 0 84px;
     border-bottom:1px solid var(--line);
@@ -436,7 +421,7 @@
   .btn-ghost:hover{ border-color:var(--gold); color:var(--gold-soft); }
   .btn svg{ width:18px; height:18px; flex-shrink:0; }
 
-  /* ---------- SECTION SHELL ---------- */
+  /* SECTION SHELL */
   section{
     padding:76px 0;
     border-bottom:1px solid var(--line);
@@ -458,7 +443,7 @@
     font-size:1rem;
   }
 
-  /* ---------- ABOUT ---------- */
+  /* ABOUT */
   .about-grid{
     display:grid;
     grid-template-columns: 1.3fr 1fr;
@@ -486,7 +471,7 @@
     .facts{ border-left:none; border-top:1px solid var(--line); padding-left:0; padding-top:28px; }
   }
 
-  /* ---------- EXPERIENCE TIMELINE ---------- */
+  /* EXPERIENCE TIMELINE */
   .tl-subhead{
     margin:-6px 0 28px;
     color:var(--muted-dim);
@@ -635,7 +620,7 @@
     .tl-role{ font-size:1.08rem; }
   }
 
-  /* ---------- SKILLS ---------- */
+  /* SKILLS */
   .filter-tabs{
     display:flex;
     flex-wrap:wrap;
@@ -710,7 +695,7 @@
   .skill-icon svg{ width:17px; height:17px; }
   .skill-card span{ font-size:0.92rem; color:var(--cream); line-height:1.3; }
 
-  /* ---------- PROJECTS ---------- */
+  /* PROJECTS */
   .projects{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -791,7 +776,7 @@
     .projects{ grid-template-columns:1fr; }
   }
 
-  /* ---------- SOLUTIONS / SERVICES ---------- */
+  /* SOLUTIONS / SERVICES */
   .services-network{
     margin:0 0 40px;
   }
@@ -949,7 +934,7 @@
     margin:0 0 18px;
   }
 
-  /* ---------- EDUCATION ---------- */
+  /* EDUCATION */
   .edu-item{ margin-bottom:28px; }
   .edu-item:last-child{ margin-bottom:0; }
   .edu-item .tl-date{ color:var(--gold-soft); }
@@ -1043,7 +1028,7 @@
     }
   }
 
-  /* ---------- ACHIEVEMENTS / CERTS ---------- */
+  /* ACHIEVEMENTS / CERTS */
   .two-col{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -1195,7 +1180,7 @@
     margin:0;
   }
 
-  /* ---------- CERTIFICATIONS ---------- */
+  /* CERTIFICATIONS */
   .certs{
     display:grid;
     grid-template-columns:repeat(2, 1fr);
@@ -1245,7 +1230,7 @@
   @media (max-width:700px){
     .certs{ grid-template-columns:1fr; }
   }
-  /* ---------- CONTACT / FOOTER ---------- */
+  /* CONTACT / FOOTER */
   .contact{
     padding:88px 0 64px;
     border-bottom:none;
@@ -1267,7 +1252,7 @@
     flex-wrap:wrap;
     gap:14px;
   }
-  /* ---------- WHATSAPP REASON FORM ---------- */
+  /* WHATSAPP REASON FORM */
   .wa-form{
     background:var(--bg-panel);
     border:1px solid var(--line);
@@ -1478,9 +1463,7 @@
     font-size:0.82rem;
   }
 
-  /* =====================================================
-     ANIMATIONS + HOVER-TO-OPEN NAV
-     ===================================================== */
+  /* ANIMATIONS + HOVER-TO-OPEN NAV */
   @keyframes nudge { 0%,100%{transform:translateX(0)} 50%{transform:translateX(5px)} }
   @keyframes wordUp { to { transform:translateY(0); } }
   @keyframes ring { 0%{box-shadow:0 0 0 0 rgba(var(--gold-rgb),.55)} 100%{box-shadow:0 0 0 12px rgba(var(--gold-rgb),0)} }
@@ -1580,9 +1563,7 @@
     .js .hero h1 .w > span{ transform:none; }
   }
 
-  /* =====================================================
-     FUTURISTIC LAYER (money · tech · cybersecurity · startup)
-     ===================================================== */
+  /* FUTURISTIC LAYER */
   .tl-card,.skill-card,.project,.edu-card,.achieve-graph,.wa-form{
     background:color-mix(in srgb,var(--bg-panel) 76%,transparent);
     -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
@@ -1675,11 +1656,62 @@
 
   @media (max-width:900px){ .radar,.fx-chip{ display:none; } }
   @media (max-width:560px){ .hud{ inset:6px; } }
+
+  /* ===== MOBILE FIXES ===== */
+  html, body{ overflow-x:clip; max-width:100%; }
+  .hero-grid > *, .about-grid > *, .two-col > *{ min-width:0; }
+  section[id], header[id]{ scroll-margin-top:72px; }
+
+  @media (max-width:900px){
+    .nav-cta{ display:none; }
+    .side-nav{ padding:10px 16px; }
+    .navlinks.mobile-open{ max-height:calc(100vh - 70px); overflow-y:auto; }
+    .navlinks a{ padding:14px 0; }
+    .nav-toggle, .theme-toggle{ width:42px; height:42px; }
+  }
+
+  @media (max-width:720px){
+    .wrap{ padding:0 20px; }
+    .hero{ padding:48px 0 44px; }
+    section{ padding:48px 0; }
+    .section-head{ margin-bottom:32px; }
+    .hero h1{ font-size:clamp(2.2rem, 11vw, 3rem); max-width:none; }
+    .hero-actions{ flex-direction:column; }
+    .hero-actions .btn, .contact-actions .btn{ width:100%; justify-content:center; }
+    .hero-eyebrow{ font-size:.88rem; }
+
+    .about-photo-row{ flex-wrap:wrap; }
+    .achieve-graph{ padding:20px 14px 12px; }
+    .service, .cert-card{ padding:22px 20px; }
+    .wa-form{ padding:22px 18px; max-width:100%; }
+    .contact-details{ gap:24px; flex-direction:column; }
+    .contact h2{ max-width:none; }
+    .skill-grid{ grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); gap:10px; }
+    .skill-card{ padding:12px; gap:10px; }
+    .filter-tabs{ gap:8px; }
+
+    .wa-field input, .wa-field select, .wa-field textarea{ font-size:16px; }
+
+    .project:hover, .service:hover, .edu-card:hover, .skill-card:hover{ transform:none; }
+
+    .tl-card,.skill-card,.project,.edu-card,.achieve-graph,.wa-form,.service,.cert-card{
+      -webkit-backdrop-filter:none; backdrop-filter:none;
+      background:var(--bg-panel);
+    }
+    .tl-card{ will-change:auto; transform-style:flat; }
+    .ticker{ font-size:10px; }
+    .hud{ display:none; }
+  }
+
+  @media (max-width:380px){
+    .brand{ font-size:.92rem; }
+    .skill-grid{ grid-template-columns:1fr 1fr; }
+    .skill-card span:last-child{ font-size:.82rem; }
+  }
 </style>
 </head>
 <body>
 
-<!-- ===== Background scene: money, cybersecurity, tech, startup ===== -->
 <div class="scene" aria-hidden="true">
   <div class="scene-grid"></div>
 
@@ -2411,7 +2443,7 @@
           <div class="cert-icon"><svg viewBox="0 0 24 24"><path d="M12 2 9 8l-6 .9 4.4 4.2L6.3 19 12 15.9 17.7 19l-1.1-5.9L21 8.9 15 8Z"/></svg></div>
           <div>
             <h3>SQL - Basics</h3>
-            <div class="cert-issuer">HackerRank/div>
+            <div class="cert-issuer">HackerRank</div>
             <div class="cert-year">2026</div>
           </div>
         </div>
@@ -2557,7 +2589,6 @@
 </footer>
 </div>
 
-<!-- ===== Futuristic layer elements ===== -->
 <div class="fx-spot" id="fxSpot" aria-hidden="true"></div>
 <div class="radar" aria-hidden="true"></div>
 <div class="fx-lines" aria-hidden="true"></div>
@@ -2581,20 +2612,21 @@
       }
     }
 
-    var saved = localStorage.getItem('mkj-theme');
+    var saved = null;
+    try { saved = localStorage.getItem('mkj-theme'); } catch (e) {}
     applyTheme(saved === 'light' ? 'light' : 'dark');
 
     toggle.addEventListener('click', function () {
       var isLight = root.getAttribute('data-theme') === 'light';
       var next = isLight ? 'dark' : 'light';
       applyTheme(next);
-      localStorage.setItem('mkj-theme', next);
+      try { localStorage.setItem('mkj-theme', next); } catch (e) {}
     });
   })();
 </script>
 
 <script>
-/* ===== Background scene builder: desktop (wide) and mobile (tall) layouts ===== */
+/* Background scene builder: desktop (wide) and mobile (tall) layouts */
 (function () {
   var NS = 'http://www.w3.org/2000/svg';
   var svg = document.getElementById('sceneSvg');
@@ -2646,11 +2678,9 @@
     gCircuit.innerHTML = '';
     gCandles.innerHTML = '';
 
-    /* seeded random so the chart looks the same on every load */
     var s = 7;
     function rnd() { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }
 
-    /* Money + Startup: candles trending up, with a trend line through them */
     var pts = [], N = L.candles;
     for (var i = 0; i < N; i++) {
       var x = L.x0 + i * L.step;
@@ -2669,7 +2699,6 @@
     var last = pts[pts.length - 1];
     [dot, ring].forEach(function (c) { c.setAttribute('cx', last[0]); c.setAttribute('cy', last[1] - 6); });
 
-    /* Tech: circuit traces ending in nodes */
     L.traces.forEach(function (d) { el('path', { d: d, 'class': 'circuit' }, gCircuit); });
     L.nodes.forEach(function (n) { el('circle', { cx: n[0], cy: n[1], r: 5, 'class': 'circuit-node' }, gCircuit); });
   }
@@ -2685,7 +2714,7 @@
 </script>
 
 <script>
-/* ===== Interactive WhatsApp contact form ===== */
+/* Interactive WhatsApp contact form */
 (function () {
   var form = document.getElementById('waForm');
   if (!form) return;
@@ -2788,7 +2817,7 @@
 </script>
 
 <script>
-  /* Mobile hamburger: open/close the section-link dropdown below the top bar */
+  /* Mobile hamburger */
   (function () {
     var toggleBtn = document.getElementById('navToggle');
     var navlinks = document.getElementById('navlinks');
@@ -2819,7 +2848,7 @@
 </script>
 
 <script>
-/* ===== Skills & projects filter tabs ===== */
+/* Skills & projects filter tabs */
 (function () {
   function wireFilter(container, attr, items, itemAttr) {
     if (!container) return;
@@ -2842,13 +2871,12 @@
 </script>
 
 <script>
-/* ===== Animations + hover-to-open nav (plain JavaScript, no framework) ===== */
+/* Animations + hover-to-open nav */
 (function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var root = document.documentElement;
   root.classList.add('js');
 
-  /* "Place your mouse here" hint beside the hidden nav */
   var nav = document.querySelector('.side-nav');
   if (nav) {
     var zone = document.createElement('div');
@@ -2856,10 +2884,9 @@
     zone.setAttribute('aria-hidden', 'true');
     zone.innerHTML =
       '<div class="nav-zone-tab"><span>›</span><span class="nav-zone-text">Place your mouse here</span></div>';
-    nav.parentNode.insertBefore(zone, nav); // must sit right before the nav (CSS uses "+")
+    nav.parentNode.insertBefore(zone, nav);
   }
 
-  /* Scroll progress bar */
   var bar = document.createElement('div');
   bar.className = 'scroll-bar';
   document.body.appendChild(bar);
@@ -2874,7 +2901,6 @@
     });
   }, { passive: true });
 
-  /* Active section highlight in the nav */
   var links = {};
   document.querySelectorAll('.navlinks a').forEach(function (a) {
     links[a.getAttribute('href').slice(1)] = a;
@@ -2895,7 +2921,6 @@
 
   if (reduce || !('IntersectionObserver' in window)) return;
 
-  /* Headline: words rise into place */
   var h1 = document.querySelector('.hero h1');
   if (h1) {
     var words = h1.textContent.trim().split(/\s+/);
@@ -2905,7 +2930,6 @@
     }).join(' ');
   }
 
-  /* Scroll reveal with staggered delays: [selector, extra class, stagger ms, base delay ms] */
   var groups = [
     ['.hero-grid > div:first-child > *:not(h1)', '', 120, 350],
     ['.hero-portrait', 'rv-scale', 0, 200],
@@ -2936,7 +2960,7 @@
       io.unobserve(el);
       el.classList.add('in');
       var wait = 900 + (parseInt(el.style.getPropertyValue('--d'), 10) || 0);
-      setTimeout(function () { // hand control back to normal CSS (hover effects etc.)
+      setTimeout(function () {
         el.classList.remove('rv', 'rv-left', 'rv-scale', 'rv-card', 'in');
         el.style.removeProperty('--d');
       }, wait);
@@ -2956,8 +2980,7 @@
 </script>
 
 <script>
-/* ===== Experience timeline: numbering, live durations, scroll-linked fill,
-   active-card highlight, and a subtle hover tilt ===== */
+/* Experience timeline: numbering, live durations, scroll-linked fill, active-card highlight, hover tilt */
 (function () {
   var timelines = Array.prototype.slice.call(document.querySelectorAll('.timeline'));
   if (!timelines.length) return;
@@ -3072,7 +3095,7 @@
 </script>
 
 <script>
-/* ===== Futuristic canvas: currency/code rain + startup network + floating finance glyphs ===== */
+/* Futuristic canvas: code rain + network + floating finance glyphs */
 (function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var mobile = window.innerWidth < 720;
