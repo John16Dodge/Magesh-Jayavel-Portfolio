@@ -791,13 +791,11 @@
     stroke-width:1.2;
     fill:none;
   }
+  /* Signal Trace: dash/offset now driven by anime.js createDrawable (draw) */
   .net-line.flow{
     stroke:var(--gold);
-    stroke-dasharray:4 7;
     opacity:.5;
-    animation:netFlow 2.6s linear infinite;
   }
-  @keyframes netFlow{ to{ stroke-dashoffset:-44; } }
   .net-hub{
     fill:var(--bg-panel);
     stroke:var(--gold);
@@ -1086,14 +1084,12 @@
   }
   .ag-svg{ width:100%; height:auto; display:block; overflow:visible; margin-top:14px; }
   .ag-grid{ stroke:var(--line); stroke-width:1; stroke-dasharray:3 5; }
+  /* Milestone Trace: line is now drawn by anime.js createDrawable (draw) */
   .ag-line{
     stroke:var(--gold);
     stroke-width:2;
     fill:none;
-    stroke-dasharray:6 6;
-    animation:agFlow 2.4s linear infinite;
   }
-  @keyframes agFlow{ to{ stroke-dashoffset:-48; } }
   .ag-node{ fill:var(--bg-panel); stroke:var(--gold); stroke-width:2; }
   .ag-node-ring{
     fill:none;
@@ -3109,6 +3105,79 @@
       });
     }
   });
+})();
+</script>
+
+<!-- anime.js v4 (UMD build exposes a global `anime`) -->
+<script src="https://cdn.jsdelivr.net/npm/animejs@4.0.2/dist/bundles/anime.umd.min.js"></script>
+
+<script>
+/* createDrawable: Market Trend Trace, Milestone Trace, Signal Trace */
+(function () {
+  if (!window.anime) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var animate = anime.animate, svg = anime.svg, stagger = anime.stagger;
+
+  function whenVisible(el, run) {
+    if (!el) return;
+    var io = new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting) return;
+      io.disconnect();
+      run();
+    }, { threshold: 0.35 });
+    io.observe(el);
+  }
+
+  /* 1. Market Trend Trace: background trend line draws on load */
+  var trendDot = document.getElementById('sceneTrendDot');
+  var trendRing = document.getElementById('sceneTrendRing');
+  if (trendDot) trendDot.style.opacity = 0;
+  if (trendRing) trendRing.style.display = 'none';
+
+  animate(svg.createDrawable('#sceneTrend'), {
+    draw: ['0 0', '0 1'],
+    ease: 'inOutQuad',
+    duration: 3000,
+    delay: 500
+  });
+  setTimeout(function () {
+    if (trendDot) animate(trendDot, { opacity: [0, 1], duration: 500 });
+    if (trendRing) trendRing.style.display = '';
+  }, 3400);
+
+  /* 2. Milestone Trace: achievements graph draws when scrolled into view */
+  var graph = document.querySelector('.achieve-graph');
+  if (graph) {
+    var line = svg.createDrawable('.ag-line');
+    line[0].draw = '0 0';
+    var pts = graph.querySelectorAll('.ag-node, .ag-value');
+    var area = graph.querySelector('path[fill^="url"]');
+    pts.forEach(function (p) { p.style.opacity = 0; });
+    if (area) area.style.opacity = 0;
+
+    whenVisible(graph, function () {
+      animate(line, { draw: ['0 0', '0 1'], ease: 'inOutQuad', duration: 2000 });
+      animate(pts, { opacity: [0, 1], duration: 500, delay: stagger(900, { start: 200 }) });
+      if (area) animate(area, { opacity: [0, 1], duration: 900, delay: 1600 });
+    });
+  }
+
+  /* 3. Signal Trace: solutions network pulses out from the hub */
+  var net = document.querySelector('.services-network');
+  if (net) {
+    var signals = svg.createDrawable('.net-line.flow');
+    signals.forEach(function (s) { s.draw = '0 0'; });
+    whenVisible(net, function () {
+      animate(signals, {
+        draw: ['0 0', '0 1', '1 1'],
+        ease: 'inOutQuad',
+        duration: 2200,
+        delay: stagger(140),
+        loop: true
+      });
+    });
+  }
 })();
 </script>
 
