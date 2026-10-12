@@ -8,6 +8,20 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2216%22%20fill%3D%22%230a1a12%22/%3E%3Ctext%20x%3D%2250%22%20y%3D%2268%22%20font-family%3D%22Georgia%2C%20serif%22%20font-size%3D%2246%22%20font-weight%3D%22600%22%20fill%3D%22%23c9a227%22%20text-anchor%3D%22middle%22%3EMJ%3C/text%3E%3C/svg%3E">
+
+<!-- Import map for the ES-module libraries (Lenis, Motion, three.js WebGPU) -->
+<script type="importmap">
+{
+  "imports": {
+    "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.3.11/+esm",
+    "motion": "https://cdn.jsdelivr.net/npm/motion@12.23.12/+esm",
+    "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.webgpu.js",
+    "three/webgpu": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.webgpu.js",
+    "three/tsl": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.tsl.js"
+  }
+}
+</script>
+
 <style>
   :root{
     --bg: #0a1a12;
@@ -22,6 +36,9 @@
     --muted-dim: #5f7362;
     --btn-primary-bg: var(--gold);
     --btn-primary-text: #10240b;
+
+    /* Background intensity: all decorative background layers are held at 20% */
+    --fx-level: .2;
 
     --scene-grid:rgba(201,162,39,.07);
     --scene-grid-major:rgba(201,162,39,.13);
@@ -92,9 +109,18 @@
     color:var(--cream);
   }
 
-  /* BACKGROUND SCENE */
+  /* ===== Lenis recommended rules (from lenis/dist/lenis.css) ===== */
+  html.lenis,
+  html.lenis body{ height:auto; }
+  .lenis.lenis-smooth{ scroll-behavior:auto !important; }
+  .lenis.lenis-smooth [data-lenis-prevent]{ overscroll-behavior:contain; }
+  .lenis.lenis-stopped{ overflow:clip; }
+  .lenis.lenis-smooth iframe{ pointer-events:none; }
+
+  /* BACKGROUND SCENE (held at 20% intensity) */
   .scene{
     position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+    opacity:var(--fx-level);
     background:
       radial-gradient(ellipse 900px 520px at 88% -8%, var(--scene-glow-a), transparent 62%),
       radial-gradient(ellipse 760px 560px at -8% 42%, var(--scene-glow-b), transparent 62%),
@@ -441,6 +467,8 @@
     font-family:'Fraunces', serif;
     font-style:italic;
     font-size:1rem;
+    display:inline-block;
+    will-change:transform;
   }
 
   /* ABOUT */
@@ -791,11 +819,11 @@
     stroke-width:1.2;
     fill:none;
   }
-  /* Signal Trace: dash/offset now driven by anime.js createDrawable (draw) */
   .net-line.flow{
     stroke:var(--gold);
-    opacity:.5;
+    opacity:.8;
   }
+  @keyframes netFlow{ to{ stroke-dashoffset:-44; } }
   .net-hub{
     fill:var(--bg-panel);
     stroke:var(--gold);
@@ -1084,12 +1112,12 @@
   }
   .ag-svg{ width:100%; height:auto; display:block; overflow:visible; margin-top:14px; }
   .ag-grid{ stroke:var(--line); stroke-width:1; stroke-dasharray:3 5; }
-  /* Milestone Trace: line is now drawn by anime.js createDrawable (draw) */
   .ag-line{
     stroke:var(--gold);
     stroke-width:2;
     fill:none;
   }
+  @keyframes agFlow{ to{ stroke-dashoffset:-48; } }
   .ag-node{ fill:var(--bg-panel); stroke:var(--gold); stroke-width:2; }
   .ag-node-ring{
     fill:none;
@@ -1226,6 +1254,57 @@
   @media (max-width:700px){
     .certs{ grid-template-columns:1fr; }
   }
+
+  /* INTERACTIVE PARTICLE GLOBE (three.js WebGPU + Motion) */
+  .globe-lead{
+    margin:-12px 0 28px;
+    max-width:56ch;
+    color:var(--muted);
+    font-size:1rem;
+  }
+  .globe-stage{
+    position:relative;
+    width:100%;
+    height:clamp(340px, 68vh, 620px);
+    border:1px solid var(--line);
+    background:color-mix(in srgb, var(--bg-panel) 55%, transparent);
+    overflow:hidden;
+  }
+  .globe-stage canvas{
+    display:block;
+    width:100%;
+    height:100%;
+    cursor:crosshair;
+    touch-action:pan-y;
+    outline:none;
+  }
+  .globe-stage canvas:focus-visible{
+    box-shadow:inset 0 0 0 2px var(--gold);
+  }
+  .globe-hint{
+    position:absolute;
+    left:16px; bottom:14px;
+    font-size:.78rem;
+    color:var(--muted);
+    background:color-mix(in srgb, var(--bg) 70%, transparent);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:5px 12px;
+    pointer-events:none;
+    transition:opacity .4s ease;
+  }
+  .globe-stage.is-pressed .globe-hint{ opacity:0; }
+  .globe-fallback{
+    display:none;
+    position:absolute; inset:0;
+    align-items:center; justify-content:center;
+    background:var(--bg-panel);
+  }
+  .globe-fallback img{ max-height:100%; width:auto; object-fit:contain; }
+  .globe-stage.is-fallback canvas,
+  .globe-stage.is-fallback .globe-hint{ display:none; }
+  .globe-stage.is-fallback .globe-fallback{ display:flex; }
+
   /* CONTACT / FOOTER */
   .contact{
     padding:88px 0 64px;
@@ -1465,10 +1544,37 @@
   @keyframes ring { 0%{box-shadow:0 0 0 0 rgba(var(--gold-rgb),.55)} 100%{box-shadow:0 0 0 12px rgba(var(--gold-rgb),0)} }
   @keyframes zoom { from{transform:scale(1)} to{transform:scale(1.06)} }
 
-  .scroll-bar{
+  /* Scroll progress bar (driven by Motion's scroll()) */
+  .lenis-progress{
     position:fixed; top:0; left:0; right:0; height:2px; z-index:30;
-    background:var(--gold); transform:scaleX(0); transform-origin:left; pointer-events:none;
+    background:var(--gold); transform:scaleX(0); transform-origin:0 50%; pointer-events:none;
   }
+
+  /* Scroll readout (driven by Motion's scroll()) */
+  .lenis-readout{
+    position:fixed; left:24px; bottom:38px; z-index:8; pointer-events:none;
+    font:500 11px 'Work Sans',monospace; color:var(--muted-dim);
+    font-variant-numeric:tabular-nums; letter-spacing:.06em;
+  }
+
+  /* Section pill nav (Lenis scrollTo with Motion easing) */
+  .lenis-nav{
+    position:fixed; top:14px; left:50%; translate:-50% 0; z-index:26;
+    display:none; gap:2px; padding:4px; border-radius:999px;
+    background:color-mix(in srgb, var(--bg-panel) 82%, transparent);
+    border:1px solid var(--line);
+    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  }
+  .lenis-nav button{
+    font:500 12px 'Work Sans',sans-serif; font-variant-numeric:tabular-nums;
+    padding:5px 9px; border-radius:999px; border:0; background:transparent;
+    color:var(--muted); cursor:pointer;
+    transition:background .2s ease, color .2s ease;
+  }
+  .lenis-nav button:hover{ background:rgba(var(--gold-rgb),.14); color:var(--gold-soft); }
+  .lenis-nav button.active{ background:var(--gold); color:#10240b; }
+  .lenis-nav button:focus-visible{ outline:2px solid var(--gold); outline-offset:1px; }
+  @media (min-width:901px){ .lenis-nav{ display:flex; } }
 
   .hero-portrait{ overflow:hidden; }
   .hero-portrait img{ animation:zoom 14s ease-in-out infinite alternate; }
@@ -1550,6 +1656,7 @@
     .navlinks a:nth-child(8){ transition-delay:.52s; }
     .navlinks a:nth-child(9){ transition-delay:.58s; }
     .navlinks a:nth-child(10){ transition-delay:.64s; }
+    .navlinks a:nth-child(11){ transition-delay:.70s; }
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -1580,15 +1687,16 @@
     background:var(--gold); box-shadow:0 0 12px rgba(var(--gold-rgb),.9);
   }
 
-  #fx{ position:fixed; inset:0; z-index:0; pointer-events:none; }
+  /* Decorative background layers, all held at 20% */
+  #fx{ position:fixed; inset:0; z-index:0; pointer-events:none; opacity:var(--fx-level); }
   .fx-spot{
-    position:fixed; inset:0; z-index:0; pointer-events:none;
+    position:fixed; inset:0; z-index:0; pointer-events:none; opacity:var(--fx-level);
     background:radial-gradient(420px circle at var(--mx,70%) var(--my,30%),rgba(var(--gold-rgb),.10),transparent 65%);
   }
 
   .radar{
     position:fixed; right:28px; bottom:54px; width:130px; height:130px; z-index:0;
-    border-radius:50%; pointer-events:none; opacity:.7;
+    border-radius:50%; pointer-events:none; opacity:calc(.7 * var(--fx-level));
     border:1px solid rgba(var(--gold-rgb),.35);
     background:radial-gradient(circle,transparent 0 28%,rgba(var(--gold-rgb),.2) 29% 30%,transparent 31% 58%,rgba(var(--gold-rgb),.2) 59% 60%,transparent 61%);
   }
@@ -1619,7 +1727,7 @@
       linear-gradient(var(--c),var(--c)) bottom right/1.5px 24px no-repeat;
   }
   .fx-lines{
-    position:fixed; inset:0; z-index:23; pointer-events:none;
+    position:fixed; inset:0; z-index:23; pointer-events:none; opacity:var(--fx-level);
     background:repeating-linear-gradient(0deg,rgba(0,0,0,.05) 0 1px,transparent 1px 3px),
                radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.28) 100%);
   }
@@ -1664,6 +1772,7 @@
     .navlinks.mobile-open{ max-height:calc(100vh - 70px); overflow-y:auto; }
     .navlinks a{ padding:14px 0; }
     .nav-toggle, .theme-toggle{ width:42px; height:42px; }
+    .lenis-readout{ display:none; }
   }
 
   @media (max-width:720px){
@@ -1697,6 +1806,7 @@
     .tl-card{ will-change:auto; transform-style:flat; }
     .ticker{ font-size:10px; }
     .hud{ display:none; }
+    .globe-stage{ height:clamp(300px, 56vh, 440px); }
   }
 
   @media (max-width:380px){
@@ -1704,9 +1814,33 @@
     .skill-grid{ grid-template-columns:1fr 1fr; }
     .skill-card span:last-child{ font-size:.82rem; }
   }
+
+  /* anime.js draw-on-scroll */
+  html.draw-on .section-head h2::after{ display:none; }
+  .h-draw{ position:absolute; left:0; bottom:-18px; width:160px; height:12px; overflow:visible; pointer-events:none; }
+  .h-draw path{ fill:none; stroke:var(--gold); stroke-width:2; stroke-linecap:round;
+    filter:drop-shadow(0 0 5px rgba(var(--gold-rgb),.8)); }
+  .frame-draw{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:2; }
+  .frame-draw rect{ fill:none; stroke:var(--gold); stroke-width:2; vector-effect:non-scaling-stroke;
+    filter:drop-shadow(0 0 6px rgba(var(--gold-rgb),.7)); }
 </style>
 </head>
 <body>
+
+<div class="lenis-progress" aria-hidden="true"></div>
+
+<nav class="lenis-nav" aria-label="Jump to section">
+  <button type="button" data-target="#about" title="About">01</button>
+  <button type="button" data-target="#experience" title="Experience">02</button>
+  <button type="button" data-target="#skills" title="Skills">03</button>
+  <button type="button" data-target="#projects" title="Projects">04</button>
+  <button type="button" data-target="#solutions" title="Solutions">05</button>
+  <button type="button" data-target="#education" title="Education">06</button>
+  <button type="button" data-target="#more" title="Achievements">07</button>
+  <button type="button" data-target="#certifications" title="Certifications">08</button>
+  <button type="button" data-target="#globe" title="Interactive">09</button>
+  <button type="button" data-target="#contact" title="Contact">10</button>
+</nav>
 
 <div class="scene" aria-hidden="true">
   <div class="scene-grid"></div>
@@ -1733,7 +1867,7 @@
   <div class="scene-scan"></div>
 </div>
 
-<nav class="side-nav">
+<nav class="side-nav" data-lenis-prevent>
   <div class="brand">Magesh Kumar J.</div>
   <button id="navToggle" class="nav-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navlinks">
     <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -1749,6 +1883,7 @@
     <a href="#education">Education</a>
     <a href="#more">Achievements</a>
     <a href="#certifications">Certifications</a>
+    <a href="#globe">Interactive</a>
     <a href="#contact">Contact</a>
   </div>
   <a class="nav-cta" href="https://wa.me/918148916824?text=Hi%20Magesh%2C%20I%20found%20your%20portfolio%20and%20would%20like%20to%20connect." target="_blank" rel="noopener">Message on WhatsApp</a>
@@ -1805,8 +1940,8 @@
               <div class="avatar-role">Villupuram, Tamil Nadu</div>
             </div>
           </div>
-          <p>I'm a B.Tech Computer Science graduate (May 2026) currently interning in AML &amp; KYC compliance, where I work on customer due diligence, screening and UK regulatory frameworks. Before that, I spent time on the other side of the desk — as an academic counsellor, soft skills trainer, and business developer — enrolling clients, running workshops, and giving talks on communication and leadership.</p>
-          <p>That mix is deliberate. Compliance work needs precision and judgement; sales and training need empathy and clarity. I try to bring both to every role: a user-centric, problem-solving mindset backed by a genuine interest in doing right by the person in front of me.</p>
+          <p>B.Tech Computer Science graduate (May 2026), now interning in AML &amp; KYC compliance across due diligence, screening and UK regulations. Earlier, I worked as an academic counsellor, soft skills trainer and business developer — enrolling clients, running workshops and speaking on communication and leadership.</p>
+          <p>That mix is deliberate: compliance needs precision and judgement, while sales and training need empathy and clarity. I bring both, with a user-centric, problem-solving mindset and a genuine interest in doing right by the person in front of me.</p>
         </div>
         <dl class="facts">
           <div class="fact">
@@ -1978,38 +2113,14 @@
       <div class="skill-cat" data-cat="compliance">
         <h3>Compliance &amp; domain</h3>
         <div class="skill-grid">
-          <div class="skill-card">
-            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3Z"/><path d="m9.5 12 2 2 3.5-3.5"/></svg></span>
-            <span>AML &amp; KYC</span>
-          </div>
-          <div class="skill-card">
-            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3Z"/><path d="m9.5 12 2 2 3.5-3.5"/></svg></span>
-            <span>Customer Due Diligence (CDD)</span>
-          </div>
-          <div class="skill-card">
-            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3Z"/><path d="m9.5 12 2 2 3.5-3.5"/></svg></span>
-            <span>Enhanced Due Diligence (EDD)</span>
-          </div>
-          <div class="skill-card">
-            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l4 2"/></svg></span>
-            <span>Customer Risk Assessment</span>
-          </div>
-          <div class="skill-card">
-            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-8 4 16 2-8h6"/></svg></span>
-            <span>Transaction Monitoring</span>
-          </div>
-          <div class="skill-card">
-            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/><path d="M9 3.5 12 2l3 1.5"/></svg></span>
-            <span>Financial Crime Risk Assessment</span>
-          </div>
-          <div class="skill-card">
-            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>
-            <span>UK AML Regulations</span>
-          </div>
-          <div class="skill-card">
-            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg></span>
-            <span>Compliance Documentation</span>
-          </div>
+          <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3Z"/><path d="m9.5 12 2 2 3.5-3.5"/></svg></span><span>AML &amp; KYC</span></div>
+          <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3Z"/><path d="m9.5 12 2 2 3.5-3.5"/></svg></span><span>Customer Due Diligence (CDD)</span></div>
+          <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3Z"/><path d="m9.5 12 2 2 3.5-3.5"/></svg></span><span>Enhanced Due Diligence (EDD)</span></div>
+          <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l4 2"/></svg></span><span>Customer Risk Assessment</span></div>
+          <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-8 4 16 2-8h6"/></svg></span><span>Transaction Monitoring</span></div>
+          <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/><path d="M9 3.5 12 2l3 1.5"/></svg></span><span>Financial Crime Risk Assessment</span></div>
+          <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><span>UK AML Regulations</span></div>
+          <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg></span><span>Compliance Documentation</span></div>
           <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3Z"/><path d="m9.5 12 2 2 3.5-3.5"/></svg></span><span>Sanctions Screening</span></div>
           <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3Z"/><path d="m9.5 12 2 2 3.5-3.5"/></svg></span><span>PEP Screening</span></div>
           <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3Z"/><path d="m9.5 12 2 2 3.5-3.5"/></svg></span><span>Adverse Media Screening</span></div>
@@ -2036,22 +2147,10 @@
       <div class="skill-cat" data-cat="dev">
         <h3>Development &amp; tools</h3>
         <div class="skill-grid">
-          <div class="skill-card">
-            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
-            <span>Java Full Stack</span>
-          </div>
-          <div class="skill-card">
-            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="8" height="8" rx="2"/><rect x="14" y="7" width="8" height="8" rx="2"/><path d="M10 11h4"/></svg></span>
-            <span>Blockchain</span>
-          </div>
-          <div class="skill-card">
-            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span>
-            <span>SQL</span>
-          </div>
-          <div class="skill-card">
-            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3"/><path d="M13 15h4"/></svg></span>
-            <span>VS Code / Eclipse IDE</span>
-          </div>
+          <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span><span>Java Full Stack</span></div>
+          <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="8" height="8" rx="2"/><rect x="14" y="7" width="8" height="8" rx="2"/><path d="M10 11h4"/></svg></span><span>Blockchain</span></div>
+          <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span><span>SQL</span></div>
+          <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3"/><path d="M13 15h4"/></svg></span><span>VS Code / Eclipse IDE</span></div>
           <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span><span>Python Full Stack</span></div>
           <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span><span>MERN Stack</span></div>
           <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span><span>HTML / CSS / JavaScript</span></div>
@@ -2062,34 +2161,13 @@
       <div class="skill-cat" data-cat="soft">
         <h3>Soft skills</h3>
         <div class="skill-grid">
-          <div class="skill-card">
-            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>
-            <span>Customer focus</span>
-          </div>
-          <div class="skill-card">
-            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
-            <span>Leadership &amp; mentoring</span>
-          </div>
-          <div class="skill-card">
-            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg></span>
-            <span>Teamwork</span>
-          </div>
-          <div class="skill-card">
-            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2.05V17h6v-.25c0-.85.4-1.55 1-2.05A7 7 0 0 0 12 2Z"/></svg></span>
-            <span>Problem-solving</span>
-          </div>
-          <div class="skill-card">
-            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="14" rx="2"/><path d="M7 21h10"/><path d="M9 13v-3M12 13V7M15 13v-5"/></svg></span>
-            <span>Presentation &amp; pitching</span>
-          </div>
-          <div class="skill-card">
-            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 17v5"/><path d="M8 22h8"/></svg></span>
-            <span>Public speaking</span>
-          </div>
-          <div class="skill-card">
-            <span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 3-4h4l-3 4Z"/><path d="m9 7 3-4h4l-3 4Z"/><path d="M15 7 18 3h1a2 2 0 0 1 2 2v2Z"/><rect x="2" y="7" width="20" height="13" rx="2"/></svg></span>
-            <span>Video editing</span>
-          </div>
+          <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span><span>Customer focus</span></div>
+          <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span>Leadership &amp; mentoring</span></div>
+          <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg></span><span>Teamwork</span></div>
+          <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2.05V17h6v-.25c0-.85.4-1.55 1-2.05A7 7 0 0 0 12 2Z"/></svg></span><span>Problem-solving</span></div>
+          <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="14" rx="2"/><path d="M7 21h10"/><path d="M9 13v-3M12 13V7M15 13v-5"/></svg></span><span>Presentation &amp; pitching</span></div>
+          <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 17v5"/><path d="M8 22h8"/></svg></span><span>Public speaking</span></div>
+          <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 3-4h4l-3 4Z"/><path d="m9 7 3-4h4l-3 4Z"/><path d="M15 7 18 3h1a2 2 0 0 1 2 2v2Z"/><rect x="2" y="7" width="20" height="13" rx="2"/></svg></span><span>Video editing</span></div>
           <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2.05V17h6v-.25c0-.85.4-1.55 1-2.05A7 7 0 0 0 12 2Z"/></svg></span><span>Analytical thinking</span></div>
           <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2.05V17h6v-.25c0-.85.4-1.55 1-2.05A7 7 0 0 0 12 2Z"/></svg></span><span>Decision making</span></div>
           <div class="skill-card"><span class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span><span>Written &amp; verbal communication</span></div>
@@ -2520,6 +2598,21 @@
     </div>
   </section>
 
+  <section id="globe">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Interactive showcase</h2>
+        <span class="section-num">10</span>
+      </div>
+      <p class="globe-lead">A photo rebuilt from thousands of particles. Press and hold it to pull the particles into a globe, then let go to watch the picture re-form.</p>
+      <div class="globe-stage" id="globeStage">
+        <canvas id="globeCanvas" role="button" tabindex="0" aria-label="Press and hold to form a particle globe"></canvas>
+        <div class="globe-hint">Press and hold to form a globe</div>
+        <div class="globe-fallback"><img src="hero-portrait.png" alt="Magesh Kumar Jayavel"></div>
+      </div>
+    </div>
+  </section>
+
   <section id="contact" class="contact">
     <div class="wrap">
       <h2>Let's talk.</h2>
@@ -2608,6 +2701,7 @@
 <div class="fx-lines" aria-hidden="true"></div>
 <div class="hud" aria-hidden="true"></div>
 <div class="fx-chip" aria-hidden="true"><i></i>SECURE · TLS 1.3 · ENCRYPTED</div>
+<output class="lenis-readout" aria-hidden="true">0%</output>
 <div class="ticker" aria-hidden="true"><div class="ticker-track" id="fxTrack"></div></div>
 
 <script>
@@ -2901,19 +2995,7 @@
     nav.parentNode.insertBefore(zone, nav);
   }
 
-  var bar = document.createElement('div');
-  bar.className = 'scroll-bar';
-  document.body.appendChild(bar);
-  var ticking = false;
-  window.addEventListener('scroll', function () {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(function () {
-      var max = root.scrollHeight - window.innerHeight;
-      bar.style.transform = 'scaleX(' + (max > 0 ? window.scrollY / max : 0) + ')';
-      ticking = false;
-    });
-  }, { passive: true });
+  /* The scroll progress bar is now driven by Motion's scroll() in the Lenis module below. */
 
   var links = {};
   document.querySelectorAll('.navlinks a').forEach(function (a) {
@@ -2960,6 +3042,8 @@
     ['.achieve-graph', 'rv-scale', 0, 0],
     ['.ms-item', 'rv-left', 60, 0],
     ['.cert-card', '', 70, 0],
+    ['.globe-lead', '', 0, 0],
+    ['.globe-stage', 'rv-scale', 0, 0],
     ['.list-marked li', '', 70, 0],
     ['.contact .wrap > *', '', 90, 0],
     ['.wa-field', '', 90, 150],
@@ -3108,81 +3192,8 @@
 })();
 </script>
 
-<!-- anime.js v4 (UMD build exposes a global `anime`) -->
-<script src="https://cdn.jsdelivr.net/npm/animejs@4.0.2/dist/bundles/anime.umd.min.js"></script>
-
 <script>
-/* createDrawable: Market Trend Trace, Milestone Trace, Signal Trace */
-(function () {
-  if (!window.anime) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  var animate = anime.animate, svg = anime.svg, stagger = anime.stagger;
-
-  function whenVisible(el, run) {
-    if (!el) return;
-    var io = new IntersectionObserver(function (entries) {
-      if (!entries[0].isIntersecting) return;
-      io.disconnect();
-      run();
-    }, { threshold: 0.35 });
-    io.observe(el);
-  }
-
-  /* 1. Market Trend Trace: background trend line draws on load */
-  var trendDot = document.getElementById('sceneTrendDot');
-  var trendRing = document.getElementById('sceneTrendRing');
-  if (trendDot) trendDot.style.opacity = 0;
-  if (trendRing) trendRing.style.display = 'none';
-
-  animate(svg.createDrawable('#sceneTrend'), {
-    draw: ['0 0', '0 1'],
-    ease: 'inOutQuad',
-    duration: 3000,
-    delay: 500
-  });
-  setTimeout(function () {
-    if (trendDot) animate(trendDot, { opacity: [0, 1], duration: 500 });
-    if (trendRing) trendRing.style.display = '';
-  }, 3400);
-
-  /* 2. Milestone Trace: achievements graph draws when scrolled into view */
-  var graph = document.querySelector('.achieve-graph');
-  if (graph) {
-    var line = svg.createDrawable('.ag-line');
-    line[0].draw = '0 0';
-    var pts = graph.querySelectorAll('.ag-node, .ag-value');
-    var area = graph.querySelector('path[fill^="url"]');
-    pts.forEach(function (p) { p.style.opacity = 0; });
-    if (area) area.style.opacity = 0;
-
-    whenVisible(graph, function () {
-      animate(line, { draw: ['0 0', '0 1'], ease: 'inOutQuad', duration: 2000 });
-      animate(pts, { opacity: [0, 1], duration: 500, delay: stagger(900, { start: 200 }) });
-      if (area) animate(area, { opacity: [0, 1], duration: 900, delay: 1600 });
-    });
-  }
-
-  /* 3. Signal Trace: solutions network pulses out from the hub */
-  var net = document.querySelector('.services-network');
-  if (net) {
-    var signals = svg.createDrawable('.net-line.flow');
-    signals.forEach(function (s) { s.draw = '0 0'; });
-    whenVisible(net, function () {
-      animate(signals, {
-        draw: ['0 0', '0 1', '1 1'],
-        ease: 'inOutQuad',
-        duration: 2200,
-        delay: stagger(140),
-        loop: true
-      });
-    });
-  }
-})();
-</script>
-
-<script>
-/* Futuristic canvas: code rain + network + floating finance glyphs */
+/* Futuristic canvas: code rain + network + floating finance glyphs (layer held at 20% via CSS) */
 (function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var mobile = window.innerWidth < 720;
@@ -3318,6 +3329,515 @@
   }
   requestAnimationFrame(frame);
 })();
+</script>
+
+<!-- anime.js: createDrawable + onScroll -->
+<script type="module">
+import { animate, svg, onScroll, stagger } from 'https://cdn.jsdelivr.net/npm/animejs@4.0.2/+esm';
+
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.documentElement.classList.add('draw-on');
+  const NS = 'http://www.w3.org/2000/svg';
+  const mk = (tag, attrs, parent) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    parent && parent.appendChild(e);
+    return e;
+  };
+
+  /* 1. Wavy underline under every section heading, drawn when it scrolls in */
+  document.querySelectorAll('.section-head h2').forEach(h => {
+    const s = mk('svg', { class: 'h-draw', viewBox: '0 0 160 12', 'aria-hidden': 'true' }, h);
+    const p = mk('path', { d: 'M2 6 Q22 0 42 6 T82 6 T122 6 T158 6' }, s);
+    const [d] = svg.createDrawable(p);
+    d.draw = '0 0';
+    animate(d, {
+      draw: ['0 0', '0 1'],
+      duration: 1200,
+      ease: 'inOutQuad',
+      autoplay: onScroll({ target: h })
+    });
+  });
+
+  /* 2. Gold frame drawing itself around the hero portrait */
+  const hp = document.querySelector('.hero-portrait');
+  if (hp) {
+    const s = mk('svg', { class: 'frame-draw', viewBox: '0 0 100 100', preserveAspectRatio: 'none', 'aria-hidden': 'true' }, hp);
+    const r = mk('rect', { x: 4, y: 4, width: 92, height: 92 }, s);
+    const [d] = svg.createDrawable(r);
+    d.draw = '0 0';
+    animate(d, {
+      draw: ['0 0', '0 1'],
+      duration: 2200,
+      delay: 500,
+      ease: 'inOutQuad',
+      autoplay: onScroll({ target: hp })
+    });
+  }
+
+  /* 3. Background candlestick trend line: drawn by page scroll progress */
+  const trendDot = document.getElementById('sceneTrendDot');
+  const trendRing = document.getElementById('sceneTrendRing');
+  const [trend] = svg.createDrawable('#sceneTrend');
+  trend.draw = '0 .1';
+  animate(trend, {
+    draw: ['0 .1', '0 1'],
+    ease: 'linear',
+    autoplay: onScroll({
+      target: '.page-content',
+      enter: 'top top',
+      leave: 'bottom bottom',
+      sync: 0.4
+    }),
+    onUpdate: self => {
+      if (trendDot)  trendDot.style.opacity = self.progress;
+      if (trendRing) trendRing.style.display = self.progress > 0.97 ? '' : 'none';
+    }
+  });
+
+  /* 4. Solutions network: lines draw in, staggered, synced to scroll */
+  const netLines = svg.createDrawable('.net-line');
+  netLines.forEach(l => (l.draw = '0 0'));
+  animate(netLines, {
+    draw: ['0 0', '0 1'],
+    ease: 'inOutQuad',
+    delay: stagger(120),
+    autoplay: onScroll({ target: '.services-network', sync: 0.3 })
+  });
+
+  /* 5. Achievements graph: line draws with scroll, nodes and values fade in after */
+  const [agLine] = svg.createDrawable('.ag-line');
+  if (agLine) {
+    agLine.draw = '0 0';
+    animate(agLine, {
+      draw: ['0 0', '0 1'],
+      ease: 'linear',
+      autoplay: onScroll({ target: '.achieve-graph', sync: 0.3 })
+    });
+    animate('.ag-svg path:not(.ag-line)', {
+      opacity: [0, 1],
+      ease: 'linear',
+      autoplay: onScroll({ target: '.achieve-graph', sync: 0.3 })
+    });
+    animate('.ag-node, .ag-value', {
+      opacity: [0, 1],
+      delay: stagger(250),
+      ease: 'linear',
+      autoplay: onScroll({ target: '.achieve-graph', sync: 0.3 })
+    });
+  }
+}
+</script>
+
+<!-- Lenis smooth scroll + Motion: progress bar, parallax numbers, readout, section pill nav -->
+<script type="module">
+import Lenis from "lenis"
+import { animate, scroll, frame, easeInOut } from "motion"
+
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches
+
+/* Lenis smooths the scroll. Motion's frame loop drives it. */
+let lenis = null
+if (!reduce) {
+  lenis = new Lenis({ autoRaf: false })
+
+  /* "setup" runs before Motion measures scroll in "read", so scroll()
+     sees the scroll position Lenis writes in the same frame. */
+  if (frame && typeof frame.setup === "function") {
+    frame.setup(({ timestamp }) => lenis.raf(timestamp), true)
+  } else {
+    const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf) }
+    requestAnimationFrame(raf)
+  }
+}
+
+/* Top progress bar */
+scroll(
+  animate(
+    ".lenis-progress",
+    { transform: ["scaleX(0)", "scaleX(1)"] },
+    { ease: "linear" }
+  )
+)
+
+/* Parallax on the section numbers (gentle: ±36px) */
+if (!reduce) {
+  document.querySelectorAll("main > section").forEach((section) => {
+    const num = section.querySelector(".section-num")
+    if (!num) return
+    scroll(
+      animate(
+        num,
+        { transform: ["translateY(-36px)", "translateY(36px)"] },
+        { ease: "linear" }
+      ),
+      { target: section, offset: ["start end", "end start"] }
+    )
+  })
+}
+
+/* Page progress readout */
+const readout = document.querySelector(".lenis-readout")
+scroll((progress) => {
+  if (readout) readout.textContent = Math.round(progress * 100) + "%"
+})
+
+/* Smooth scroll to a target with a Motion easing function */
+const isMobile = () => window.innerWidth <= 900
+function goTo(target) {
+  const el = typeof target === "string" ? document.querySelector(target) : target
+  if (!el) return
+  if (lenis) {
+    lenis.scrollTo(el, {
+      duration: 1.6,
+      easing: easeInOut,
+      offset: isMobile() ? -72 : 0
+    })
+  } else {
+    el.scrollIntoView({ behavior: "smooth", block: "start" })
+  }
+}
+
+document.querySelectorAll(".lenis-nav button").forEach((button) => {
+  button.addEventListener("click", () => goTo(button.dataset.target))
+})
+
+/* In-page anchors (side nav, network nodes) use the same smooth scroll */
+document.querySelectorAll('a[href^="#"]').forEach((a) => {
+  const href = a.getAttribute("href")
+  if (!href || href === "#") return
+  a.addEventListener("click", (e) => {
+    const el = document.querySelector(href)
+    if (!el) return
+    e.preventDefault()
+    goTo(el)
+  })
+})
+
+/* Highlight the active section in the pill nav */
+const pills = [...document.querySelectorAll(".lenis-nav button")]
+if ("IntersectionObserver" in window) {
+  const byId = {}
+  pills.forEach((b) => { byId[b.dataset.target.slice(1)] = b })
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return
+      pills.forEach((b) => b.classList.remove("active"))
+      const b = byId[e.target.id]
+      if (b) b.classList.add("active")
+    })
+  }, { rootMargin: "-45% 0px -50% 0px" })
+  Object.keys(byId).forEach((id) => {
+    const s = document.getElementById(id)
+    if (s) spy.observe(s)
+  })
+}
+</script>
+
+<!-- Particle globe: three.js (WebGPU with WebGL fallback) + TSL + Motion -->
+<script type="module">
+import { animate, motionValue, press } from "motion"
+import * as THREE from "three/webgpu"
+import { attribute, cos, mix, positionLocal, sin, time, uniform, vec3 } from "three/tsl"
+
+const stage = document.getElementById("globeStage")
+const canvas = document.getElementById("globeCanvas")
+
+if (stage && canvas) {
+  /* One Motion value controls one TSL uniform. The uniform drives the
+     position morph for every particle in the material's vertex graph.
+     The same value fades the photograph in once the particles settle. */
+  const globe = uniform(1)
+  const globeValue = motionValue(1)
+
+  function highResolutionMix(globeAmount) {
+    const amount = Math.max(globeAmount, 0)
+    const start = 0.005
+    const end = 0.035
+    const t = Math.min(1, Math.max(0, (amount - start) / (end - start)))
+    return 1 - t * t * (3 - 2 * t)
+  }
+
+  /* Photos already on this site: swap or extend this list as you like */
+  const PHOTOS = ["hero-portrait.png", "profile.jpg"]
+  let previousPhoto = null
+  try { previousPhoto = sessionStorage.getItem("three-tsl-photo") } catch (e) {}
+  const photoChoices = PHOTOS.filter((p) => p !== previousPhoto)
+  const PHOTO_URL = (photoChoices.length ? photoChoices : PHOTOS)[
+    Math.floor(Math.random() * (photoChoices.length || PHOTOS.length))
+  ]
+  try { sessionStorage.setItem("three-tsl-photo", PHOTO_URL) } catch (e) {}
+
+  const COLUMNS = window.innerWidth < 720 ? 120 : 200
+  const globeYaw = Math.random() * Math.PI * 2
+
+  function runParticleMotion(photoMesh) {
+    /* Motion value -> uniform + photo opacity */
+    const sync = (v) => {
+      globe.value = v
+      photoMesh.material.opacity = highResolutionMix(v)
+    }
+    globeValue.on("change", sync)
+    sync(globeValue.get())
+
+    animate(globeValue, 0, {
+      type: "spring",
+      stiffness: 55,
+      damping: 16,
+      mass: 1,
+      delay: 0.8,
+    })
+
+    press(canvas, () => {
+      stage.classList.add("is-pressed")
+      animate(globeValue, 1, {
+        type: "spring",
+        stiffness: 120,
+        damping: 18,
+        mass: 0.9,
+      })
+
+      return () => {
+        stage.classList.remove("is-pressed")
+        animate(globeValue, 0, {
+          type: "spring",
+          stiffness: 70,
+          damping: 16,
+          mass: 1,
+        })
+      }
+    })
+  }
+
+  function loadPhoto(url) {
+    return new Promise((resolve, reject) => {
+      const image = new Image()
+
+      image.onload = () => {
+        try {
+          const source = document.createElement("canvas")
+          source.width = image.naturalWidth
+          source.height = image.naturalHeight
+
+          const context = source.getContext("2d", { willReadFrequently: true })
+          context.drawImage(image, 0, 0)
+
+          const map = new THREE.Texture(image)
+          map.colorSpace = THREE.SRGBColorSpace
+          map.needsUpdate = true
+
+          resolve({
+            width: source.width,
+            height: source.height,
+            pixels: context.getImageData(0, 0, source.width, source.height).data,
+            map,
+          })
+        } catch (err) {
+          reject(err)
+        }
+      }
+
+      image.onerror = () => reject(new Error("Could not load the photograph"))
+      image.src = url
+    })
+  }
+
+  function createParticles(photo) {
+    const imageAspect = photo.width / photo.height
+    const rows = Math.round(COLUMNS / imageAspect)
+    const count = COLUMNS * rows
+    const imagePositions = new Float32Array(count * 3)
+    const globePositions = new Float32Array(count * 3)
+    const colours = new Float32Array(count * 3)
+    const phases = new Float32Array(count)
+    const speeds = new Float32Array(count)
+    const colour = new THREE.Color()
+
+    for (let index = 0; index < count; index++) {
+      const column = index % COLUMNS
+      const row = Math.floor(index / COLUMNS)
+      const sampleX = Math.min(
+        photo.width - 1,
+        Math.floor((column + 0.5) / COLUMNS * photo.width)
+      )
+      const sampleY = Math.min(
+        photo.height - 1,
+        Math.floor((row + 0.5) / rows * photo.height)
+      )
+      const pixel = (sampleY * photo.width + sampleX) * 4
+      const offset = index * 3
+
+      colour.setRGB(
+        photo.pixels[pixel] / 255,
+        photo.pixels[pixel + 1] / 255,
+        photo.pixels[pixel + 2] / 255,
+        THREE.SRGBColorSpace
+      )
+      colours[offset] = colour.r
+      colours[offset + 1] = colour.g
+      colours[offset + 2] = colour.b
+      phases[index] = Math.random() * Math.PI * 2
+      speeds[index] = 0.7 + Math.random() * 0.35
+    }
+
+    const geometry = new THREE.InstancedBufferGeometry().copy(
+      new THREE.PlaneGeometry(1, 1)
+    )
+    geometry.instanceCount = count
+    geometry.setAttribute("imagePosition", new THREE.InstancedBufferAttribute(imagePositions, 3))
+    geometry.setAttribute("globePosition", new THREE.InstancedBufferAttribute(globePositions, 3))
+    geometry.setAttribute("colour", new THREE.InstancedBufferAttribute(colours, 3))
+    geometry.setAttribute("phase", new THREE.InstancedBufferAttribute(phases, 1))
+    geometry.setAttribute("speed", new THREE.InstancedBufferAttribute(speeds, 1))
+
+    const imagePosition = attribute("imagePosition")
+    const spherePosition = attribute("globePosition")
+    const phase = attribute("phase")
+    const speed = attribute("speed")
+    const particleSize = uniform(new THREE.Vector2(0.01, 0.01))
+    const turbulence = vec3(
+      sin(time.mul(speed.add(0.6)).add(phase)).mul(0.045),
+      cos(time.mul(speed.add(0.37)).add(phase.mul(1.71))).mul(0.035),
+      sin(time.mul(speed.add(0.22)).add(phase.mul(2.13))).mul(0.045)
+    )
+    const material = new THREE.MeshBasicNodeMaterial({ toneMapped: false })
+
+    material.colorNode = attribute("colour")
+    const particleCenter = mix(
+      imagePosition,
+      spherePosition.add(turbulence),
+      globe
+    )
+    material.positionNode = particleCenter.add(
+      vec3(positionLocal.xy.mul(particleSize), 0)
+    )
+
+    const object = new THREE.Mesh(geometry, material)
+    object.frustumCulled = false
+
+    return { imageAspect, columns: COLUMNS, rows, particleSize, object }
+  }
+
+  function createPhotoOverlay(photo) {
+    const photoMaterial = new THREE.MeshBasicMaterial({
+      map: photo.map,
+      toneMapped: false,
+      transparent: true,
+      depthWrite: false,
+      depthTest: false,
+      opacity: 0,
+    })
+
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), photoMaterial)
+    mesh.renderOrder = 1
+    return mesh
+  }
+
+  function layoutParticles(particles, photoMesh, aspect) {
+    const { columns, imageAspect, object, particleSize, rows } = particles
+    const imageHalfHeight = Math.min(0.72, 0.86 * aspect / imageAspect)
+    const imageHalfWidth = imageHalfHeight * imageAspect
+    const globeRadius = Math.min(0.58, aspect * 0.82)
+    const position = object.geometry.getAttribute("imagePosition")
+    const sphere = object.geometry.getAttribute("globePosition")
+    const yawCos = Math.cos(globeYaw)
+    const yawSin = Math.sin(globeYaw)
+    const tilt = -0.28
+
+    for (let index = 0; index < position.count; index++) {
+      const column = index % columns
+      const row = Math.floor(index / columns)
+      const x = (column + 0.5) / columns
+      const y = (row + 0.5) / rows
+      const sphereY = 1 - index / Math.max(position.count - 1, 1) * 2
+      const ringRadius = Math.sqrt(Math.max(0, 1 - sphereY * sphereY))
+      const angle = index * 2.39996323
+      const sphereX = Math.cos(angle) * ringRadius
+      const sphereZ = Math.sin(angle) * ringRadius
+      const spunX = sphereX * yawCos + sphereZ * yawSin
+      const spunZ = -sphereX * yawSin + sphereZ * yawCos
+
+      position.setXYZ(
+        index,
+        (x - 0.5) * imageHalfWidth * 2,
+        (0.5 - y) * imageHalfHeight * 2,
+        0
+      )
+      sphere.setXYZ(
+        index,
+        spunX * globeRadius,
+        (sphereY * Math.cos(tilt) - spunZ * Math.sin(tilt)) * globeRadius,
+        (sphereY * Math.sin(tilt) + spunZ * Math.cos(tilt)) * globeRadius
+      )
+    }
+
+    position.needsUpdate = true
+    sphere.needsUpdate = true
+    particleSize.value.set(
+      imageHalfWidth * 2 / columns * 1.01,
+      imageHalfHeight * 2 / rows * 1.01
+    )
+    photoMesh.scale.set(imageHalfWidth * 2, imageHalfHeight * 2, 1)
+  }
+
+  let visible = false
+  let started = false
+
+  async function start() {
+    const renderer = new THREE.WebGPURenderer({ canvas, antialias: true, alpha: true })
+    await renderer.init()
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
+    renderer.outputColorSpace = THREE.SRGBColorSpace
+    renderer.setClearColor(0x000000, 0)
+
+    const photo = await loadPhoto(PHOTO_URL)
+    const particles = createParticles(photo)
+    const photoMesh = createPhotoOverlay(photo)
+    const scene = new THREE.Scene()
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10)
+
+    camera.position.z = 4
+    scene.add(particles.object)
+    scene.add(photoMesh)
+
+    const resize = () => {
+      const width = Math.max(stage.clientWidth, 1)
+      const height = Math.max(stage.clientHeight, 1)
+      const aspect = width / height
+
+      renderer.setSize(width, height, false)
+      camera.left = -aspect
+      camera.right = aspect
+      camera.top = 1
+      camera.bottom = -1
+      camera.updateProjectionMatrix()
+      layoutParticles(particles, photoMesh, aspect)
+    }
+
+    new ResizeObserver(resize).observe(stage)
+    resize()
+    runParticleMotion(photoMesh)
+    canvas.dataset.ready = "true"
+
+    /* Render only while the section is on screen */
+    renderer.setAnimationLoop(() => {
+      if (visible) renderer.render(scene, camera)
+    })
+  }
+
+  /* Start lazily, the first time the section nears the viewport */
+  const io = new IntersectionObserver((entries) => {
+    visible = entries[0].isIntersecting
+    if (visible && !started) {
+      started = true
+      start().catch((error) => {
+        console.error(error)
+        stage.classList.add("is-fallback")
+      })
+    }
+  }, { rootMargin: "200px 0px" })
+  io.observe(stage)
+}
 </script>
 
 </body>
