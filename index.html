@@ -1823,6 +1823,43 @@
   .frame-draw{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:2; }
   .frame-draw rect{ fill:none; stroke:var(--gold); stroke-width:2; vector-effect:non-scaling-stroke;
     filter:drop-shadow(0 0 6px rgba(var(--gold-rgb),.7)); }
+
+  /* ===== RECENT UPDATES CORNER WIDGET ===== */
+  .upd{ position:fixed; right:20px; bottom:42px; z-index:27; }
+  .upd-btn{
+    display:flex; align-items:center; gap:8px; padding:10px 16px;
+    background:var(--bg-panel); color:var(--gold-soft);
+    border:1px solid var(--gold); border-radius:999px;
+    font:500 .82rem 'Work Sans',sans-serif; cursor:pointer;
+    box-shadow:0 8px 24px -10px rgba(0,0,0,.5);
+    transition:background .2s ease, color .2s ease;
+  }
+  .upd-btn:hover{ background:var(--gold); color:var(--btn-primary-text); }
+  .upd-dot{ width:8px; height:8px; border-radius:50%; background:var(--gold); animation:blink 1.6s ease-in-out infinite; }
+  .upd.seen .upd-dot{ display:none; }
+  .upd-panel{
+    position:absolute; right:0; bottom:calc(100% + 10px);
+    width:min(330px, calc(100vw - 40px));
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:6px; padding:8px;
+    box-shadow:0 18px 40px -14px rgba(0,0,0,.55);
+    opacity:0; transform:translateY(8px); pointer-events:none;
+    transition:opacity .22s ease, transform .22s ease;
+  }
+  .upd.open .upd-panel{ opacity:1; transform:none; pointer-events:auto; }
+  .upd-title{ font-size:.74rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted-dim); padding:6px 10px 8px; }
+  .upd-item{
+    display:block; width:100%; text-align:left; background:transparent; border:0;
+    border-radius:4px; padding:10px; cursor:pointer; color:var(--cream);
+    font:400 .9rem/1.4 'Work Sans',sans-serif;
+  }
+  .upd-item:hover, .upd-item:focus-visible{ background:var(--bg-panel-2); outline:none; }
+  .upd-item small{ display:block; color:var(--gold-soft); font-size:.74rem; margin-bottom:2px; }
+  .project.flash{ animation:projFlash 2.2s ease; }
+  @keyframes projFlash{
+    0%,100%{ box-shadow:none; }
+    30%{ box-shadow:0 0 0 2px var(--gold), 0 0 30px -4px rgba(var(--gold-rgb),.7); }
+  }
+  @media (max-width:720px){ .upd{ right:14px; bottom:38px; } }
 </style>
 </head>
 <body>
@@ -1946,7 +1983,7 @@
         <dl class="facts">
           <div class="fact">
             <dt>Currently</dt>
-            <dd>AML &amp; KYC Compliance Intern, ReTTRAC Global</dd>
+            <dd>AML &amp; KYC Compliance Intern, ReTRRAC Global</dd>
           </div>
           <div class="fact">
             <dt>Education</dt>
@@ -1978,7 +2015,7 @@
               <span class="tl-duration"></span>
             </div>
             <div class="tl-role">AML &amp; KYC Compliance Intern</div>
-            <div class="tl-org">ReTTRAC Global</div>
+            <div class="tl-org">ReTRRAC Global</div>
             <ul>
               <li>Conduct customer identity verification, Customer Identification Program (CIP) documentation, CDD and EDD on 20+ client profiles weekly, applying UK AML regulations to support onboarding and risk rating.</li>
               <li>Perform sanctions screening, adverse media checks and PEP assessments using ComplyCube, and prepare and maintain KYC records to keep them ready for compliance audits.</li>
@@ -2253,6 +2290,16 @@
             <div class="stack-pills"><span class="pill">HTML</span><span class="pill">CSS</span><span class="pill">JavaScript</span></div>
           </div>
           <a class="link" href="https://john16dodge.github.io/Sales-Tool/" target="_blank" rel="noopener">View site ↗</a>
+        </div>
+
+        <div class="project" id="proj-xtrack" data-pcat="web">
+          <span class="project-index">07</span>
+          <div class="project-body">
+            <h3>X-Track</h3>
+            <p>A website that measures efficiency from the tasks assigned and generates it as a report. Currently built for ReTRRAC only; further development is needed.</p>
+            <div class="stack-pills"><span class="pill">Web</span><span class="pill">Efficiency Reports</span><span class="pill">ReTRRAC only</span></div>
+          </div>
+          <a class="link" href="https://john16dodge.github.io/X-Track-ReTRRAC-v1.1/" target="_blank" rel="noopener">View site ↗</a>
         </div>
 
       </div>
@@ -2553,7 +2600,7 @@
           <div class="cert-icon"><svg viewBox="0 0 24 24"><path d="M12 2 9 8l-6 .9 4.4 4.2L6.3 19 12 15.9 17.7 19l-1.1-5.9L21 8.9 15 8Z"/></svg></div>
           <div>
             <h3>CAFS AML Certification</h3>
-            <div class="cert-issuer">ReTTRAC Global</div>
+            <div class="cert-issuer">ReTRRAC Global</div>
             <div class="cert-year">2026</div>
           </div>
         </div>
@@ -2694,6 +2741,20 @@
     © 2026 Magesh Kumar Jayavel.
   </div>
 </footer>
+</div>
+
+<!-- Recent updates corner widget -->
+<div class="upd" id="upd">
+  <div class="upd-panel" id="updPanel" role="menu" aria-label="Recent updates">
+    <div class="upd-title">Recent updates</div>
+    <button type="button" class="upd-item" role="menuitem" data-target="#projects" data-flash="#proj-xtrack"><small>Nov 2026 · New project</small>X-Track, an efficiency report website (ReTRRAC only)</button>
+    <button type="button" class="upd-item" role="menuitem" data-target="#certifications"><small>Oct 2026 · Certification</small>Financial Intelligence Against Human Trafficking (FIHT)</button>
+    <button type="button" class="upd-item" role="menuitem" data-target="#experience"><small>Jul 2026 · Experience</small>Joined ReTRRAC Global as AML &amp; KYC Compliance Intern</button>
+    <button type="button" class="upd-item" role="menuitem" data-target="#education"><small>May 2026 · Education</small>Completed B.Tech CSE (ICB), CGPA 8.08</button>
+  </div>
+  <button type="button" class="upd-btn" id="updBtn" aria-expanded="false" aria-controls="updPanel">
+    <span class="upd-dot"></span>Recent updates
+  </button>
 </div>
 
 <div class="fx-spot" id="fxSpot" aria-hidden="true"></div>
@@ -3838,6 +3899,43 @@ if (stage && canvas) {
   }, { rootMargin: "200px 0px" })
   io.observe(stage)
 }
+</script>
+
+<!-- Recent updates widget -->
+<script>
+(function () {
+  var box = document.getElementById('upd'), btn = document.getElementById('updBtn');
+  if (!box || !btn) return;
+  try { if (localStorage.getItem('mkj-upd-seen') === 'xtrack') box.classList.add('seen'); } catch (e) {}
+
+  function setOpen(open) {
+    box.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) {
+      box.classList.add('seen');
+      try { localStorage.setItem('mkj-upd-seen', 'xtrack'); } catch (e) {}
+    }
+  }
+  btn.addEventListener('click', function (e) { e.stopPropagation(); setOpen(!box.classList.contains('open')); });
+  document.addEventListener('click', function (e) { if (!box.contains(e.target)) setOpen(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+
+  box.querySelectorAll('.upd-item').forEach(function (item) {
+    item.addEventListener('click', function () {
+      var target = item.getAttribute('data-target');
+      /* reuse the side-nav link so the Lenis smooth scroll handles it */
+      var link = document.querySelector('.navlinks a[href="' + target + '"]');
+      if (link) link.click();
+      else { var el = document.querySelector(target); if (el) el.scrollIntoView({ behavior: 'smooth' }); }
+      setOpen(false);
+      var f = item.getAttribute('data-flash');
+      if (f) setTimeout(function () {
+        var card = document.querySelector(f);
+        if (card) { card.classList.add('flash'); setTimeout(function () { card.classList.remove('flash'); }, 2300); }
+      }, 1500);
+    });
+  });
+})();
 </script>
 
 </body>
